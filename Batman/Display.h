@@ -5,6 +5,7 @@
 #include "BigE.h"
 #include "Batarang.h"
 #include "Batwing.h"
+#include "BombEffect.h"
 #include <vector>
 #include <fstream>
 #include <string>
@@ -48,10 +49,6 @@ private:
 	Sprite scene1;
 	Texture scene2Texture;
 	Sprite scene2;
-	Texture pos1Texture;
-	Sprite pos1;
-	Texture pos2Texture;
-	Sprite pos2;
 	Texture barTexture;
 	Sprite bar;
 	Texture logoTexture;
@@ -73,6 +70,10 @@ private:
 
 	Batwing batwing;
 	Texture batwingTexture;
+
+	BombEffect bomb;
+	Texture bombTexture;
+	bool bombCheck;
 
 	float deltaTime;
 	float totalTime;

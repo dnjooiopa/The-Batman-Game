@@ -17,6 +17,7 @@ public:
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
 	int curX() { return animation.currentImage.x; }
+	Vector2f getPosition() { return body.getPosition(); }
 	void setSpeed(float speed);
 	RectangleShape draw() { return body; }
 	Collision Getcollision() { return Collision(body); }

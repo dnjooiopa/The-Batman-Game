@@ -139,6 +139,7 @@
     <ClInclude Include="Batarang.h" />
     <ClInclude Include="Batwing.h" />
     <ClInclude Include="BigE.h" />
+    <ClInclude Include="BombEffect.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="GameRunning.h" />

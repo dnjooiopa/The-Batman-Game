@@ -35,7 +35,7 @@ Display::Display()
 	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f);
 
 	//bigEnemy
-	bermTexture.loadFromFile("sprite/bigEnemyT.png");
+	bermTexture.loadFromFile("sprite/bigEnemy.png");
 	berm.setBigE(&bermTexture, Vector2u(6, 4), 0.08f, 120.0f);
 
 	//Batarang
@@ -45,6 +45,10 @@ Display::Display()
 	//Batwing
 	batwingTexture.loadFromFile("sprite/batwing.png");
 	batwing.setBatwing(&batwingTexture, Vector2u(2, 3), 0.08f, 500.0f);
+
+	//Bomb
+	bombTexture.loadFromFile("sprite/bomb.png");
+	bomb.setBombEffect(&bombTexture, Vector2u(6, 1), 0.1f);
 	
 	//font
 	font.loadFromFile("font/batmfa.ttf");
@@ -59,6 +63,7 @@ Display::Display()
 	totalTimeButton = 0;
 	delayButton = 0.07;
 	mCheck = false;
+	bombCheck = false;
 
 	//enemy
 	normalEnemyGetHit = false;
@@ -321,6 +326,17 @@ void Display::mainStory()
 	batarangShoot();
 	player.Update(deltaTime, getHit, shoot);
 	window->draw(player.body);	
+
+	bombCheck = true;
+	bomb.Update(deltaTime, bombCheck);
+	if (bombCheck)
+	{
+		window->draw(bomb.Draw());
+		if (bomb.curX() >= 5)
+		{
+			bombCheck = false;
+		}
+	}
 
 }
 

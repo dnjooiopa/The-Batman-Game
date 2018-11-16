@@ -13,18 +13,15 @@ public:
 	void bigUpdate(int row, float deltaTime, bool faceLeft);
 	void batarangUpdate(float deltaTime);
 	void batwingUpdate(int row, float deltaTime, bool faceRight);
-	
+	void bombUpdate(float deltaTime, bool bombCheck);
 	IntRect uvRect;
-
-	Vector2u imageCount;
 	Vector2u currentImage;
 
-
 private:
+	Vector2u imageCount;
 	bool i;
 	float totalTime;
 	float switchTime;
 	int row;
-
 };
 

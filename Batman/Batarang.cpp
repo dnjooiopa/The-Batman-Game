@@ -20,9 +20,9 @@ void Batarang::Update(float deltaTime)
 	body.setTextureRect(animation.uvRect);
 }
 
-void Batarang::setPosition(Vector2f pos)
+void Batarang::setPosition(Vector2f getPosition)
 {
-	body.setPosition(pos);
+	body.setPosition(getPosition);
 }
 
 float Batarang::getX()
