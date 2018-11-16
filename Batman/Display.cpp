@@ -48,11 +48,16 @@ Display::Display()
 
 	//Bomb
 	bombTexture.loadFromFile("sprite/bomb.png");
-	bomb.setBombEffect(&bombTexture, Vector2u(6, 1), 0.1f);
+	bomb.setBombEffect(&bombTexture, Vector2u(6, 1), 0.12f);
 	
+	//firetest
+	fireTexture.loadFromFile("sprite/fire.jpg");
+	fire.setFire(&fireTexture, Vector2u(4, 4), 0.1f);
+	fire.setPosition(Vector2f(150.0f, 500.0f));
+
 	//font
 	font.loadFromFile("font/batmfa.ttf");
-	
+
 	//player
 	x = 0;
 	shoot = false;
@@ -107,7 +112,7 @@ void Display::setView(bool k)
 {
 	if (k)
 	{
-		camera.setCenter(Vector2f(player.getX() + 490.0f, scene1Texture.getSize().y / 2.0f));
+		camera.setCenter(Vector2f(player.getX(), scene1Texture.getSize().y / 2.0f));
 		camera.setSize(Vector2f(1280.0f, scene1Texture.getSize().y));
 	}
 	else
@@ -193,6 +198,8 @@ void Display::drawMainMenu()
 	window->draw(textScore);
 	window->draw(textExit);
 	window->draw(textName);
+	fire.Update(deltaTime);//fire
+	window->draw(fire.draw());//fire
 	window->display();
 }
 void Display::buttonCheck()
@@ -290,11 +297,10 @@ void Display::Playing()
 	window->display();
 }
 
-
 /////////////Camera
 void Display::drawScene()
 {
-	if (player.getX() >= 640)
+	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 640)
 	{
 		x = 100;
 		camera.move((Vector2f(player.getX() + x, 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 2.5f);
@@ -321,22 +327,23 @@ void Display::mainStory()
 	if (enemySpawn)
 	{
 		enemyAI();
-		bermAI();
+	//	bermAI();
 	}
 	batarangShoot();
 	player.Update(deltaTime, getHit, shoot);
 	window->draw(player.body);	
-
-	bombCheck = true;
-	bomb.Update(deltaTime, bombCheck);
+	
+	///////Bomb effect
+	bomb.Update(deltaTime);
 	if (bombCheck)
-	{
+	{	
 		window->draw(bomb.Draw());
 		if (bomb.curX() >= 5)
 		{
 			bombCheck = false;
 		}
 	}
+	
 
 }
 
@@ -351,9 +358,8 @@ void Display::enemyAI()
 			
 			if (damaged == 10)
 			{
-				getHit = true;
+				//getHit = true;
 				myHP -= 3000;
-				//std::cout << damaged << endl;
 				if (myHP <= 0) myHP = 0;
 			}
 			else getHit = false;
@@ -391,7 +397,6 @@ void Display::bermAI()
 ///////////////////////////Batarang
 void Display::batarangShoot()
 {
-	//Vector2f flySpeed(800.0f * deltaTime, 0.0f);
 	Vector2f flySpeed(1.2f, 0.0f);
 	if (player.curX() == 3 && !shoot && player.checkShoot())
 	{
@@ -416,10 +421,17 @@ void Display::batarangShoot()
 			isFire = true;
 		}
 	}
-	if (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) || berm.Getcollision().CheckCollision(batarang.Getcollision()) || abs(batarang.getX() - player.getX()) >= 1000 )
+	if (isFire && (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) || abs(batarang.getX() - player.getX()) >= 600) )
 	{
+		bomb.setBomb(true);
+		bomb.setPosition(Vector2f(batarang.getX(),batarang.getY()-50.0f));
+		bombCheck = true;
 		shoot = false;
 		isFire = false;
+	}
+	else
+	{
+		bomb.setBomb(false);
 	}
 	batarang.body.move(movement);
 }

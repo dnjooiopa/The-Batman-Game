@@ -6,6 +6,7 @@
 #include "Batarang.h"
 #include "Batwing.h"
 #include "BombEffect.h"
+#include "Fire.h"
 #include <vector>
 #include <fstream>
 #include <string>
@@ -74,6 +75,9 @@ private:
 	BombEffect bomb;
 	Texture bombTexture;
 	bool bombCheck;
+
+	Fire fire;
+	Texture fireTexture;
 
 	float deltaTime;
 	float totalTime;

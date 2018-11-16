@@ -26,5 +26,6 @@ private:
 	bool gameStart;
 	bool showHighscore;
 	bool m;
+	Music dsSound;
 };
 

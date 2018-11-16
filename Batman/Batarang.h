@@ -14,6 +14,7 @@ public:
 	void setPosition(Vector2f pos);
 	float getX();
 	float getY();
+	Vector2f getPosition() { return body.getPosition(); }
 	RectangleShape body;
 	Vector2f Getposition() { return body.getPosition(); }
 	Collision Getcollision() { return Collision(body); }

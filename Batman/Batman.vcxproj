@@ -129,6 +129,7 @@
     <ClCompile Include="BigE.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Display.cpp" />
+    <ClCompile Include="Fire.cpp" />
     <ClCompile Include="GameRunning.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NormalEnemy.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="BombEffect.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="Fire.h" />
     <ClInclude Include="GameRunning.h" />
     <ClInclude Include="NormalEnemy.h" />
     <ClInclude Include="Player.h" />

@@ -22,29 +22,30 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	shoot = false;
 	canJump = true;
 	jumpHeight = 350.0f;
-	g = 2500.0f;
+	g = 2800.0f;
 	defaultPosY = 700.0f - (1.5 * animation.uvRect.height);
 	punchSound.openFromFile("sound/punch.ogg");
+	punchSound.setVolume(10);
 	totalTime = 0;
 	totalTimeB = 0;
 	delayButton = 0.05f;
 	sPunch = true;
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
-	body.setPosition(150.0f, defaultPosY);
+	body.setPosition(640.0f, defaultPosY);
 	
 }
 
 void Player::Update(float deltaTime, bool getHit, bool flying)
 {
-	 velocity.x = 0.0f;
-	if (Keyboard::isKeyPressed(Keyboard::A) && !crouchCheck && !punchCheck && !shoot)
+    velocity.x = 0.0f;
+	if (Keyboard::isKeyPressed(Keyboard::A) && !crouchCheck && !punchCheck && !shoot && getX()>125)
 	{
 		row = 0;
 		velocity.x -= speed;
 		shoot = false;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::D) && !crouchCheck && !punchCheck && !shoot)
+	if (Keyboard::isKeyPressed(Keyboard::D) && !crouchCheck && !punchCheck && !shoot && getX() < 9480)
 	{
 		row = 0;
 		velocity.x += speed;

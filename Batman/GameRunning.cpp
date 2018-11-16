@@ -10,8 +10,12 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	runMenu = true;
 	gameStart = false;
 	showHighscore = false;
-	MainMenu();
 	m = false;
+	dsSound.openFromFile("sound/darksoul.ogg");
+	dsSound.setPlayingOffset(Time(seconds(0)));
+	dsSound.play();
+	MainMenu();
+	
 }
 
 GameRunning::~GameRunning()
@@ -20,7 +24,6 @@ GameRunning::~GameRunning()
 
 void GameRunning::MainMenu()
 {
-
 	float deltaTime = 0.0;
 	while (runMenu)
 	{
