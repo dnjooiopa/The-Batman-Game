@@ -20,6 +20,7 @@ void Animation::setAnimation(Texture *texture, Vector2u imageCount, float switch
 	uvRect.width = texture->getSize().x / float(imageCount.x);
 	uvRect.height = texture->getSize().y / float(imageCount.y);
 	i = true;
+	j = false;
 
 }
 
@@ -71,16 +72,27 @@ void Animation::playerUpdate(int row, float deltaTime, bool faceRight, bool punc
 	}
 }
 //////Enemy
-void Animation::enemyUpdate(int row, float deltaTime, bool faceLeft)
+void Animation::enemyUpdate(int row, float deltaTime, bool faceLeft, bool dead)
 {
 	
-	if (row == 2)
+	if (row == 2 || row == 3)
 		switchTime = 0.2;
 	else
 		switchTime = 0.08;
+
+	if (dead && i)
+	{
+		currentImage.x = 0;
+		i = false;
+	}
 	currentImage.y = row;
 	totalTime += deltaTime;
 
+	if (currentImage.x == imageCount.x-1 && dead)
+	{
+		j = true;
+	}
+	
 	if (totalTime >= switchTime)
 	{
 		totalTime -= switchTime;
@@ -93,38 +105,7 @@ void Animation::enemyUpdate(int row, float deltaTime, bool faceLeft)
 
 	uvRect.top = currentImage.y * uvRect.height;
 
-	if (faceLeft)
-	{
-		uvRect.left = currentImage.x * uvRect.width;
-		uvRect.width = abs(uvRect.width);
-	}
-	else
-	{
-		uvRect.left = (currentImage.x + 1) * abs(uvRect.width);
-		uvRect.width = -abs(uvRect.width);
-	}
-}
-void Animation::bigUpdate(int row, float deltaTime, bool faceLeft)
-{
-	if (row == 2)
-		switchTime = 0.2;
-	else
-		switchTime = 0.08;
-	currentImage.y = row;
-	totalTime += deltaTime;
-
-	if (totalTime >= switchTime)
-	{
-		totalTime -= switchTime;
-		currentImage.x++;
-		if (currentImage.x >= imageCount.x)
-		{
-			currentImage.x = 0;
-		}
-	}
-
-	uvRect.top = currentImage.y * uvRect.height;
-
+	if (j) currentImage.x = imageCount.x-1;
 	if (faceLeft)
 	{
 		uvRect.left = currentImage.x * uvRect.width;

@@ -16,6 +16,7 @@ public:
 	void Update(float deltaTime, bool getHit, bool flying);
 	void Draw(RenderWindow &window);
 	void collide();
+	bool checkPunch() { return cPunch; }
 	Vector2f getPosition() { return Vector2f(body.getPosition()); }
 	float getX() {return body.getPosition().x;}
 	float getY() {return body.getPosition().y;}
@@ -37,6 +38,7 @@ private:
 	bool jump;
 	bool punch;
 	bool sPunch;
+	bool cPunch;
 	bool shoot;
 	bool canJump;
 	float jumpHeight;

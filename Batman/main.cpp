@@ -8,7 +8,6 @@
 int main()
 {
     GameRunning mygameWindow(sf::Vector2u(1280, 720), "THE BATMAN");
-
 	/*const int score = 15000000;
 	string name = "hello";
 	

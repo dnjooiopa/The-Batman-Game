@@ -4,21 +4,22 @@
 #include "Collision.h"
 using namespace sf;
 
-class NormalEnemy
+class Enemy
 {
 public:
-	NormalEnemy();
-	~NormalEnemy();
+	Enemy();
+	~Enemy();
 
-	void setEnemy(Texture* texture, Vector2u imageCount, float switchTime, float speed);
+	void setEnemy(Texture* texture, Vector2u imageCount, float switchTime, float speed,int hp);
 	void setPosition(float posX);
 	void Update(Vector2f playerPos, bool hit, float deltaTime);
 	void Draw(RenderWindow &window);
+	void setSpeed(float speed);
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
 	int curX() { return animation.currentImage.x; }
+	bool enemyDead() { return dead; }
 	Vector2f getPosition() { return body.getPosition(); }
-	void setSpeed(float speed);
 	RectangleShape draw() { return body; }
 	Collision Getcollision() { return Collision(body); }
 
@@ -29,6 +30,8 @@ private:
 	bool faceLeft;
 	int row;
 	bool checkMovement;
+	int hp;
+	bool dead;
 
 };
 

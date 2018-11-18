@@ -12,10 +12,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	showHighscore = false;
 	m = false;
 	dsSound.openFromFile("sound/darksoul.ogg");
-	dsSound.setPlayingOffset(Time(seconds(0)));
-	dsSound.play();
 	MainMenu();
-	
 }
 
 GameRunning::~GameRunning()
@@ -24,6 +21,8 @@ GameRunning::~GameRunning()
 
 void GameRunning::MainMenu()
 {
+	//dsSound.setPlayingOffset(Time(seconds(0)));
+	//dsSound.play();
 	float deltaTime = 0.0;
 	while (runMenu)
 	{
@@ -37,7 +36,7 @@ void GameRunning::MainMenu()
 			}
 		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Return) || Mouse::isButtonPressed(Mouse::Left))
+		if (Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left)&&display.msCheck))
 		{
 			switch (display.getSelect())
 			{

@@ -32,11 +32,11 @@ Display::Display()
 
 	//normalEnemy
 	normalEnemyTexture.loadFromFile("sprite/nV.png");
-	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f);
+	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f, 500);
 
 	//bigEnemy
 	bermTexture.loadFromFile("sprite/bigEnemy.png");
-	berm.setBigE(&bermTexture, Vector2u(6, 4), 0.08f, 120.0f);
+	berm.setEnemy(&bermTexture, Vector2u(6, 4), 0.08f, 120.0f, 1500);
 
 	//Batarang
 	batarangTexture.loadFromFile("sprite/batarang.png");
@@ -51,8 +51,8 @@ Display::Display()
 	bomb.setBombEffect(&bombTexture, Vector2u(6, 1), 0.12f);
 	
 	//firetest
-	fireTexture.loadFromFile("sprite/fire.jpg");
-	fire.setFire(&fireTexture, Vector2u(4, 4), 0.1f);
+	fireTexture.loadFromFile("sprite/fireT.png");
+	fire.setFire(&fireTexture, Vector2u(4, 4), 0.07f);
 	fire.setPosition(Vector2f(150.0f, 500.0f));
 
 	//font
@@ -68,6 +68,7 @@ Display::Display()
 	totalTimeButton = 0;
 	delayButton = 0.07;
 	mCheck = false;
+	msCheck = false;
 	bombCheck = false;
 
 	//enemy
@@ -134,7 +135,6 @@ void Display::moreStory()
 ///////////////////////////////////MainMenu????????????????????????????????????
 void Display::drawMainMenu()
 {
-
 	Text textPlaygame, textExit, textScore, textName;
 	textPlaygame.setFont(font);//Play Game
 	textPlaygame.setString("PLAY GAME");
@@ -163,6 +163,7 @@ void Display::drawMainMenu()
 		select = 1;
 		textPlaygame.setStyle(sf::Text::Bold);
 		logo.setPosition(770, 200);
+		msCheck = mouseCheck(&textPlaygame);
 	}
 	else
 	{
@@ -174,6 +175,7 @@ void Display::drawMainMenu()
 		select = 2;
 		textScore.setStyle(sf::Text::Bold);
 		logo.setPosition(770, 300);
+		msCheck = mouseCheck(&textScore);
 	}
 	else
 	{
@@ -185,11 +187,13 @@ void Display::drawMainMenu()
 		select = 3;
 		textExit.setStyle(sf::Text::Bold);
 		logo.setPosition(770, 400);
+		msCheck = mouseCheck(&textExit);
 	}
 	else
 	{
 		textExit.setStyle(Text::Regular);
 	}
+	
 	buttonCheck();
 	window->clear();
 	window->draw(mainMenuSprite);
@@ -294,16 +298,19 @@ void Display::Playing()
 	//batwing.Update(deltaTime);
 	//window->draw(batwing.body);
 	statusBar();
+	fire.setPosition(Vector2f(player.getX()-100, player.getY() - 100));
+	//fire.Update(deltaTime);//fire
+	//window->draw(fire.draw());//fire
 	window->display();
 }
 
 /////////////Camera
 void Display::drawScene()
 {
-	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 640)
+	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 680)
 	{
 		x = 100;
-		camera.move((Vector2f(player.getX() + x, 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 2.5f);
+		camera.move((Vector2f(player.getX() + x, 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 5.0f);
 	}
 	else
 	{
@@ -327,11 +334,10 @@ void Display::mainStory()
 	if (enemySpawn)
 	{
 		enemyAI();
-	//	bermAI();
+		bermAI();
 	}
 	batarangShoot();
-	player.Update(deltaTime, getHit, shoot);
-	window->draw(player.body);	
+	playerControl();
 	
 	///////Bomb effect
 	bomb.Update(deltaTime);
@@ -344,13 +350,28 @@ void Display::mainStory()
 		}
 	}
 	
+}
 
+void Display::playerControl()
+{
+	if (normalEnemy.Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
+		normalEnemyGetHit = true;
+	else 
+		normalEnemyGetHit = false;
+
+	if (berm.Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
+		bigEnemyGetHit = true;
+	else
+		bigEnemyGetHit = false;
+
+	player.Update(deltaTime, getHit, shoot);
+	window->draw(player.body);
 }
 
 ////////////////////Normal Enemy
 void Display::enemyAI()
 {
-	if (normalEnemy.Getcollision().CheckCollision(player.Getcollision()))
+	if (normalEnemy.Getcollision().CheckCollision(player.Getcollision()) && !normalEnemy.enemyDead())
 	{
 		if (normalEnemy.curX() == 2)
 		{
@@ -373,13 +394,13 @@ void Display::enemyAI()
 ////////////////////Big Enemy
 void Display::bermAI()
 {
-	if (berm.Getcollision().CheckCollision(player.Getcollision()))
+	if (berm.Getcollision().CheckCollision(player.Getcollision()) && !berm.enemyDead())
 	{
 		if (berm.curX() == 2)
 		{
 			damaged = rand() % 100;
 
-			if (damaged == 10)
+			if (damaged == 10 )
 			{
 				getHit = true;
 				myHP -= 5000;
@@ -421,7 +442,7 @@ void Display::batarangShoot()
 			isFire = true;
 		}
 	}
-	if (isFire && (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) || abs(batarang.getX() - player.getX()) >= 600) )
+	if (isFire && (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) || isFire && berm.Getcollision().CheckCollision(batarang.Getcollision()) || abs(batarang.getX() - player.getX()) >= 610) )
 	{
 		bomb.setBomb(true);
 		bomb.setPosition(Vector2f(batarang.getX(),batarang.getY()-50.0f));
@@ -438,9 +459,6 @@ void Display::batarangShoot()
 
 void Display::statusBar()
 {
-	
-	
-
 	//Bar
 	bar.setPosition(Vector2f(camera.getCenter().x-640.0f, camera.getCenter().y - 360.0f));
 	window->draw(bar);
@@ -479,8 +497,6 @@ void Display::statusBar()
 	textScore.setOutlineColor(sf::Color::Black);
 	textScore.setPosition(Vector2f(camera.getCenter().x - 238.0f, camera.getCenter().y - 330.0f));
 	window->draw(textScore);
-	
-
 }
 
 void Display::playerDead()
@@ -491,8 +507,13 @@ void Display::playerDead()
 
 }
 
+void Display::enemyDead()
+{
+}
+
 void Display::playMoreStory()
 {
+	batarangShoot();
 	player.Update(deltaTime, getHit, shoot);
 	window->draw(player.body);
 }

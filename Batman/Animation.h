@@ -9,8 +9,7 @@ public:
 	~Animation();
 	void setAnimation(Texture* texture, Vector2u imageCount, float switchTime);
 	void playerUpdate(int row, float deltaTime, bool faceRight, bool punch, bool jump, bool shoot, float posY);
-	void enemyUpdate(int row, float deltaTime, bool faceLeft);
-	void bigUpdate(int row, float deltaTime, bool faceLeft);
+	void enemyUpdate(int row, float deltaTime, bool faceLeft, bool dead);
 	void batarangUpdate(float deltaTime);
 	void batwingUpdate(int row, float deltaTime, bool faceRight);
 	void bombUpdate(float deltaTime, bool bombCheck);
@@ -20,6 +19,7 @@ public:
 private:
 	Vector2u imageCount;
 	bool i;
+	bool j;
 	float totalTime;
 	float switchTime;
 	int row;

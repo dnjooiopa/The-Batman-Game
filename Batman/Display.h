@@ -1,8 +1,7 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include "Player.h"
-#include "NormalEnemy.h"
-#include "BigE.h"
+#include "Enemy.h"
 #include "Batarang.h"
 #include "Batwing.h"
 #include "BombEffect.h"
@@ -31,15 +30,17 @@ public:
 	void Playing();
 	void drawScene();
 	void mainStory();
+	void playerControl();
 	void enemyAI();
 	void bermAI();
 	void batarangShoot();
 	void statusBar();
 	void playerDead();
+	void enemyDead();
 	void playMoreStory();
 	bool getMouseCheck() { return mCheck; }
 	int getSelect() { return select; }
-	
+	bool msCheck;
 
 private:
 	View camera;
@@ -59,10 +60,10 @@ private:
 	Player player;
 	Texture playerTexture;
 
-	NormalEnemy normalEnemy;
+	Enemy normalEnemy;
 	Texture normalEnemyTexture;
 
-	BigE berm;
+	Enemy berm;
 	Texture bermTexture;
 
 	Batarang batarang;
@@ -90,6 +91,7 @@ private:
 	float totalTimeButton;
 	float delayButton;
 	bool mCheck;
+	
 
 	bool enemySpawn;
 	bool spawnCheck;

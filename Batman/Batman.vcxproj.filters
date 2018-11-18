@@ -30,22 +30,19 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NormalEnemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Batarang.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Batwing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BigE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Fire.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,16 +59,10 @@
     <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NormalEnemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Batarang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Batwing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BigE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
@@ -81,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fire.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
