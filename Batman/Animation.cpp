@@ -126,16 +126,6 @@ void Animation::batarangUpdate(float posX)
 {
 	currentImage.y = row;
 	currentImage.x = int(posX) % imageCount.x;
-	/*totalTime += deltaTime;
-	if (totalTime >= switchTime)
-	{
-		totalTime -= switchTime;
-		currentImage.x++;
-		if (currentImage.x >= imageCount.x)
-		{
-			currentImage.x = 0;
-		}
-	}*/
 
 	uvRect.top = currentImage.y * uvRect.height;
 	uvRect.left = currentImage.x * uvRect.width;
@@ -170,7 +160,7 @@ void Animation::batwingUpdate(int row, float deltaTime, bool faceRight)
 		uvRect.width = -abs(uvRect.width);
 	}
 }
-
+/////bomb
 void Animation::bombUpdate(float deltaTime, bool bombCheck)
 {
 	currentImage.y = row;

@@ -30,14 +30,15 @@ public:
 	void Update(float deltaTime) 
 	{
 		if(bombCheck) sbomb = true;
-		//std::cout << curX() << std::endl;
 		if (curX() == 1 && sbomb)
 		{
 			bombSound.setPlayingOffset(Time(seconds(0)));
 			bombSound.play();
 			sbomb = false;
+			std::cout << curX() << std::endl;
 		}
-		animation.bombUpdate(deltaTime, bombCheck);
+		//std::cout << animation.currentImage.x << std::endl;
+		animation.bombUpdate(deltaTime, !sbomb);
 		body.setTextureRect(animation.uvRect);
 	}
 	RectangleShape Draw()

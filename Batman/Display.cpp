@@ -71,8 +71,10 @@ Display::Display()
 	bombCheck = false;
 
 	//enemy
-	for(int i=0;i<4;i++)
+	n = 5;
+	for(int i=0;i<n;i++)
 		normalEnemyGetHit[i]= false;
+	
 	normalEnemyGetBomb = false;
 	bigEnemyGetHit = false;
 	bigEnemyGetBomb = false;
@@ -339,33 +341,20 @@ void Display::mainStory()
 	}
 	if (enemySpawn)
 	{
-		//enemyAI();
-		//bermAI();
-		
-	}vectorUpdate();
-	//batarangShoot();
+		vectorUpdate();
+		enemyAttack();
+	}
+	batarangShoot();
 	playerControl();
 	
-	///////Bomb effect
-	bomb.Update(deltaTime);
-	if (bombCheck)
-	{
-		window->draw(bomb.Draw());
-		if (bomb.curX() >= 5)
-		{
-			bombCheck = false;
-		}
-	}
 }
 
 void Display::playerControl()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < n; i++)
 	{
-		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
-			normalEnemyGetHit[i] = true;
-		else
-			normalEnemyGetHit[i] = false;
+		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec[i].faceLeft))
+			enemyVec[i].getHit(true);
 	}
 
 	//if (berm.Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
@@ -378,26 +367,27 @@ void Display::playerControl()
 }
 
 ////////////////////Normal Enemy
-void Display::enemyAI()
+void Display::enemyAttack()
 {
-	if (normalEnemy.Getcollision().CheckCollision(player.Getcollision()) && !normalEnemy.checkDead())
+	for (int i = 0; i < n; i++)
 	{
-		if (normalEnemy.curX() == 2)
+		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec[i].checkDead())
 		{
-			damaged = rand() % 100;
-			
-			if (damaged == 10)
+			if (enemyVec[i].curX() == 2)
 			{
-				//getHit = true;
-				myHP -= 3000;
-				if (myHP <= 0) myHP = 0;
+				damaged = rand() % 100;
+
+				if (damaged == 10)
+				{
+					//getHit = true;
+					myHP -= 2000;
+					if (myHP <= 0) myHP = 0;
+				}
+				else getHit = false;
 			}
-			else getHit = false;
 		}
 	}
 	
-	normalEnemy.Update(player.getPosition(), normalEnemyGetHit,deltaTime);
-	window->draw(normalEnemy.draw());
 }
 
 ////////////////////Big Enemy
@@ -420,7 +410,7 @@ void Display::bermAI()
 		}
 	}
 
-	berm.Update(player.getPosition(), bigEnemyGetHit, deltaTime);
+	berm.Update(player.getPosition(), deltaTime);
 	window->draw(berm.draw());
 }
 
@@ -451,19 +441,14 @@ void Display::batarangShoot()
 			isFire = true;
 		}
 	}
-	if (isFire && ((normalEnemy.Getcollision().CheckCollision(batarang.Getcollision())&&!normalEnemy.checkDead()) || (berm.Getcollision().CheckCollision(batarang.Getcollision())&&!berm.checkDead()) || batarang.getX() >= camera.getCenter().x + 550 || batarang.getX() <= camera.getCenter().x - 670) )
+	for (int i = 0; i < n; i++)
 	{
-		if (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) && !normalEnemy.checkDead()) normalEnemy.getBomb(true);
-		if (berm.Getcollision().CheckCollision(batarang.Getcollision()) && !berm.checkDead()) berm.getBomb(true);
-		bomb.setBomb(true);
-		bomb.setPosition(Vector2f(batarang.getX(),batarang.getY()-50.0f));
-		bombCheck = true;
-		shoot = false;
-		isFire = false;
-	}
-	else
-	{
-		bomb.setBomb(false);
+		if (isFire && ((enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
+		{
+			if (enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead()) enemyVec[i].getShot(true);
+			shoot = false;
+			isFire = false;
+		}
 	}
 	batarang.body.move(movement);
 }
@@ -527,21 +512,23 @@ void Display::playMoreStory()
 
 void Display::vectorSet()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < n; i++)
 	{
 		normalEnemy.setSpeed(50 + rand() % 100);
 		normalEnemy.setPosition(player.getX() + (100 + rand() % 100));
 		enemyVec.push_back(normalEnemy);
 	}
-	
 }
 
 void Display::vectorUpdate()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
-		enemyVec[i].Update(player.getPosition(), normalEnemyGetHit[i], deltaTime);
-		window->draw(enemyVec[i].draw());
+		if (!enemyVec[i].checkDead())
+		{
+			enemyVec[i].Update(player.getPosition(), deltaTime);
+			window->draw(enemyVec[i].draw());
+		}
 	}
 }
 

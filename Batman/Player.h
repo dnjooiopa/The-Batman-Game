@@ -27,7 +27,6 @@ public:
     RectangleShape body;
 	bool faceRight;
 	
-
 private:
 	Animation animation;
 	bool crouchCheck;

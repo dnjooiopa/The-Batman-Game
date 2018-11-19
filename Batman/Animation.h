@@ -15,11 +15,10 @@ public:
 	void bombUpdate(float deltaTime, bool bombCheck);
 	IntRect uvRect;
 	Vector2u currentImage;
-
+	bool j;
 private:
 	Vector2u imageCount;
 	bool i;
-	bool j;
 	float totalTime;
 	float switchTime;
 	int row;

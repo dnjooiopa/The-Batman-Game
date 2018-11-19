@@ -12,28 +12,29 @@ public:
 
 	void setEnemy(Texture* texture, Vector2u imageCount, float switchTime, float speed,int hp);
 	void setPosition(float posX);
-	void Update(Vector2f playerPos, bool hit, float deltaTime);
-	void getBomb(bool bomb);
+	void Update(Vector2f playerPos, float deltaTime);
+	void getShot(bool shot);
+	void getHit(bool hit);
 	void Draw(RenderWindow &window);
 	void setSpeed(float speed);
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
 	int curX() { return animation.currentImage.x; }
-	bool checkDead() { return dead; }
+	bool checkDead() { return animation.j; }
 	Vector2f getPosition() { return body.getPosition(); }
 	RectangleShape draw() { return body; }
 	Collision Getcollision() { return Collision(body); }
+	bool faceLeft;
 
 private:
 	RectangleShape body;
 	Animation animation;
 	float speed;
-	bool faceLeft;
 	int row;
 	bool checkMovement;
 	int hp;
 	bool dead;
-	bool bomb;
-
+	bool shot;
+	bool hit;
 };
 

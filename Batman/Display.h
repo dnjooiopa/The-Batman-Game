@@ -33,7 +33,7 @@ public:
 	void drawScene();
 	void mainStory();
 	void playerControl();
-	void enemyAI();
+	void enemyAttack();
 	void bermAI();
 	void batarangShoot();
 	void statusBar();
@@ -115,6 +115,7 @@ private:
 	ifstream loadFile;
 
 	vector<Enemy> enemyVec;
+	int n;
 
 };
 
