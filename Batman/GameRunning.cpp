@@ -33,6 +33,7 @@ void GameRunning::MainMenu()
 			if (event.type == Event::Closed)
 			{
 				window.close();
+				runMenu = false;
 			}
 		}
 
@@ -76,6 +77,7 @@ void GameRunning::GameStart()
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
+				gameStart = false;
 			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -106,7 +108,7 @@ void GameRunning::GameStart()
 		}
 	}
 }
-
+////////////////////////
 void GameRunning::Highscore()
 {
 	while (showHighscore) {
@@ -116,6 +118,7 @@ void GameRunning::Highscore()
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
+				showHighscore = false;
 			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape) )

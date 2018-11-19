@@ -444,7 +444,7 @@ void Display::batarangShoot()
 			isFire = true;
 		}
 	}
-	if (isFire && ((normalEnemy.Getcollision().CheckCollision(batarang.Getcollision())&&!normalEnemy.checkDead()) || (berm.Getcollision().CheckCollision(batarang.Getcollision())&&!berm.checkDead()) || abs(batarang.getX() - player.getX()) >= 610) )
+	if (isFire && ((normalEnemy.Getcollision().CheckCollision(batarang.Getcollision())&&!normalEnemy.checkDead()) || (berm.Getcollision().CheckCollision(batarang.Getcollision())&&!berm.checkDead()) || batarang.getX() >= camera.getCenter().x + 550 || batarang.getX() <= camera.getCenter().x - 670) )
 	{
 		if (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) && !normalEnemy.checkDead()) normalEnemy.getBomb(true);
 		if (berm.Getcollision().CheckCollision(batarang.Getcollision()) && !berm.checkDead()) berm.getBomb(true);
