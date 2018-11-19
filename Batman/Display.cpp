@@ -205,8 +205,6 @@ void Display::drawMainMenu()
 	window->draw(textScore);
 	window->draw(textExit);
 	window->draw(textName);
-	fire.Update(deltaTime);//fire
-	window->draw(fire.draw());//fire
 	window->display();
 }
 void Display::buttonCheck()
