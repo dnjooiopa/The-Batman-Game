@@ -108,7 +108,7 @@ void GameRunning::GameStart()
 		}
 	}
 }
-////////////////////////
+
 void GameRunning::Highscore()
 {
 	while (showHighscore) {
