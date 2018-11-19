@@ -1,7 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 0
 #include "Display.h"
-#include "iostream"
-#include <ctime>
+
 
 Display::Display()
 {
@@ -72,7 +71,8 @@ Display::Display()
 	bombCheck = false;
 
 	//enemy
-	normalEnemyGetHit = false;
+	for(int i=0;i<4;i++)
+		normalEnemyGetHit[i]= false;
 	normalEnemyGetBomb = false;
 	bigEnemyGetHit = false;
 	bigEnemyGetBomb = false;
@@ -95,6 +95,8 @@ Display::Display()
 	}
 	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
 
+	////////////
+	test = true;
 }
 
 Display::~Display()
@@ -135,7 +137,7 @@ void Display::moreStory()
 	statusBar();
 	window->display();
 }
-///////////////////////////////////MainMenu????????????????????????????????????
+///////////////////////////////////MainMenu//////////////////////////////////
 void Display::drawMainMenu()
 {
 	Text textPlaygame, textExit, textScore, textName;
@@ -327,19 +329,21 @@ void Display::drawScene()
 void Display::mainStory()
 {
 	//////////////// Normal Enemy Fighting Check
-	if (player.getX() >= 1000 && spawnCheck)
+	if (player.getX() >= 1 && spawnCheck)
 	{
 		enemySpawn = true;
-		normalEnemy.setPosition(player.getX()+500.0f);
-     	berm.setPosition(player.getX() + 1000.0f);
+		//normalEnemy.setPosition(player.getX()+500.0f);
+     	//berm.setPosition(player.getX() + 1000.0f);
 		spawnCheck = false;
+		vectorSet();
 	}
 	if (enemySpawn)
 	{
-		enemyAI();
-		bermAI();
-	}
-	batarangShoot();
+		//enemyAI();
+		//bermAI();
+		
+	}vectorUpdate();
+	//batarangShoot();
 	playerControl();
 	
 	///////Bomb effect
@@ -356,15 +360,18 @@ void Display::mainStory()
 
 void Display::playerControl()
 {
-	if (normalEnemy.Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
-		normalEnemyGetHit = true;
-	else 
-		normalEnemyGetHit = false;
+	for (int i = 0; i < 4; i++)
+	{
+		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
+			normalEnemyGetHit[i] = true;
+		else
+			normalEnemyGetHit[i] = false;
+	}
 
-	if (berm.Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
-		bigEnemyGetHit = true;
-	else
-		bigEnemyGetHit = false;
+	//if (berm.Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
+	//	bigEnemyGetHit = true;
+	//else
+	//	bigEnemyGetHit = false;
 
 	player.Update(deltaTime, getHit, shoot);
 	window->draw(player.body);
@@ -511,15 +518,31 @@ void Display::playerDead()
 
 }
 
-void Display::enemyDead()
-{
-}
-
 void Display::playMoreStory()
 {
 	batarangShoot();
 	player.Update(deltaTime, getHit, shoot);
 	window->draw(player.body);
+}
+
+void Display::vectorSet()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		normalEnemy.setSpeed(50 + rand() % 100);
+		normalEnemy.setPosition(player.getX() + (100 + rand() % 100));
+		enemyVec.push_back(normalEnemy);
+	}
+	
+}
+
+void Display::vectorUpdate()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		enemyVec[i].Update(player.getPosition(), normalEnemyGetHit[i], deltaTime);
+		window->draw(enemyVec[i].draw());
+	}
 }
 
 

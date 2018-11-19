@@ -6,6 +6,8 @@
 #include "Batwing.h"
 #include "BombEffect.h"
 #include "Fire.h"
+#include <iostream>
+#include <ctime>
 #include <vector>
 #include <fstream>
 #include <string>
@@ -36,8 +38,9 @@ public:
 	void batarangShoot();
 	void statusBar();
 	void playerDead();
-	void enemyDead();
 	void playMoreStory();
+	void vectorSet();
+	void vectorUpdate();
 	bool getMouseCheck() { return mCheck; }
 	int getSelect() { return select; }
 	bool msCheck;
@@ -95,10 +98,11 @@ private:
 
 	bool enemySpawn;
 	bool spawnCheck;
-	bool normalEnemyGetHit;
+	bool normalEnemyGetHit[4];
 	bool normalEnemyGetBomb;
 	bool bigEnemyGetHit;
 	bool bigEnemyGetBomb;
+	bool test;
 
 	int myHP;
 	RectangleShape HP;
@@ -109,6 +113,8 @@ private:
 
 	vector<pair<int, string>> scoreboard;
 	ifstream loadFile;
+
+	vector<Enemy> enemyVec;
 
 };
 
