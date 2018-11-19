@@ -26,7 +26,7 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	g = 2800.0f;
 	defaultPosY = 700.0f - (1.5 * animation.uvRect.height);
 	punchSound.openFromFile("sound/punch.ogg");
-	punchSound.setVolume(20);
+	punchSound.setVolume(30);
 	totalTime = 0;
 	totalTimeB = 0;
 	delayButton = 0.05f;

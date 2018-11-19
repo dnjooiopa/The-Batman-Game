@@ -96,7 +96,9 @@ private:
 	bool enemySpawn;
 	bool spawnCheck;
 	bool normalEnemyGetHit;
+	bool normalEnemyGetBomb;
 	bool bigEnemyGetHit;
+	bool bigEnemyGetBomb;
 
 	int myHP;
 	RectangleShape HP;

@@ -73,7 +73,10 @@ Display::Display()
 
 	//enemy
 	normalEnemyGetHit = false;
+	normalEnemyGetBomb = false;
 	bigEnemyGetHit = false;
+	bigEnemyGetBomb = false;
+	
 
 	//HP
 	myHP = 100000;
@@ -302,6 +305,8 @@ void Display::Playing()
 	//fire.Update(deltaTime);//fire
 	//window->draw(fire.draw());//fire
 	window->display();
+
+
 }
 
 /////////////Camera
@@ -342,14 +347,13 @@ void Display::mainStory()
 	///////Bomb effect
 	bomb.Update(deltaTime);
 	if (bombCheck)
-	{	
+	{
 		window->draw(bomb.Draw());
 		if (bomb.curX() >= 5)
 		{
 			bombCheck = false;
 		}
 	}
-	
 }
 
 void Display::playerControl()
@@ -371,7 +375,7 @@ void Display::playerControl()
 ////////////////////Normal Enemy
 void Display::enemyAI()
 {
-	if (normalEnemy.Getcollision().CheckCollision(player.Getcollision()) && !normalEnemy.enemyDead())
+	if (normalEnemy.Getcollision().CheckCollision(player.Getcollision()) && !normalEnemy.checkDead())
 	{
 		if (normalEnemy.curX() == 2)
 		{
@@ -387,14 +391,14 @@ void Display::enemyAI()
 		}
 	}
 	
-	normalEnemy.Update(player.getPosition(), normalEnemyGetHit, deltaTime);
+	normalEnemy.Update(player.getPosition(), normalEnemyGetHit,deltaTime);
 	window->draw(normalEnemy.draw());
 }
 
 ////////////////////Big Enemy
 void Display::bermAI()
 {
-	if (berm.Getcollision().CheckCollision(player.Getcollision()) && !berm.enemyDead())
+	if (berm.Getcollision().CheckCollision(player.Getcollision()) && !berm.checkDead())
 	{
 		if (berm.curX() == 2)
 		{
@@ -431,7 +435,7 @@ void Display::batarangShoot()
 
 	if (shoot)
 	{
-		batarang.Update(deltaTime);
+		batarang.Update();
 		window->draw(batarang.body);
 		if (!isFire)
 		{
@@ -442,8 +446,10 @@ void Display::batarangShoot()
 			isFire = true;
 		}
 	}
-	if (isFire && (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) || isFire && berm.Getcollision().CheckCollision(batarang.Getcollision()) || abs(batarang.getX() - player.getX()) >= 610) )
+	if (isFire && ((normalEnemy.Getcollision().CheckCollision(batarang.Getcollision())&&!normalEnemy.checkDead()) || (berm.Getcollision().CheckCollision(batarang.Getcollision())&&!berm.checkDead()) || abs(batarang.getX() - player.getX()) >= 610) )
 	{
+		if (normalEnemy.Getcollision().CheckCollision(batarang.Getcollision()) && !normalEnemy.checkDead()) normalEnemy.getBomb(true);
+		if (berm.Getcollision().CheckCollision(batarang.Getcollision()) && !berm.checkDead()) berm.getBomb(true);
 		bomb.setBomb(true);
 		bomb.setPosition(Vector2f(batarang.getX(),batarang.getY()-50.0f));
 		bombCheck = true;

@@ -92,6 +92,10 @@ void Animation::enemyUpdate(int row, float deltaTime, bool faceLeft, bool dead)
 	{
 		j = true;
 	}
+	if (!dead)
+	{
+		j = false;
+	}
 	
 	if (totalTime >= switchTime)
 	{
@@ -118,10 +122,11 @@ void Animation::enemyUpdate(int row, float deltaTime, bool faceLeft, bool dead)
 	}
 }
 /////batarang
-void Animation::batarangUpdate(float deltaTime)
+void Animation::batarangUpdate(float posX)
 {
 	currentImage.y = row;
-	totalTime += deltaTime;
+	currentImage.x = int(posX) % imageCount.x;
+	/*totalTime += deltaTime;
 	if (totalTime >= switchTime)
 	{
 		totalTime -= switchTime;
@@ -130,7 +135,7 @@ void Animation::batarangUpdate(float deltaTime)
 		{
 			currentImage.x = 0;
 		}
-	}
+	}*/
 
 	uvRect.top = currentImage.y * uvRect.height;
 	uvRect.left = currentImage.x * uvRect.width;

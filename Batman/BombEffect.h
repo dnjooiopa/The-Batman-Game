@@ -16,7 +16,7 @@ public:
 		body.setSize(Vector2f(150.0f, 150.0f));
 		body.setTexture(texture);
 		bombSound.openFromFile("sound/bomb.ogg");
-		bombSound.setVolume(25);
+		bombSound.setVolume(35);
 		sbomb = false;
 	}
 	void setBomb(bool bombCheck)
@@ -29,7 +29,7 @@ public:
 	}
 	void Update(float deltaTime) 
 	{
-		if(bombCheck) sbomb = true;	
+		if(bombCheck) sbomb = true;
 		//std::cout << curX() << std::endl;
 		if (curX() == 1 && sbomb)
 		{

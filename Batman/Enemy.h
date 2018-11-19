@@ -13,12 +13,13 @@ public:
 	void setEnemy(Texture* texture, Vector2u imageCount, float switchTime, float speed,int hp);
 	void setPosition(float posX);
 	void Update(Vector2f playerPos, bool hit, float deltaTime);
+	void getBomb(bool bomb);
 	void Draw(RenderWindow &window);
 	void setSpeed(float speed);
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
 	int curX() { return animation.currentImage.x; }
-	bool enemyDead() { return dead; }
+	bool checkDead() { return dead; }
 	Vector2f getPosition() { return body.getPosition(); }
 	RectangleShape draw() { return body; }
 	Collision Getcollision() { return Collision(body); }
@@ -32,6 +33,7 @@ private:
 	bool checkMovement;
 	int hp;
 	bool dead;
+	bool bomb;
 
 };
 

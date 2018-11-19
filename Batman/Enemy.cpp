@@ -16,6 +16,7 @@ void Enemy::setEnemy(Texture * texture, Vector2u imageCount, float switchTime, f
 	this->hp = hp;
 	faceLeft = true;
 	dead = false;
+	bomb = false;
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
 }
@@ -25,8 +26,7 @@ void Enemy::setPosition(float posX)
 	body.setPosition(posX, 700.0f - 1.5*animation.uvRect.height);
 }
 
-
-void Enemy::Update(Vector2f playerPos, bool hit, float deltaTime)
+void Enemy::Update(Vector2f playerPos, bool hit,float deltaTime)
 {
 	Vector2f movement(0.0f, 0.0f);
 	if (!dead)
@@ -76,7 +76,12 @@ void Enemy::Update(Vector2f playerPos, bool hit, float deltaTime)
 				faceLeft = false;
 		}
 	}
-	//// Get Hit
+	//// Get Hit and Bomb
+	if (bomb)
+	{
+		hp -= 500;
+		bomb = false;
+	}
 	if (hit) hp -= 300;
 	if (hp <= 0)
 	{
@@ -88,6 +93,17 @@ void Enemy::Update(Vector2f playerPos, bool hit, float deltaTime)
 	body.setTextureRect(animation.uvRect);
 	body.move(movement);
 
+	if (Keyboard::isKeyPressed(Keyboard::B))
+	{
+		hp = 1000;
+		dead = false;
+	}
+
+}
+
+void Enemy::getBomb(bool bomb)
+{
+	this->bomb = bomb;
 }
 
 void Enemy::Draw(RenderWindow &window)

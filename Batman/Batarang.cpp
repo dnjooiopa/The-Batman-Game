@@ -14,9 +14,9 @@ void Batarang::setBatarang(Texture * texture, Vector2u imageCount, float switchT
 	body.setSize(Vector2f(0.5 * animation.uvRect.width, 0.5 * animation.uvRect.height));
 }
 
-void Batarang::Update(float deltaTime)
+void Batarang::Update()
 {
-	animation.batarangUpdate(deltaTime);
+	animation.batarangUpdate(getX());
 	body.setTextureRect(animation.uvRect);
 }
 

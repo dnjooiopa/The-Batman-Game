@@ -56,6 +56,7 @@ void GameRunning::MainMenu()
 				break;
 			case 3:
 				window.close();
+				runMenu = false;
 				break;
 			}
 		}

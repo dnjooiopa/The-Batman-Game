@@ -10,7 +10,7 @@ public:
 	Batarang();
 	~Batarang();
 	void setBatarang(Texture* texture, Vector2u imageCount, float switchTime);
-	void Update(float deltaTime);
+	void Update();
 	void setPosition(Vector2f pos);
 	float getX();
 	float getY();
