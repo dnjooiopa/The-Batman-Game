@@ -1,9 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Animation.h"
 #include "Batarang.h"
 #include "Collision.h"
-#include "PlaySound.h"
 using namespace sf;
 
 class Player
@@ -50,7 +50,7 @@ private:
 	
 	Vector2f velocity;
 	Vector2f pos;
-	PlaySound sound;
+	Music punchSound;
 
 };
 

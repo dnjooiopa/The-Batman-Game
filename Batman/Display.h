@@ -5,12 +5,10 @@
 #include "Batarang.h"
 #include "Batwing.h"
 #include "BombEffect.h"
-#include "Fire.h"
 #include <iostream>
 #include <ctime>
 #include <vector>
 #include <fstream>
-//#include <string>
 #include <algorithm>
 
 using namespace sf;
@@ -83,9 +81,6 @@ private:
 	Texture bombTexture;
 	bool bombCheck;
 
-	Fire fire;
-	Texture fireTexture;
-
 	unsigned int countTime;
 	float deltaTime;
 	float totalTime;
@@ -119,5 +114,6 @@ private:
 	vector<Enemy> enemyVec;
 	int n;
 
+	Music batFlying;
 };
 

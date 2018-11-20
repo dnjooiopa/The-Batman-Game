@@ -47,11 +47,6 @@ Display::Display()
 	//Bomb
 	bombTexture.loadFromFile("sprite/bomb.png");
 	bomb.setBombEffect(&bombTexture, Vector2u(6, 1), 0.12f);
-	
-	//firetest
-	fireTexture.loadFromFile("sprite/fireT.png");
-	fire.setFire(&fireTexture, Vector2u(4, 4), 0.07f);
-	fire.setPosition(Vector2f(150.0f, 500.0f));
 
 	//font
 	font.loadFromFile("font/batmfa.ttf");
@@ -98,6 +93,10 @@ Display::Display()
 
 	////////////
 	test = true;
+
+	//Sound
+	batFlying.openFromFile("sound/batFlying.ogg");
+	batFlying.setVolume(50);
 }
 
 Display::~Display()
@@ -305,9 +304,6 @@ void Display::Playing()
 	//batwing.Update(deltaTime);
 	//window->draw(batwing.body);
 	statusBar();
-	fire.setPosition(Vector2f(player.getX()-100, player.getY() - 100));
-	//fire.Update(deltaTime);//fire
-	//window->draw(fire.draw());//fire
 	window->display();
 
 
@@ -450,6 +446,8 @@ void Display::batarangShoot()
 		batarang.setPosition(Vector2f(player.getX() + d, player.getY() + 25.0f));
 		shoot = true;
 		player.cShoot = false;
+		batFlying.setPlayingOffset(Time(seconds(0.1)));
+		batFlying.play();
 	}
 
 	if (shoot)
@@ -472,6 +470,7 @@ void Display::batarangShoot()
 	{
 		if (isFire && ((enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
 		{
+			batFlying.stop();
 			if (enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead())
 			{
 				enemyVec[i].getShot(true);
