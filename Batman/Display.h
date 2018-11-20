@@ -43,10 +43,9 @@ public:
 	void vectorSet();
 	void vectorUpdate();
 	bool posCheck();
-	bool getMouseCheck() { return mCheck; }
 	int getSelect() { return select; }
 	bool msCheck;
-
+	bool mCheck;
 private:
 	View camera;
 	RenderWindow *window;
@@ -97,8 +96,6 @@ private:
 	int select;
 	float totalTimeButton;
 	float delayButton;
-	bool mCheck;
-	
 
 	bool enemySpawn;
 	bool spawnCheck;
@@ -106,7 +103,6 @@ private:
 	bool normalEnemyGetBomb;
 	bool bigEnemyGetHit;
 	bool bigEnemyGetBomb;
-	bool test;
 
 	int myHP;
 	RectangleShape HP;

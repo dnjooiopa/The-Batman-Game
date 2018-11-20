@@ -22,7 +22,7 @@ GameRunning::~GameRunning()
 void GameRunning::MainMenu()
 {
 	float deltaTime = 0.0;
-	while (window.isOpen())
+	while (state == 1)
 	{
 		deltaTime = clock1.restart().asSeconds();
 		
@@ -43,18 +43,17 @@ void GameRunning::MainMenu()
 			case 1:
 				
 				display.setView(true);
+				state = gameStart;
 				GameStart();
 				break;
 			case 2:
-				runMenu = false;
-				showHighscore = true;
-				gameStart = false;
+				state == showHighscore;
 				display.setView(false);
 				Highscore();
 				break;
 			case 3:
 				window.close();
-				runMenu = false;
+				state = 0;
 				break;
 			}
 		}
@@ -67,7 +66,7 @@ void GameRunning::GameStart()
 {
 	float deltaTime = 0.0;
 	Time time;
-	while (gameStart) {
+	while (state == gameStart) {
 		deltaTime = clock1.restart().asSeconds();
 		time = clock2.getElapsedTime();
 		Event event;
@@ -75,15 +74,13 @@ void GameRunning::GameStart()
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
-				gameStart = false;
+				state = 0;
 			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{
-			runMenu = true;
-			gameStart = false;
+		{	
 			display.setView(false);
-			m = false;
+			state = runMenu;
 			MainMenu();
 		}
 		display.setDT(deltaTime);
@@ -94,22 +91,20 @@ void GameRunning::GameStart()
 
 void GameRunning::Highscore()
 {
-	while (showHighscore) {
+	while (state == showHighscore) {
 
 		Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
-				showHighscore = false;
+				state = 0;
 			}
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape) )
+		if (Keyboard::isKeyPressed(Keyboard::Escape) || (Mouse::isButtonPressed(Mouse::Left) && display.mCheck))
 		{
-			runMenu = true;
-			showHighscore = false;
-			gameStart = false;
 			display.setView(false);
+			state = runMenu;
 			MainMenu();
 		}
 		display.drawHighscore();

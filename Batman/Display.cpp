@@ -95,9 +95,6 @@ Display::Display()
 		scoreboard.push_back({ tempScore,tempName });
 	}
 	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
-
-	////////////
-	test = true;
 }
 
 Display::~Display()
@@ -284,14 +281,13 @@ void Display::drawHighscore()
 		textBack.setPosition(40, 25);
 		if (mouseCheck(&textBack))
 		{
-			mCheck = true;
 			textBack.setStyle(sf::Text::Bold);
 		}
 		else
 		{
 			textBack.setStyle(Text::Regular);
-			mCheck = false;
 		}
+		mCheck = mouseCheck(&textBack);
 		window->draw(textBack);
 	}
 	window->display();
@@ -306,7 +302,7 @@ void Display::Playing()
 	//batwing.Update(deltaTime);
 	//window->draw(batwing.body);
 	statusBar();
-	fire.setPosition(Vector2f(player.getX()-100, player.getY() - 100));
+	//fire.setPosition(Vector2f(player.getX()-100, player.getY() - 100));
 	//fire.Update(deltaTime);//fire
 	//window->draw(fire.draw());//fire
 	window->display();
