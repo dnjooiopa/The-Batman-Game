@@ -28,8 +28,7 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	jumpHeight = 350.0f;
 	g = 2800.0f;
 	defaultPosY = 700.0f - (1.5 * animation.uvRect.height);
-	punchSound.openFromFile("sound/punch.ogg");
-	punchSound.setVolume(30);
+
 	totalTime = 0;
 	totalTimeB = 0;
 	delayButton = 0.05f;
@@ -121,8 +120,7 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 			if (animation.currentImage.x == 2 && sPunch && !getHit)
 			{	
 				cPunch = true;
-				punchSound.setPlayingOffset(Time(seconds(0)));
-				punchSound.play();
+				sound.playPunchSound();
 				sPunch = false;
 			}
 			else

@@ -128,11 +128,11 @@
     <ClCompile Include="Batwing.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Display.cpp" />
-    <ClCompile Include="Fire.cpp" />
     <ClCompile Include="GameRunning.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlaySound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -141,10 +141,13 @@
     <ClInclude Include="BombEffect.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Display.h" />
-    <ClInclude Include="Fire.h" />
     <ClInclude Include="GameRunning.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlaySound.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Batman.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
