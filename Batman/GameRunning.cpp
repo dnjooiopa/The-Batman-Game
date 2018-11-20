@@ -47,8 +47,8 @@ void GameRunning::MainMenu()
 				GameStart();
 				break;
 			case 2:
-				state == showHighscore;
 				display.setView(false);
+				state = showHighscore;
 				Highscore();
 				break;
 			case 3:

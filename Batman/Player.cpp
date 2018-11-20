@@ -231,27 +231,3 @@ void Player::collide()
 		body.setPosition(Vector2f(getX(), defaultPosY));
 	}
 }
-
-
-
-
-//if (Keyboard::isKeyPressed(Keyboard::Up))
-//{
-//	shoot = false;
-//	row = 0;
-//	velocity.y -= speed * deltaTime;
-//	if (faceRight)
-//		velocity.x += 0.001f;
-//	else
-//		velocity.x -= 0.001f;
-//}
-
-//if (Keyboard::isKeyPressed(Keyboard::Down) && !shoot)
-//{
-//	row = 0;
-//	velocity.y += speed * deltaTime;
-//	if (faceRight)
-//		velocity.x += 0.001f;
-//	else
-//		velocity.x -= 0.001f;
-//}

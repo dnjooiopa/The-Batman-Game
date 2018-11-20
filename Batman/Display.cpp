@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS 0
 #include "Display.h"
 
 Display::Display()
@@ -91,7 +90,6 @@ Display::Display()
 		string tempName;
 		int tempScore;
 		loadFile >> tempName >> tempScore;
-	//	cout << ">> \"" << tempName << "\" " << tempScore << endl;
 		scoreboard.push_back({ tempScore,tempName });
 	}
 	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
@@ -135,6 +133,20 @@ void Display::setView(bool k)
 	
 	window->setView(camera);
 }
+void Display::drawScene()
+{
+	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 680)
+	{
+		x = 100;
+		camera.move((Vector2f(player.getX() + x, 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 5.0f);
+	}
+	else
+	{
+		x = 0;
+	}
+	window->setView(camera);
+	window->draw(scene1);
+}
 void Display::moreStory()
 {
 	window->clear();
@@ -143,7 +155,6 @@ void Display::moreStory()
 	statusBar();
 	window->display();
 }
-///////////////////////////////////MainMenu//////////////////////////////////
 void Display::drawMainMenu()
 {
 	Text textPlaygame, textExit, textScore, textName;
@@ -313,22 +324,6 @@ void Display::Playing()
 
 }
 
-/////////////Camera
-void Display::drawScene()
-{
-	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 680)
-	{
-		x = 100;
-		camera.move((Vector2f(player.getX() + x, 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 5.0f);
-	}
-	else
-	{
-		x = 0;
-	}
-	window->setView(camera);
-	window->draw(scene1);
-}
-
 ///////////////////Main Story////////////////////////////////////////
 void Display::mainStory()
 {
@@ -393,7 +388,7 @@ void Display::playerControl()
 			//enemyVec1.push_back(normalEnemy);
 
 			berm.setSpeed(50 + rand() % 100);
-			berm.setPosition((player.getX() - 300) + (rand() % 600));
+			berm.setPosition((player.getX() - 700) + (rand() % 1400));
 			enemyVec1.push_back(berm);
 		}
 	}
@@ -413,11 +408,11 @@ void Display::enemyAttack1()
 		{
 			if (enemyVec1[i].curX() == 2)
 			{
-				damaged = rand() % 300;
+				damaged = rand() % 200;
 
 				if (damaged == 10)
 				{
-				    if (myHP > 0) myHP -= 2000;
+				    if (myHP > 0) myHP -= 3000;
 					if (myHP <= 0) myHP = 0;
 				}
 			}
@@ -435,11 +430,11 @@ void Display::enemyAttack2()
 		{
 			if (enemyVec2[i].curX() == 2)
 			{
-				damaged = rand() % 300;
+				damaged = rand() % 200;
 
 				if (damaged == 10)
 				{
-					if (myHP > 0) myHP -= 5000;
+					if (myHP > 0) myHP -= 8000;
 					if (myHP <= 0) myHP = 0;
 				}
 			}
