@@ -19,8 +19,11 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	faceRight = true;
 	punch = false;
 	cPunch = false;
+	sPunch = true;
 	jump = false;
 	shoot = false;
+	cShoot = false;
+	sShoot = false;
 	canJump = true;
 	jumpHeight = 350.0f;
 	g = 2800.0f;
@@ -30,7 +33,6 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	totalTime = 0;
 	totalTimeB = 0;
 	delayButton = 0.05f;
-	sPunch = true;
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
 	body.setPosition(640.0f, defaultPosY);
@@ -101,6 +103,7 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 		{
 			totalTimeB -= delayButton;
 			shoot = true;
+			sShoot = true;
 			row = 7;
 		}
 	}
@@ -143,10 +146,18 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 		if (shoot)
 		{
 			row = 7;
+
+			if (animation.currentImage.x == 3 && sShoot)
+			{
+				cShoot = true;
+				sShoot = false;
+			}
+
 			if (animation.currentImage.x >= 5)
 			{
 				shoot = false;
 			}
+
 		}
 		if (crouchCheck)
 		{

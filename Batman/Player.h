@@ -20,13 +20,12 @@ public:
 	Vector2f getPosition() { return Vector2f(body.getPosition()); }
 	float getX() {return body.getPosition().x;}
 	float getY() {return body.getPosition().y;}
-	bool checkShoot() { return shoot; }
 	int curX() { return animation.currentImage.x; }
 	Vector2f Getposition() { return body.getPosition(); }
 	Collision Getcollision() { return Collision(body); }
     RectangleShape body;
 	bool faceRight;
-	
+	bool cShoot;
 private:
 	Animation animation;
 	bool crouchCheck;
@@ -39,6 +38,8 @@ private:
 	bool sPunch;
 	bool cPunch;
 	bool shoot;
+	
+	bool sShoot;
 	bool canJump;
 	float jumpHeight;
 	float g;

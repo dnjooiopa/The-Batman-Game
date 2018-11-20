@@ -14,7 +14,8 @@ public:
 	void setPosition(float posX);
 	void Update(Vector2f playerPos, float deltaTime);
 	void getShot(bool shot);
-	void getHit(bool hit);
+	void getPunch(bool hit);
+	bool getHit() { return hit; }
 	void Draw(RenderWindow &window);
 	void setSpeed(float speed);
 	float getX() { return body.getPosition().x; }

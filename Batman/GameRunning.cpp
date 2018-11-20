@@ -5,11 +5,11 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 {
 	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Titlebar);
 	display.setWindow(&window);
-	select = 1;
 	display.setView(false);
-	runMenu = true;
-	gameStart = false;
-	showHighscore = false;
+	state = 1;
+	runMenu = 1;
+	gameStart = 2;
+	showHighscore = 3;
 	m = false;
 	dsSound.openFromFile("sound/darksoul.ogg");
 	MainMenu();
@@ -21,19 +21,18 @@ GameRunning::~GameRunning()
 
 void GameRunning::MainMenu()
 {
-	//dsSound.setPlayingOffset(Time(seconds(0)));
-	//dsSound.play();
 	float deltaTime = 0.0;
-	while (runMenu)
+	while (window.isOpen())
 	{
-		deltaTime = clock.restart().asSeconds();
+		deltaTime = clock1.restart().asSeconds();
+		
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 			{
 				window.close();
-				runMenu = false;
+				state = 0;
 			}
 		}
 
@@ -42,9 +41,7 @@ void GameRunning::MainMenu()
 			switch (display.getSelect())
 			{
 			case 1:
-				runMenu = false;
-				showHighscore = false;
-				gameStart = true;
+				
 				display.setView(true);
 				GameStart();
 				break;
@@ -69,9 +66,10 @@ void GameRunning::MainMenu()
 void GameRunning::GameStart()
 {
 	float deltaTime = 0.0;
-	 
+	Time time;
 	while (gameStart) {
-		deltaTime = clock.restart().asSeconds();
+		deltaTime = clock1.restart().asSeconds();
+		time = clock2.getElapsedTime();
 		Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
@@ -88,24 +86,9 @@ void GameRunning::GameStart()
 			m = false;
 			MainMenu();
 		}
-
-		/////////////////Secret Scene
-		if (Keyboard::isKeyPressed(Keyboard::T))
-		{
-			m = true;
-			display.setView(false);
-		}
-		if (m)
-		{
-			display.setDT(deltaTime);
-			display.moreStory();
-			display.playMoreStory();
-		}////////////////////////////
-		else
-		{
-			display.setDT(deltaTime);
-			display.Playing();
-		}
+		display.setDT(deltaTime);
+		display.timeElapse(time.asSeconds());
+		display.Playing();
 	}
 }
 

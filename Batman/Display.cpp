@@ -1,7 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 0
 #include "Display.h"
 
-
 Display::Display()
 {
 	//MainMenu
@@ -68,7 +67,7 @@ Display::Display()
 	delayButton = 0.07;
 	mCheck = false;
 	msCheck = false;
-	bombCheck = false;
+	batNumber = 100;
 
 	//enemy
 	n = 5;
@@ -82,7 +81,7 @@ Display::Display()
 
 	//HP
 	myHP = 100000;
-	playerScore = 1000000;
+	playerScore = 0;
 	HP.setFillColor(Color::Red);//à«µÊÕ
 	hit = 4;
 
@@ -114,6 +113,11 @@ void Display::setWindow(RenderWindow *window)
 void Display::setDT(float deltaTime)
 {
 	this->deltaTime = deltaTime;
+}
+
+void Display::timeElapse(float timeElapse)
+{
+	this->countTime = int(timeElapse);
 }
 
 void Display::setView(bool k)
@@ -200,7 +204,6 @@ void Display::drawMainMenu()
 	{
 		textExit.setStyle(Text::Regular);
 	}
-	
 	buttonCheck();
 	window->clear();
 	window->draw(mainMenuSprite);
@@ -351,16 +354,39 @@ void Display::mainStory()
 
 void Display::playerControl()
 {
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
 		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec[i].faceLeft))
-			enemyVec[i].getHit(true);
+		{
+			if (!enemyVec[i].checkDead())
+			{
+				enemyVec[i].getPunch(true);
+				playerScore += 100;
+			}
+		}
 	}
 
-	//if (berm.Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch())
-	//	bigEnemyGetHit = true;
-	//else
-	//	bigEnemyGetHit = false;
+	//if ((countTime/1000)%10==0)
+	//{
+	//	normalEnemy.setSpeed(50 + rand() % 100);
+	//	normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
+	//	enemyVec.push_back(normalEnemy);
+	//}
+
+
+	if (Keyboard::isKeyPressed(Keyboard::G))
+	{
+		totalTimeButton += deltaTime;
+		if (totalTimeButton >= 0.15)
+		{
+			totalTimeButton -= 0.15;
+			normalEnemy.setSpeed(50 + rand() % 100);
+			normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
+			enemyVec.push_back(normalEnemy);
+		}
+	}
+	else
+		totalTimeButton = 0;
 
 	player.Update(deltaTime, getHit, shoot);
 	window->draw(player.body);
@@ -369,21 +395,19 @@ void Display::playerControl()
 ////////////////////Normal Enemy
 void Display::enemyAttack()
 {
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
 		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec[i].checkDead())
 		{
 			if (enemyVec[i].curX() == 2)
 			{
-				damaged = rand() % 100;
+				damaged = rand() % 300;
 
 				if (damaged == 10)
 				{
-					//getHit = true;
-					myHP -= 2000;
+				    if (myHP > 0) myHP -= 2000;
 					if (myHP <= 0) myHP = 0;
 				}
-				else getHit = false;
 			}
 		}
 	}
@@ -418,7 +442,7 @@ void Display::bermAI()
 void Display::batarangShoot()
 {
 	Vector2f flySpeed(1.2f, 0.0f);
-	if (player.curX() == 3 && !shoot && player.checkShoot())
+	if (!shoot && player.cShoot && batNumber != 0)
 	{
 		if (player.faceRight)
 			d = 110.0f;
@@ -426,6 +450,7 @@ void Display::batarangShoot()
 			d = 0;
 		batarang.setPosition(Vector2f(player.getX() + d, player.getY() + 25.0f));
 		shoot = true;
+		player.cShoot = false;
 	}
 
 	if (shoot)
@@ -439,68 +464,31 @@ void Display::batarangShoot()
 			if (!player.faceRight)
 				movement = -flySpeed;
 			isFire = true;
+			if(batNumber > 0)
+				batNumber--;
 		}
+		batarang.body.move(movement);
 	}
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
 		if (isFire && ((enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
 		{
-			if (enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead()) enemyVec[i].getShot(true);
+			if (enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead())
+			{
+				enemyVec[i].getShot(true);
+				playerScore += 200;
+			}
 			shoot = false;
 			isFire = false;
 		}
 	}
-	batarang.body.move(movement);
-}
-
-void Display::statusBar()
-{
-	//Bar
-	bar.setPosition(Vector2f(camera.getCenter().x-640.0f, camera.getCenter().y - 360.0f));
-	window->draw(bar);
-
-	Text test,times,textScore;
-	//Time
-	/*time_t now = time(0);
-	char* dt = ctime(&now);
-	times.setFont(font);
-	times.setString(dt);
-	times.setCharacterSize(30);
-	times.setFillColor(sf::Color::Magenta);
-	times.setOutlineColor(sf::Color::White);
-	times.setPosition(Vector2f(camera.getCenter().x + 100.0f, camera.getCenter().y - 350.0f));
-	window->draw(times);*/
-
-	//HP
-	HP.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 310.0f));
-	HP.setSize(Vector2f(myHP / 362, 55));
-	window->draw(HP);
-	std::string sTest = to_string(myHP);
-	test.setFont(font);
-	test.setString("HP:"+sTest);
-	test.setCharacterSize(40);
-	test.setFillColor(sf::Color::Green);
-	test.setOutlineColor(sf::Color::Black);
-	test.setPosition(Vector2f(camera.getCenter().x - 570.0f, camera.getCenter().y -315.0f));
-	window->draw(test);	
-
-	//score
-	std::string score = to_string(playerScore);
-	textScore.setFont(font);
-	textScore.setString(score);
-	textScore.setCharacterSize(50);
-	textScore.setFillColor(sf::Color::Yellow);
-	textScore.setOutlineColor(sf::Color::Black);
-	textScore.setPosition(Vector2f(camera.getCenter().x - 238.0f, camera.getCenter().y - 330.0f));
-	window->draw(textScore);
+	
 }
 
 void Display::playerDead()
 {
-	
 	player.Update(deltaTime, false, false);
 	window->draw(player.body);
-
 }
 
 void Display::playMoreStory()
@@ -515,7 +503,7 @@ void Display::vectorSet()
 	for (int i = 0; i < n; i++)
 	{
 		normalEnemy.setSpeed(50 + rand() % 100);
-		normalEnemy.setPosition(player.getX() + (100 + rand() % 100));
+		normalEnemy.setPosition((player.getX()-300) + (rand() % 600));
 		enemyVec.push_back(normalEnemy);
 	}
 }
@@ -530,6 +518,68 @@ void Display::vectorUpdate()
 			window->draw(enemyVec[i].draw());
 		}
 	}
+}
+
+bool Display::posCheck()
+{
+	for (int i = 0; i < enemyVec.size(); i++)
+	{
+		if (!enemyVec[i].checkDead() && abs(enemyVec[i].getX() - player.getX()) <= 200)
+		{
+			return false;
+		}
+		else
+			return true;
+	}
+	
+}
+
+void Display::statusBar()
+{
+	//Bar
+	bar.setPosition(Vector2f(camera.getCenter().x - 640.0f, camera.getCenter().y - 360.0f));
+	window->draw(bar);
+
+	Text hpNumber, times, textScore, textBat;
+	//Time
+	string dt = to_string(countTime);
+	times.setFont(font);
+	times.setString(dt);
+	times.setCharacterSize(40);
+	times.setFillColor(sf::Color::Red);
+	times.setPosition(Vector2f(camera.getCenter().x + 250.0f, camera.getCenter().y - 310.0f));
+	window->draw(times);
+
+	//HP
+	HP.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 310.0f));
+	HP.setSize(Vector2f(myHP / 362, 55));
+	window->draw(HP);
+	std::string sTest = to_string(myHP);
+	hpNumber.setFont(font);
+	hpNumber.setString("HP:" + sTest);
+	hpNumber.setCharacterSize(40);
+	hpNumber.setFillColor(sf::Color::Green);
+	hpNumber.setOutlineColor(sf::Color::Black);
+	hpNumber.setPosition(Vector2f(camera.getCenter().x - 570.0f, camera.getCenter().y - 315.0f));
+	window->draw(hpNumber);
+
+	//score
+	string score = to_string(playerScore);
+	textScore.setFont(font);
+	textScore.setString(score);
+	textScore.setCharacterSize(50);
+	textScore.setFillColor(sf::Color::Yellow);
+	textScore.setOutlineColor(sf::Color::Black);
+	textScore.setPosition(Vector2f(camera.getCenter().x - 238.0f, camera.getCenter().y - 330.0f));
+	window->draw(textScore);
+
+	string bn = to_string(batNumber);
+	textBat.setFont(font);
+	textBat.setString(bn);
+	textBat.setCharacterSize(40);
+	textBat.setFillColor(sf::Color::White);
+	textBat.setPosition(Vector2f(camera.getCenter().x + 480.0f, camera.getCenter().y - 310.0f));
+	window->draw(textBat);
 }
 
 

@@ -19,12 +19,13 @@ public:
 private:
 	RenderWindow window;
 	Display display;
-	Clock clock;
+	Clock clock1;
+	Clock clock2;
 	bool running;
-	int select;
-	bool runMenu;
-	bool gameStart;
-	bool showHighscore;
+	int state;
+	int runMenu;
+	int gameStart;
+	int showHighscore;
 	bool m;
 	Music dsSound;
 };

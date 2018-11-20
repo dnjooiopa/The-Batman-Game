@@ -10,7 +10,7 @@
 #include <ctime>
 #include <vector>
 #include <fstream>
-#include <string>
+//#include <string>
 #include <algorithm>
 
 using namespace sf;
@@ -23,6 +23,7 @@ public:
 	~Display();
 	void setWindow(RenderWindow *window);
 	void setDT(float deltaTime);
+	void timeElapse(float timeElapse);
 	void drawMainMenu();
 	void buttonCheck();
 	bool mouseCheck(Text *text);
@@ -41,6 +42,7 @@ public:
 	void playMoreStory();
 	void vectorSet();
 	void vectorUpdate();
+	bool posCheck();
 	bool getMouseCheck() { return mCheck; }
 	int getSelect() { return select; }
 	bool msCheck;
@@ -72,6 +74,7 @@ private:
 	Batarang batarang;
 	Texture batarangTexture;
 	Vector2f movement;
+	int batNumber;
 
 	Batwing batwing;
 	Texture batwingTexture;
@@ -83,6 +86,7 @@ private:
 	Fire fire;
 	Texture fireTexture;
 
+	unsigned int countTime;
 	float deltaTime;
 	float totalTime;
 	float d;

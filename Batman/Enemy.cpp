@@ -69,7 +69,6 @@ void Enemy::Update(Vector2f playerPos, float deltaTime)
 		}
 		else
 		{
-
 			if (movement.x < 0.0f)
 				faceLeft = true;
 			else
@@ -92,7 +91,6 @@ void Enemy::Update(Vector2f playerPos, float deltaTime)
 		row = 3;
 		dead = true;
 	}
-
 	animation.enemyUpdate(row, deltaTime, faceLeft, dead);
 	body.setTextureRect(animation.uvRect);
 	body.move(movement);
@@ -102,15 +100,14 @@ void Enemy::Update(Vector2f playerPos, float deltaTime)
 		hp = 1000;
 		dead = false;
 	}
-
 }
 
-void Enemy::getShot(bool bomb)
+void Enemy::getShot(bool shot)
 {
-	this->shot = bomb;
+	this->shot = shot;
 }
 
-void Enemy::getHit(bool hit)
+void Enemy::getPunch(bool hit)
 {
 	this->hit = hit;
 }

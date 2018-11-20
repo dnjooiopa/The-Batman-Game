@@ -2,8 +2,8 @@
 Harry! 5
 Farm 77
 test 100
-Batman 2222222
+Batman 9999
 hello 1500
 
-hello 1500
-hello 15000000
+hell 1500
+hello 150
