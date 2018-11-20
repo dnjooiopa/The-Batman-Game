@@ -43,9 +43,9 @@ public:
 	void vectorSet();
 	void vectorUpdate();
 	bool posCheck();
-	bool getMouseCheck() { return mCheck; }
 	int getSelect() { return select; }
 	bool msCheck;
+	bool mCheck;
 
 private:
 	View camera;
@@ -97,8 +97,6 @@ private:
 	int select;
 	float totalTimeButton;
 	float delayButton;
-	bool mCheck;
-	
 
 	bool enemySpawn;
 	bool spawnCheck;

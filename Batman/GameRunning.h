@@ -12,9 +12,7 @@ public:
 	GameRunning(Vector2u size,std::string name);
 	~GameRunning();
 
-	void GameStart();
-	void MainMenu();
-	void Highscore();
+	void GameOpen();
 
 private:
 	RenderWindow window;
@@ -23,9 +21,11 @@ private:
 	Clock clock2;
 	bool running;
 	int state;
+	int exit;
 	int runMenu;
 	int gameStart;
 	int showHighscore;
+	Int32 lastTime;
 	bool m;
 	Music dsSound;
 };

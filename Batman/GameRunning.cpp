@@ -7,113 +7,82 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	display.setWindow(&window);
 	display.setView(false);
 	state = 1;
+	exit = 0;
 	runMenu = 1;
 	gameStart = 2;
 	showHighscore = 3;
-	m = false;
+	lastTime = 0;
 	dsSound.openFromFile("sound/darksoul.ogg");
-	MainMenu();
+	GameOpen();
 }
 
 GameRunning::~GameRunning()
 {
 }
 
-void GameRunning::MainMenu()
+void GameRunning::GameOpen()
 {
 	float deltaTime = 0.0;
+	Time time;
 	while (window.isOpen())
 	{
 		deltaTime = clock1.restart().asSeconds();
-		
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 			{
 				window.close();
-				state = 0;
+				state = exit;
 			}
 		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left)&&display.msCheck))
+		///////Menu/////////
+		if (state == runMenu)
 		{
-			switch (display.getSelect())
+			if (Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left) && display.msCheck))
 			{
-			case 1:
-				
-				display.setView(true);
-				GameStart();
-				break;
-			case 2:
-				runMenu = false;
-				showHighscore = true;
-				gameStart = false;
+				switch (display.getSelect())
+				{
+				case 1:
+					display.setView(true);
+					state = gameStart;
+					break;
+				case 2:
+					display.setView(false);
+					state = showHighscore;
+					break;
+				case 3:
+					window.close();
+					state = exit;
+					break;
+				}
+			}
+			display.setDT(deltaTime);
+			display.drawMainMenu();
+		}
+		//////Play Game///////
+		if (state == gameStart)
+		{	
+			time = clock2.getElapsedTime();
+			if (Keyboard::isKeyPressed(Keyboard::Escape))
+			{
 				display.setView(false);
-				Highscore();
-				break;
-			case 3:
-				window.close();
-				runMenu = false;
-				break;
+				state = runMenu;
 			}
+			display.setDT(deltaTime);
+			display.timeElapse(time.asSeconds());
+			display.Playing();
 		}
-		display.setDT(deltaTime);
-		display.drawMainMenu();
-	}
-}
 
-void GameRunning::GameStart()
-{
-	float deltaTime = 0.0;
-	Time time;
-	while (gameStart) {
-		deltaTime = clock1.restart().asSeconds();
-		time = clock2.getElapsedTime();
-		Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-			{
-				window.close();
-				gameStart = false;
-			}
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		///////Show High Score/////
+		if (state == showHighscore)
 		{
-			runMenu = true;
-			gameStart = false;
-			display.setView(false);
-			m = false;
-			MainMenu();
-		}
-		display.setDT(deltaTime);
-		display.timeElapse(time.asSeconds());
-		display.Playing();
-	}
-}
-
-void GameRunning::Highscore()
-{
-	while (showHighscore) {
-
-		Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
+			if (Keyboard::isKeyPressed(Keyboard::Escape) || (Mouse::isButtonPressed(Mouse::Left) && display.mCheck))
 			{
-				window.close();
-				showHighscore = false;
+				display.setView(false);
+				state = runMenu;
 			}
+			display.drawHighscore();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape) )
-		{
-			runMenu = true;
-			showHighscore = false;
-			gameStart = false;
-			display.setView(false);
-			MainMenu();
-		}
-		display.drawHighscore();
 	}
-
 }
-

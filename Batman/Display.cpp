@@ -65,8 +65,8 @@ Display::Display()
 	select = 1;
 	totalTimeButton = 0;
 	delayButton = 0.07;
-	mCheck = false;
 	msCheck = false;
+	mCheck = false;
 	batNumber = 100;
 
 	//enemy
@@ -283,15 +283,14 @@ void Display::drawHighscore()
 		textBack.setFillColor(sf::Color::White);
 		textBack.setPosition(40, 25);
 		if (mouseCheck(&textBack))
-		{
-			mCheck = true;
+		{	
 			textBack.setStyle(sf::Text::Bold);
 		}
 		else
 		{
 			textBack.setStyle(Text::Regular);
-			mCheck = false;
 		}
+		mCheck = mouseCheck(&textBack);
 		window->draw(textBack);
 	}
 	window->display();
