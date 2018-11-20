@@ -34,14 +34,16 @@ public:
 	void drawScene();
 	void mainStory();
 	void playerControl();
-	void enemyAttack();
-	void bermAI();
+	void enemyAttack1();
+	void enemyAttack2();
 	void batarangShoot();
 	void statusBar();
 	void playerDead();
 	void playMoreStory();
-	void vectorSet();
-	void vectorUpdate();
+	void vectorSet1();
+	void vectorUpdate1();
+	void vectorSet2();
+	void vectorUpdate2();
 	bool posCheck();
 	int getSelect() { return select; }
 	bool msCheck;
@@ -114,8 +116,10 @@ private:
 	vector<pair<int, string>> scoreboard;
 	ifstream loadFile;
 
-	vector<Enemy> enemyVec;
+	vector<Enemy> enemyVec1;
+	vector<Enemy> enemyVec2;
 	int n;
 
+	Music batFlying;
 };
 

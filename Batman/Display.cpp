@@ -70,7 +70,7 @@ Display::Display()
 	batNumber = 100;
 
 	//enemy
-	n = 5;
+	n = 2;
 	for(int i=0;i<n;i++)
 		normalEnemyGetHit[i]= false;
 	
@@ -95,6 +95,9 @@ Display::Display()
 		scoreboard.push_back({ tempScore,tempName });
 	}
 	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
+
+	batFlying.openFromFile("sound/batFlying.ogg");
+	batFlying.setVolume(50);
 }
 
 Display::~Display()
@@ -336,12 +339,16 @@ void Display::mainStory()
 		//normalEnemy.setPosition(player.getX()+500.0f);
      	//berm.setPosition(player.getX() + 1000.0f);
 		spawnCheck = false;
-		vectorSet();
+		vectorSet1();
+		vectorSet2();
 	}
 	if (enemySpawn)
 	{
-		vectorUpdate();
-		enemyAttack();
+		vectorUpdate1();
+		enemyAttack1();
+
+		vectorUpdate2();
+		enemyAttack2();
 	}
 	batarangShoot();
 	playerControl();
@@ -350,24 +357,29 @@ void Display::mainStory()
 
 void Display::playerControl()
 {
-	for (int i = 0; i < enemyVec.size(); i++)
+	for (int i = 0; i < enemyVec1.size(); i++)
 	{
-		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec[i].faceLeft))
+		if (enemyVec1[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec1[i].faceLeft))
 		{
-			if (!enemyVec[i].checkDead())
+			if (!enemyVec1[i].checkDead())
 			{
-				enemyVec[i].getPunch(true);
+				enemyVec1[i].getPunch(true);
 				playerScore += 100;
 			}
 		}
 	}
 
-	//if ((countTime/1000)%10==0)
-	//{
-	//	normalEnemy.setSpeed(50 + rand() % 100);
-	//	normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
-	//	enemyVec.push_back(normalEnemy);
-	//}
+	for (int i = 0; i < enemyVec2.size(); i++)
+	{
+		if (enemyVec2[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec2[i].faceLeft))
+		{
+			if (!enemyVec2[i].checkDead())
+			{
+				enemyVec2[i].getPunch(true);
+				playerScore += 100;
+			}
+		}
+	}
 
 
 	if (Keyboard::isKeyPressed(Keyboard::G))
@@ -376,9 +388,13 @@ void Display::playerControl()
 		if (totalTimeButton >= 0.15)
 		{
 			totalTimeButton -= 0.15;
-			normalEnemy.setSpeed(50 + rand() % 100);
-			normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
-			enemyVec.push_back(normalEnemy);
+			//normalEnemy.setSpeed(50 + rand() % 100);
+			//normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
+			//enemyVec1.push_back(normalEnemy);
+
+			berm.setSpeed(50 + rand() % 100);
+			berm.setPosition((player.getX() - 300) + (rand() % 600));
+			enemyVec1.push_back(berm);
 		}
 	}
 	else
@@ -389,13 +405,13 @@ void Display::playerControl()
 }
 
 ////////////////////Normal Enemy
-void Display::enemyAttack()
+void Display::enemyAttack1()
 {
-	for (int i = 0; i < enemyVec.size(); i++)
+	for (int i = 0; i < enemyVec1.size(); i++)
 	{
-		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec[i].checkDead())
+		if (enemyVec1[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec1[i].checkDead())
 		{
-			if (enemyVec[i].curX() == 2)
+			if (enemyVec1[i].curX() == 2)
 			{
 				damaged = rand() % 300;
 
@@ -411,27 +427,24 @@ void Display::enemyAttack()
 }
 
 ////////////////////Big Enemy
-void Display::bermAI()
+void Display::enemyAttack2()
 {
-	if (berm.Getcollision().CheckCollision(player.Getcollision()) && !berm.checkDead())
+	for (int i = 0; i < enemyVec2.size(); i++)
 	{
-		if (berm.curX() == 2)
+		if (enemyVec2[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec2[i].checkDead())
 		{
-			damaged = rand() % 100;
-
-			if (damaged == 10 )
+			if (enemyVec2[i].curX() == 2)
 			{
-				getHit = true;
-				myHP -= 5000;
-				//std::cout << damaged << endl;
-				if (myHP <= 0) myHP = 0;
+				damaged = rand() % 300;
+
+				if (damaged == 10)
+				{
+					if (myHP > 0) myHP -= 5000;
+					if (myHP <= 0) myHP = 0;
+				}
 			}
-			else getHit = false;
 		}
 	}
-
-	berm.Update(player.getPosition(), deltaTime);
-	window->draw(berm.draw());
 }
 
 ///////////////////////////Batarang
@@ -447,6 +460,8 @@ void Display::batarangShoot()
 		batarang.setPosition(Vector2f(player.getX() + d, player.getY() + 25.0f));
 		shoot = true;
 		player.cShoot = false;
+		batFlying.setPlayingOffset(Time(seconds(0)));
+		batFlying.play();
 	}
 
 	if (shoot)
@@ -465,13 +480,26 @@ void Display::batarangShoot()
 		}
 		batarang.body.move(movement);
 	}
-	for (int i = 0; i < enemyVec.size(); i++)
+	for (int i = 0; i < enemyVec1.size(); i++)
 	{
-		if (isFire && ((enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
+		if (isFire && ((enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
 		{
-			if (enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead())
+			if (enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead())
 			{
-				enemyVec[i].getShot(true);
+				enemyVec1[i].getShot(true);
+				playerScore += 200;
+			}
+			shoot = false;
+			isFire = false;
+		}
+	}
+	for (int i = 0; i < enemyVec2.size(); i++)
+	{
+		if (isFire && ((enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
+		{
+			if (enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead())
+			{
+				enemyVec2[i].getShot(true);
 				playerScore += 200;
 			}
 			shoot = false;
@@ -494,33 +522,55 @@ void Display::playMoreStory()
 	window->draw(player.body);
 }
 
-void Display::vectorSet()
+void Display::vectorSet1()
 {
 	for (int i = 0; i < n; i++)
 	{
 		normalEnemy.setSpeed(50 + rand() % 100);
-		normalEnemy.setPosition((player.getX()-300) + (rand() % 600));
-		enemyVec.push_back(normalEnemy);
+		normalEnemy.setPosition(player.getX() + 1200 + (rand() % 500));
+		enemyVec1.push_back(normalEnemy);
 	}
 }
 
-void Display::vectorUpdate()
+void Display::vectorUpdate1()
 {
-	for (int i = 0; i < enemyVec.size(); i++)
+	for (int i = 0; i < enemyVec1.size(); i++)
 	{
-		if (!enemyVec[i].checkDead())
+		if (!enemyVec1[i].checkDead())
 		{
-			enemyVec[i].Update(player.getPosition(), deltaTime);
-			window->draw(enemyVec[i].draw());
+			enemyVec1[i].Update(player.getPosition(), deltaTime);
+			window->draw(enemyVec1[i].draw());
+		}
+	}
+}
+
+void Display::vectorSet2()
+{
+	for (int i = 0; i < n; i++)
+	{
+		berm.setSpeed(50 + rand() % 120);
+		berm.setPosition(player.getX() + 5000 + (rand() % 500));
+		enemyVec1.push_back(berm);
+	}
+}
+
+void Display::vectorUpdate2()
+{
+	for (int i = 0; i < enemyVec2.size(); i++)
+	{
+		if (!enemyVec2[i].checkDead())
+		{
+			enemyVec2[i].Update(player.getPosition(), deltaTime);
+			window->draw(enemyVec2[i].draw());
 		}
 	}
 }
 
 bool Display::posCheck()
 {
-	for (int i = 0; i < enemyVec.size(); i++)
+	for (int i = 0; i < enemyVec1.size(); i++)
 	{
-		if (!enemyVec[i].checkDead() && abs(enemyVec[i].getX() - player.getX()) <= 200)
+		if (!enemyVec1[i].checkDead() && abs(enemyVec1[i].getX() - player.getX()) <= 200)
 		{
 			return false;
 		}
