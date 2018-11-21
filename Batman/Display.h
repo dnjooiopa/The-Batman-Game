@@ -6,6 +6,7 @@
 #include "Batwing.h"
 #include "BombEffect.h"
 #include "Fire.h"
+#include "Item.h"
 #include <iostream>
 #include <ctime>
 #include <vector>
@@ -43,6 +44,7 @@ public:
 	void vectorUpdate1();
 	void vectorSet2();
 	void vectorUpdate2();
+	void specialItem();
 	bool posCheck();
 	int getSelect() { return select; }
 	bool msCheck;
@@ -86,6 +88,9 @@ private:
 	Fire fire;
 	Texture fireTexture;
 
+	Item item;
+	Texture itemTexture;
+
 	unsigned int countTime;
 	float deltaTime;
 	float totalTime;
@@ -104,6 +109,7 @@ private:
 	bool normalEnemyGetBomb;
 	bool bigEnemyGetHit;
 	bool bigEnemyGetBomb;
+	bool i;
 
 	int myHP;
 	RectangleShape HP;

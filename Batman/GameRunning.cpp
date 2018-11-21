@@ -3,14 +3,14 @@
 
 GameRunning::GameRunning(Vector2u size, std::string name)
 {
-	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Titlebar);
+	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Resize);
 	display.setWindow(&window);
 	display.setView(false);
 	state = 1;
+	exit = 0;
 	runMenu = 1;
 	gameStart = 2;
 	showHighscore = 3;
-	m = false;
 	dsSound.openFromFile("sound/darksoul.ogg");
 	MainMenu();
 }
@@ -32,7 +32,7 @@ void GameRunning::MainMenu()
 			if (event.type == Event::Closed)
 			{
 				window.close();
-				state = 0;
+				state = exit;
 			}
 		}
 
@@ -53,7 +53,7 @@ void GameRunning::MainMenu()
 				break;
 			case 3:
 				window.close();
-				state = 0;
+				state = exit;
 				break;
 			}
 		}
@@ -74,7 +74,7 @@ void GameRunning::GameStart()
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
-				state = 0;
+				state = exit;
 			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -98,7 +98,7 @@ void GameRunning::Highscore()
 			if (event.type == sf::Event::Closed)
 			{
 				window.close();
-				state = 0;
+				state = exit;
 			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape) || (Mouse::isButtonPressed(Mouse::Left) && display.mCheck))

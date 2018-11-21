@@ -23,10 +23,10 @@ private:
 	Clock clock2;
 	bool running;
 	int state;
+	int exit;
 	int runMenu;
 	int gameStart;
 	int showHighscore;
-	bool m;
 	Music dsSound;
 };
 

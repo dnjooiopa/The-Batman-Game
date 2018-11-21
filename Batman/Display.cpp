@@ -52,6 +52,10 @@ Display::Display()
 	fire.setFire(&fireTexture, Vector2u(4, 4), 0.07f);
 	fire.setPosition(Vector2f(150.0f, 500.0f));
 
+	//Item
+	itemTexture.loadFromFile("sprite/batItem.png");
+	item.setItem(&itemTexture);
+
 	//font
 	font.loadFromFile("font/batmfa.ttf");
 
@@ -66,7 +70,8 @@ Display::Display()
 	delayButton = 0.07;
 	mCheck = false;
 	msCheck = false;
-	batNumber = 100;
+	batNumber = 0;
+	i = true;
 
 	//enemy
 	n = 2;
@@ -339,6 +344,54 @@ void Display::mainStory()
 	}
 	if (enemySpawn)
 	{
+		//if (Keyboard::isKeyPressed(Keyboard::G))
+		//{
+		//	totalTimeButton += deltaTime;
+		//	if (totalTimeButton >= 0.15)
+		//	{
+		//		totalTimeButton -= 0.15;
+		//		//normalEnemy.setSpeed(50 + rand() % 100);
+		//		//normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
+		//		//enemyVec1.push_back(normalEnemy);
+
+		//		berm.setSpeed(50 + rand() % 100);
+		//		berm.setPosition((player.getX() - 700) + (rand() % 1400));
+		//		enemyVec1.push_back(berm);
+		//	}
+		//}
+		//else
+		//	totalTimeButton = 0;
+
+		if (countTime % 10 == 0 && i)
+		{
+			int R = rand() % 3;
+			if (R == 0)
+			{
+				int r = rand() % 2;
+				if (r == 0)
+					berm.setPosition(player.getX() + 800);
+				else
+					berm.setPosition(player.getX() - 800);
+				berm.setSpeed(70 + rand() % 100);
+				enemyVec2.push_back(berm);
+			}
+			else
+			{
+				int r = rand() % 2;
+				if (r == 0)
+					normalEnemy.setPosition(player.getX() + 800);
+				else
+					normalEnemy.setPosition(player.getX() - 800);
+				normalEnemy.setSpeed(70 + rand() % 100);
+				enemyVec1.push_back(normalEnemy);
+			}
+			i = false;
+		}
+		else if (countTime % 10 != 0)
+		{
+			i = true;
+		}
+
 		vectorUpdate1();
 		enemyAttack1();
 
@@ -347,7 +400,7 @@ void Display::mainStory()
 	}
 	batarangShoot();
 	playerControl();
-	
+	specialItem();
 }
 
 void Display::playerControl()
@@ -376,27 +429,14 @@ void Display::playerControl()
 		}
 	}
 
-
-	if (Keyboard::isKeyPressed(Keyboard::G))
+	if (Keyboard::isKeyPressed(Keyboard::Y))
 	{
-		totalTimeButton += deltaTime;
-		if (totalTimeButton >= 0.15)
-		{
-			totalTimeButton -= 0.15;
-			//normalEnemy.setSpeed(50 + rand() % 100);
-			//normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
-			//enemyVec1.push_back(normalEnemy);
-
-			berm.setSpeed(50 + rand() % 100);
-			berm.setPosition((player.getX() - 700) + (rand() % 1400));
-			enemyVec1.push_back(berm);
-		}
+		item.setPosition(Vector2f(player.getX() + 300, 0));
 	}
-	else
-		totalTimeButton = 0;
 
 	player.Update(deltaTime, getHit, shoot);
 	window->draw(player.body);
+
 }
 
 ////////////////////Normal Enemy
@@ -445,7 +485,7 @@ void Display::enemyAttack2()
 ///////////////////////////Batarang
 void Display::batarangShoot()
 {
-	Vector2f flySpeed(1.2f, 0.0f);
+	Vector2f flySpeed(1.5f, 0.0f);
 	if (!shoot && player.cShoot && batNumber != 0)
 	{
 		if (player.faceRight)
@@ -559,6 +599,17 @@ void Display::vectorUpdate2()
 			window->draw(enemyVec2[i].draw());
 		}
 	}
+}
+
+void Display::specialItem()
+{
+	if (item.Getcollision().CheckCollision(player.Getcollision()))
+	{
+		std::cout << "**" << std::endl;
+		batNumber += 1;
+	}
+	item.Update(deltaTime);
+	window->draw(item.body);
 }
 
 bool Display::posCheck()
