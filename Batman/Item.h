@@ -9,8 +9,8 @@ public:
 	~Item();
 	void setItem(Texture* texture)
 	{	
-		imgHeight = texture->getSize().y*0.5;
-		imgWidth = texture->getSize().x*0.5f;
+		imgHeight = texture->getSize().y;
+		imgWidth = texture->getSize().x;
 		body.setTexture(texture);
 		body.setSize(Vector2f(imgWidth, imgHeight));
 		body.setPosition(Vector2f(-500, 0));

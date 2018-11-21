@@ -605,8 +605,8 @@ void Display::specialItem()
 {
 	if (item.Getcollision().CheckCollision(player.Getcollision()))
 	{
-		std::cout << "**" << std::endl;
 		batNumber += 1;
+		item.setPosition(Vector2f(player.getX() + 400, player.getY()));
 	}
 	item.Update(deltaTime);
 	window->draw(item.body);
