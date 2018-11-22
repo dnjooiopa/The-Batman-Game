@@ -11,6 +11,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	runMenu = 1;
 	gameStart = 2;
 	showHighscore = 3;
+	playerDead = 4;
 	bgSound.openFromFile("sound/bgSound.ogg");
 	bgSound.setVolume(50);
 	bgSound.setPlayingOffset(Time(seconds(0)));
@@ -26,95 +27,118 @@ void GameRunning::MainMenu()
 {
 	float deltaTime = 0.0;
 	window.setMouseCursorVisible(true);
-	while (state == 1)
+	String yourname;
+	Text player,enterYourName;
+	Font font;
+	font.loadFromFile("font/mer.ttf");
+	enterYourName.setFont(font);
+	enterYourName.setString("Please Enter Your Name");
+	enterYourName.setCharacterSize(50);
+	enterYourName.setPosition(250, 100);
+	Time time;
+	while (window.isOpen())
 	{
 		deltaTime = clock1.restart().asSeconds();
 		
 		Event event;
 		while (window.pollEvent(event))
 		{
+			if (state == playerDead)
+			{
+				
+				if (event.type == sf::Event::TextEntered) {
+					if (event.text.unicode == '\b') {//ถ้ากด Backspace เป็นการลบตัวอักษร
+						yourname.erase(yourname.getSize() - 1, 1);
+						player.setFont(font);
+						player.setString(yourname);
+					}
+					else {
+						string name;
+						yourname += static_cast<char>(event.text.unicode);
+						name += static_cast<char>(event.text.unicode);
+						if ((event.text.unicode < 128) && (yourname.getSize() < 15)) {
+							player.setFont(font);
+							player.setString(yourname);
+						}
+					}
+					player.setCharacterSize(60);   //เซ็ตขนาดของข้อความ
+					player.setPosition(250.0f, 200.0f);  //เซ็ตขนาดของข้อความ
+				}
+				else if (event.type == sf::Event::KeyPressed) {
+					if (event.key.code == sf::Keyboard::Return) {
+						player.setString(yourname);
+						player.setPosition(250, 300);
+						break;
+					}
+				}
+			}
+			
 			if (event.type == Event::Closed)
 			{
 				window.close();
 				state = exit;
 			}
 		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left)&&display.msCheck))
+		if (state == runMenu)
 		{
-			switch (display.getSelect())
+			if (Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left) && display.msCheck))
 			{
-			case 1:
-				
-				display.setView(true);
-				state = gameStart;
-				bgSound.setVolume(30);
-				GameStart();
-				break;
-			case 2:
+				switch (display.getSelect())
+				{
+				case 1:
+
+					display.setView(true);
+					state = gameStart;
+					bgSound.setVolume(30);
+					break;
+				case 2:
+					display.setView(false);
+					state = showHighscore;
+					break;
+				case 3:
+					window.close();
+					state = exit;
+					break;
+				}
+			}
+			display.setDT(deltaTime);
+			display.drawMainMenu();
+		}
+
+		if (state == gameStart)
+		{
+			time = clock2.getElapsedTime();
+			if (Keyboard::isKeyPressed(Keyboard::Escape))
+			{
 				display.setView(false);
-				state = showHighscore;
-				Highscore();
-				break;
-			case 3:
-				window.close();
-				state = exit;
-				break;
+				state = runMenu;
 			}
-		}
-		display.setDT(deltaTime);
-		display.drawMainMenu();
-	}
-}
-
-void GameRunning::GameStart()
-{
-	float deltaTime = 0.0;
-	Time time;
-	window.setMouseCursorVisible(false);
-	while (state == gameStart) {
-		deltaTime = clock1.restart().asSeconds();
-		time = clock2.getElapsedTime();
-		Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
+			if (display.playerisDead())
 			{
-				window.close();
-				state = exit;
+				state = playerDead;
+				display.setView(false);
+				bgSound.stop();
 			}
+			display.setDT(deltaTime);
+			display.timeElapse(time.asSeconds());
+			display.Playing();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{	
-			display.setView(false);
-			state = runMenu;
-			MainMenu();
-		}
-		display.setDT(deltaTime);
-		display.timeElapse(time.asSeconds());
-		display.Playing();
-	}
-}
-
-void GameRunning::Highscore()
-{
-	while (state == showHighscore) {
-
-		Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-			{
-				window.close();
-				state = exit;
-			}
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		if (state == showHighscore)
 		{
-			display.setView(false);
-			state = runMenu;
-			MainMenu();
+			if (Keyboard::isKeyPressed(Keyboard::Escape))
+			{
+				display.setView(false);
+				state = runMenu;
+			}
+			display.drawHighscore();
 		}
-		display.drawHighscore();
+		if (state == playerDead)
+		{
+			window.clear();
+			window.draw(enterYourName);
+			window.draw(player);
+			window.display();
+		}
+		
 	}
-
 }
-

@@ -442,7 +442,7 @@ void Display::enemyAttack2()
 
 				if (damaged == 10)
 				{
-					if (myHP > 0) myHP -= 8000;
+					if (myHP > 0) myHP -= 5000;
 					if (myHP <= 0) myHP = 0;
 				}
 			}
@@ -514,12 +514,6 @@ void Display::batarangShoot()
 	
 }
 
-void Display::playerDead()
-{
-	player.Update(deltaTime, false, false);
-	window->draw(player.body);
-}
-
 void Display::playMoreStory()
 {
 	batarangShoot();
@@ -541,7 +535,6 @@ void Display::vectorUpdate1()
 			enemyVec1.erase(enemyVec1.begin() + i);
 		}
 	}
-	std::cout << enemyVec1.size() << std::endl;
 }
 
 void Display::vectorUpdate2()
@@ -590,11 +583,13 @@ void Display::Trap()
 		bomb.setPosition(Vector2f(trap.getX(), trap.getY()-25));
 		bomb.setBomb(true);
 		trap.setPosition(Vector2f(-200, player.getY()));
+		myHP -= 10000;
 	}
 	bomb.Update(deltaTime);
-	if(bomb.showBomb())
+	if (bomb.showBomb())
+	{
 		window->draw(bomb.body);
-	//std::cout << bomb.showBomb() << std::endl;
+	}
 	trap.Update(deltaTime);
 	window->draw(trap.body);
 }

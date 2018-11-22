@@ -38,16 +38,18 @@ public:
 	void enemyAttack2();
 	void batarangShoot();
 	void statusBar();
-	void playerDead();
+	bool playerisDead() {
+		if (myHP == 0) return true;
+		else return false;
+	}
 	void playMoreStory();
-	void vectorSet1();
 	void vectorUpdate1();
-	void vectorSet2();
 	void vectorUpdate2();
 	void specialItem();
 	void Trap();
 	bool posCheck();
 	int getSelect() { return select; }
+	Font getFont() { return font; }
 	bool msCheck;
 	bool mCheck;
 private:

@@ -27,6 +27,7 @@ private:
 	int runMenu;
 	int gameStart;
 	int showHighscore;
+	int playerDead;
 	Music bgSound;
 };
 
