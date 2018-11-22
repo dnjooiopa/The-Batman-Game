@@ -78,7 +78,7 @@ void Enemy::Update(Vector2f playerPos, float deltaTime)
 	//// Get Hit and Shot
 	if (shot)
 	{
-		hp -= 400;
+		hp -= 500;
 		shot = false;
 	}
 	if (hit)

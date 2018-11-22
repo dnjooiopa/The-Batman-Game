@@ -179,10 +179,10 @@ void Display::drawMainMenu()
 	textExit.setFillColor(sf::Color::White);
 	textExit.setPosition(895, 400);
 	textName.setFont(font);//Name
-	textName.setString("KITTISAK PHORMRAKSA\n\n61010092");
+	textName.setString("KITTISAK PHORMRAKSA  61010092");
 	textName.setCharacterSize(20);
 	textName.setFillColor(sf::Color::White);
-	textName.setPosition(950, 20);
+	textName.setPosition(800, 20);
 
 	
 	if (select == 1 || mouseCheck(&textPlaygame))
@@ -498,7 +498,9 @@ void Display::batarangShoot()
 		batFlying.setPlayingOffset(Time(seconds(0)));
 		batFlying.play();
 	}
-
+	if (batNumber == 0)
+		player.cShoot = false;
+	
 	if (shoot)
 	{
 		batarang.Update();
@@ -517,7 +519,7 @@ void Display::batarangShoot()
 	}
 	for (int i = 0; i < enemyVec1.size(); i++)
 	{
-		if (isFire && ((enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
+		if (isFire && ((enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670 ))
 		{
 			if (enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead())
 			{
@@ -530,7 +532,7 @@ void Display::batarangShoot()
 	}
 	for (int i = 0; i < enemyVec2.size(); i++)
 	{
-		if (isFire && ((enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
+		if (isFire && ((enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670 ))
 		{
 			if (enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead())
 			{
