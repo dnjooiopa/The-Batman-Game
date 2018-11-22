@@ -23,7 +23,7 @@ bool Collision::CheckCollision(Collision other)
 	float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
 	float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
 	
-	if (intersectX < -60 && intersectY < -40)
+	if (intersectX < -60 && intersectY < -20)
 	{
 		return true;
 	}

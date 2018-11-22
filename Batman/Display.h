@@ -45,6 +45,7 @@ public:
 	void vectorSet2();
 	void vectorUpdate2();
 	void specialItem();
+	void Trap();
 	bool posCheck();
 	int getSelect() { return select; }
 	bool msCheck;
@@ -91,6 +92,9 @@ private:
 	Item item;
 	Texture itemTexture;
 
+	Item trap;
+	Texture trapTexture;
+
 	unsigned int countTime;
 	float deltaTime;
 	float totalTime;
@@ -126,5 +130,6 @@ private:
 	int n;
 
 	Music batFlying;
+	Music itemCollect;
 };
 

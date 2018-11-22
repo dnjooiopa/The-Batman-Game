@@ -55,6 +55,9 @@ Display::Display()
 	//Item
 	itemTexture.loadFromFile("sprite/batItem.png");
 	item.setItem(&itemTexture);
+	//trap
+	trapTexture.loadFromFile("sprite/trap.png");
+	trap.setItem(&trapTexture);
 
 	//font
 	font.loadFromFile("font/batmfa.ttf");
@@ -86,7 +89,7 @@ Display::Display()
 	//HP
 	myHP = 100000;
 	playerScore = 0;
-	HP.setFillColor(Color::Red);//à«µÊÕ
+	HP.setFillColor(Color::Red);
 	hit = 4;
 
 	//HighScore
@@ -101,6 +104,8 @@ Display::Display()
 
 	batFlying.openFromFile("sound/batFlying.ogg");
 	batFlying.setVolume(50);
+	itemCollect.openFromFile("sound/pickup.ogg");
+	itemCollect.setVolume(60);
 }
 
 Display::~Display()
@@ -336,31 +341,12 @@ void Display::mainStory()
 	if (player.getX() >= 1 && spawnCheck)
 	{
 		enemySpawn = true;
-		//normalEnemy.setPosition(player.getX()+500.0f);
-     	//berm.setPosition(player.getX() + 1000.0f);
 		spawnCheck = false;
 		vectorSet1();
 		vectorSet2();
 	}
 	if (enemySpawn)
 	{
-		//if (Keyboard::isKeyPressed(Keyboard::G))
-		//{
-		//	totalTimeButton += deltaTime;
-		//	if (totalTimeButton >= 0.15)
-		//	{
-		//		totalTimeButton -= 0.15;
-		//		//normalEnemy.setSpeed(50 + rand() % 100);
-		//		//normalEnemy.setPosition((player.getX() - 300) + (rand() % 600));
-		//		//enemyVec1.push_back(normalEnemy);
-
-		//		berm.setSpeed(50 + rand() % 100);
-		//		berm.setPosition((player.getX() - 700) + (rand() % 1400));
-		//		enemyVec1.push_back(berm);
-		//	}
-		//}
-		//else
-		//	totalTimeButton = 0;
 
 		if (countTime % 10 == 0 && i)
 		{
@@ -401,6 +387,7 @@ void Display::mainStory()
 	batarangShoot();
 	playerControl();
 	specialItem();
+	Trap();
 }
 
 void Display::playerControl()
@@ -431,7 +418,7 @@ void Display::playerControl()
 
 	if (Keyboard::isKeyPressed(Keyboard::Y))
 	{
-		item.setPosition(Vector2f(player.getX() + 300, 0));
+		trap.setPosition(Vector2f(player.getX() + 300, 0));
 	}
 
 	player.Update(deltaTime, getHit, shoot);
@@ -605,13 +592,33 @@ void Display::vectorUpdate2()
 
 void Display::specialItem()
 {
+	if (countTime%30==0)
+	{
+		int i = rand() % 2;
+		if (i == 0)
+			item.setPosition(Vector2f(player.getX() + 300, 0));
+		else
+			item.setPosition(Vector2f(player.getX() - 300, 0));
+	}
+
 	if (item.Getcollision().CheckCollision(player.Getcollision()))
 	{
-		batNumber += 1;
-		item.setPosition(Vector2f(player.getX() + 400, player.getY()));
+		batNumber += 10;
+		item.setPosition(Vector2f(-200, player.getY()));
+		itemCollect.setPlayingOffset(Time(seconds(0)));
+		itemCollect.play();
 	}
 	item.Update(deltaTime);
 	window->draw(item.body);
+
+}
+
+void Display::Trap()
+{	
+	if (trap.Getcollision().CheckCollision(player.Getcollision()))
+		std::cout << "}}" << std::endl;
+	trap.Update(deltaTime);
+	window->draw(trap.body);
 }
 
 bool Display::posCheck()
