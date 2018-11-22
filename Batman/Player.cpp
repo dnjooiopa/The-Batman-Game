@@ -56,7 +56,7 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	}
 
 	//Player Punch
-	if (Keyboard::isKeyPressed(Keyboard::K) && !jump)
+	if ((Keyboard::isKeyPressed(Keyboard::K)|| Mouse::isButtonPressed(Mouse::Left)) && !jump)
 	{
 		totalTime += deltaTime;
 		if (totalTime >= delayButton)
@@ -95,7 +95,7 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	}
 
 	//////Throw batarang
-	if (Keyboard::isKeyPressed(Keyboard::J) && !shoot && !crouchCheck && !flying )
+	if ((Keyboard::isKeyPressed(Keyboard::J)|| Mouse::isButtonPressed(Mouse::Right)) && !shoot && !crouchCheck && !flying )
 	{
 		totalTimeB += deltaTime;
 
@@ -162,7 +162,7 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 		if (crouchCheck)
 		{
 			row = 4;
-			if (Keyboard::isKeyPressed(Keyboard::S) && Keyboard::isKeyPressed(Keyboard::K))
+			if (Keyboard::isKeyPressed(Keyboard::S) && (Keyboard::isKeyPressed(Keyboard::K)|| Mouse::isButtonPressed(Mouse::Left)))
 			{
 				punch = true;
 				punchCheck = true;

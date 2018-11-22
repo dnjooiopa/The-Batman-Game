@@ -15,6 +15,7 @@ public:
 		row = 0;
 		body.setSize(Vector2f(150.0f, 150.0f));
 		body.setTexture(texture);
+		body.setPosition(Vector2f(-200, 0));
 		bombSound.openFromFile("sound/bomb.ogg");
 		bombSound.setVolume(35);
 		sbomb = false;
@@ -29,26 +30,21 @@ public:
 	}
 	void Update(float deltaTime) 
 	{
-		if(bombCheck) sbomb = true;
-		if (curX() == 1 && sbomb)
+		animation.bombUpdate(deltaTime, bombCheck);
+		if (bombCheck)
 		{
 			bombSound.setPlayingOffset(Time(seconds(0)));
 			bombSound.play();
-			sbomb = false;
-			std::cout << curX() << std::endl;
+			bombCheck = false;
 		}
-		//std::cout << animation.currentImage.x << std::endl;
-		animation.bombUpdate(deltaTime, !sbomb);
+		
 		body.setTextureRect(animation.uvRect);
 	}
-	RectangleShape Draw()
-	{
-		return body;
-	}
 	int curX() { return animation.currentImage.x;}
-
-private:
+	bool showBomb() { return !animation.i; }
 	RectangleShape body;
+private:
+
 	Animation animation;
 	unsigned int row;
 	float speed;

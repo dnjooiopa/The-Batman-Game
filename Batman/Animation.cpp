@@ -21,7 +21,6 @@ void Animation::setAnimation(Texture *texture, Vector2u imageCount, float switch
 	uvRect.height = texture->getSize().y / float(imageCount.y);
 	i = true;
 	j = false;
-
 }
 
 ////////////////////////Update//////////////

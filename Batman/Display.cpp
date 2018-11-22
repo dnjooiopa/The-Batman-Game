@@ -75,17 +75,7 @@ Display::Display()
 	msCheck = false;
 	batNumber = 0;
 	i = true;
-
-	//enemy
-	n = 2;
-	for(int i=0;i<n;i++)
-		normalEnemyGetHit[i]= false;
-	
-	normalEnemyGetBomb = false;
-	bigEnemyGetHit = false;
-	bigEnemyGetBomb = false;
-	
-
+	n = 10;
 	//HP
 	myHP = 100000;
 	playerScore = 0;
@@ -101,7 +91,9 @@ Display::Display()
 		scoreboard.push_back({ tempScore,tempName });
 	}
 	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
+	loadFile.close();
 
+	//Sound
 	batFlying.openFromFile("sound/batFlying.ogg");
 	batFlying.setVolume(50);
 	itemCollect.openFromFile("sound/pickup.ogg");
@@ -330,60 +322,49 @@ void Display::Playing()
 	//fire.Update(deltaTime);//fire
 	//window->draw(fire.draw());//fire
 	window->display();
-
-
 }
 
 ///////////////////Main Story////////////////////////////////////////
 void Display::mainStory()
-{
-	//////////////// Normal Enemy Fighting Check
-	if (player.getX() >= 1 && spawnCheck)
+{	
+	if (countTime % n == 0 && i)
 	{
-		enemySpawn = true;
-		spawnCheck = false;
-		vectorSet1();
-		vectorSet2();
-	}
-	if (enemySpawn)
-	{
-
-		if (countTime % 10 == 0 && i)
+		int R = rand() % 3;
+		if (R == 0)
 		{
-			int R = rand() % 3;
-			if (R == 0)
-			{
-				int r = rand() % 2;
-				if (r == 0)
-					berm.setPosition(player.getX() + 800);
-				else
-					berm.setPosition(player.getX() - 800);
-				berm.setSpeed(70 + rand() % 100);
-				enemyVec2.push_back(berm);
-			}
+			int r = rand() % 2;
+			if (r == 0)
+				berm.setPosition(player.getX() + 800);
 			else
-			{
-				int r = rand() % 2;
-				if (r == 0)
-					normalEnemy.setPosition(player.getX() + 800);
-				else
-					normalEnemy.setPosition(player.getX() - 800);
-				normalEnemy.setSpeed(70 + rand() % 100);
-				enemyVec1.push_back(normalEnemy);
-			}
-			i = false;
+				berm.setPosition(player.getX() - 800);
+			berm.setSpeed(70 + rand() % 100);
+			enemyVec2.push_back(berm);
 		}
-		else if (countTime % 10 != 0)
+		else
 		{
-			i = true;
+			int r = rand() % 2;
+			if (r == 0)
+				normalEnemy.setPosition(player.getX() + 800);
+			else
+				normalEnemy.setPosition(player.getX() - 800);
+			normalEnemy.setSpeed(70 + rand() % 100);
+			enemyVec1.push_back(normalEnemy);
 		}
-
-		vectorUpdate1();
-		enemyAttack1();
-
-		vectorUpdate2();
-		enemyAttack2();
+		i = false;
 	}
+	else if (countTime % n != 0)
+	{
+		i = true;
+	}
+
+	if (countTime >= 30) n = 5;
+	if (countTime >= 60) n = 3;
+	vectorUpdate1();
+	enemyAttack1();
+
+	vectorUpdate2();
+	enemyAttack2();
+	
 	batarangShoot();
 	playerControl();
 	specialItem();
@@ -546,16 +527,6 @@ void Display::playMoreStory()
 	window->draw(player.body);
 }
 
-void Display::vectorSet1()
-{
-	for (int i = 0; i < n; i++)
-	{
-		normalEnemy.setSpeed(50 + rand() % 100);
-		normalEnemy.setPosition(player.getX() + 1200 + (rand() % 500));
-		enemyVec1.push_back(normalEnemy);
-	}
-}
-
 void Display::vectorUpdate1()
 {
 	for (int i = 0; i < enemyVec1.size(); i++)
@@ -565,17 +536,12 @@ void Display::vectorUpdate1()
 			enemyVec1[i].Update(player.getPosition(), deltaTime);
 			window->draw(enemyVec1[i].draw());
 		}
+		else
+		{
+			enemyVec1.erase(enemyVec1.begin() + i);
+		}
 	}
-}
-
-void Display::vectorSet2()
-{
-	for (int i = 0; i < n; i++)
-	{
-		berm.setSpeed(50 + rand() % 120);
-		berm.setPosition(player.getX() + 5000 + (rand() % 500));
-		enemyVec1.push_back(berm);
-	}
+	std::cout << enemyVec1.size() << std::endl;
 }
 
 void Display::vectorUpdate2()
@@ -587,12 +553,16 @@ void Display::vectorUpdate2()
 			enemyVec2[i].Update(player.getPosition(), deltaTime);
 			window->draw(enemyVec2[i].draw());
 		}
+		else
+		{
+			enemyVec2.erase(enemyVec2.begin() + i);
+		}
 	}
 }
 
 void Display::specialItem()
 {
-	if (countTime%30==0)
+	if (countTime%20==0)
 	{
 		int i = rand() % 2;
 		if (i == 0)
@@ -616,7 +586,15 @@ void Display::specialItem()
 void Display::Trap()
 {	
 	if (trap.Getcollision().CheckCollision(player.Getcollision()))
-		std::cout << "}}" << std::endl;
+	{
+		bomb.setPosition(Vector2f(trap.getX(), trap.getY()-25));
+		bomb.setBomb(true);
+		trap.setPosition(Vector2f(-200, player.getY()));
+	}
+	bomb.Update(deltaTime);
+	if(bomb.showBomb())
+		window->draw(bomb.body);
+	//std::cout << bomb.showBomb() << std::endl;
 	trap.Update(deltaTime);
 	window->draw(trap.body);
 }

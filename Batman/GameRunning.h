@@ -27,6 +27,6 @@ private:
 	int runMenu;
 	int gameStart;
 	int showHighscore;
-	Music dsSound;
+	Music bgSound;
 };
 

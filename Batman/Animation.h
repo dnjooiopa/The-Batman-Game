@@ -16,9 +16,9 @@ public:
 	IntRect uvRect;
 	Vector2u currentImage;
 	bool j;
+	bool i;
 private:
 	Vector2u imageCount;
-	bool i;
 	float totalTime;
 	float switchTime;
 	int row;

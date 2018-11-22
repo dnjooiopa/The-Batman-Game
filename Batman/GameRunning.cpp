@@ -11,7 +11,10 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	runMenu = 1;
 	gameStart = 2;
 	showHighscore = 3;
-	dsSound.openFromFile("sound/darksoul.ogg");
+	bgSound.openFromFile("sound/bgSound.ogg");
+	bgSound.setVolume(50);
+	bgSound.setPlayingOffset(Time(seconds(0)));
+	bgSound.play();
 	MainMenu();
 }
 
@@ -22,6 +25,7 @@ GameRunning::~GameRunning()
 void GameRunning::MainMenu()
 {
 	float deltaTime = 0.0;
+	window.setMouseCursorVisible(true);
 	while (state == 1)
 	{
 		deltaTime = clock1.restart().asSeconds();
@@ -44,6 +48,7 @@ void GameRunning::MainMenu()
 				
 				display.setView(true);
 				state = gameStart;
+				bgSound.setVolume(30);
 				GameStart();
 				break;
 			case 2:
@@ -66,6 +71,7 @@ void GameRunning::GameStart()
 {
 	float deltaTime = 0.0;
 	Time time;
+	window.setMouseCursorVisible(false);
 	while (state == gameStart) {
 		deltaTime = clock1.restart().asSeconds();
 		time = clock2.getElapsedTime();
@@ -101,7 +107,7 @@ void GameRunning::Highscore()
 				state = exit;
 			}
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape) || (Mouse::isButtonPressed(Mouse::Left) && display.mCheck))
+		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
 			display.setView(false);
 			state = runMenu;

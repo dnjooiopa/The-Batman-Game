@@ -17,6 +17,7 @@ public:
 		
 		g = 3000.0f;
 	}
+	Vector2f getPosition() { return body.getPosition(); }
 	void setPosition(Vector2f pos){ body.setPosition(pos); }
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
