@@ -29,8 +29,8 @@ public:
 	void buttonCheck();
 	bool mouseCheck(Text *text);
 	void drawHighscore();
-	void setView(bool k);
-	void moreStory();
+	void setViewCheck(bool vc);
+	void setView();
 	void Playing();
 	void drawScene();
 	void mainStory();
@@ -43,7 +43,6 @@ public:
 		if (myHP == 0) return true;
 		else return false;
 	}
-	void playMoreStory();
 	void vectorUpdate1();
 	void vectorUpdate2();
 	void specialItem();
@@ -59,8 +58,6 @@ private:
 	Sprite mainMenuSprite;
 	Texture scene1Texture;
 	Sprite scene1;
-	Texture scene2Texture;
-	Sprite scene2;
 	Texture barTexture;
 	Sprite bar;
 	Texture logoTexture;
@@ -112,6 +109,7 @@ private:
 	float totalTimeButton;
 	float delayButton;
 
+	bool viewCheck;
 	bool enemySpawn;
 	bool spawnCheck;
 	bool normalEnemyGetHit[4];

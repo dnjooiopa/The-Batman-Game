@@ -18,6 +18,7 @@ public:
 	bool getHit() { return hit; }
 	void Draw(RenderWindow &window);
 	void setSpeed(float speed);
+	int getHP() { return hp; }
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
 	int curX() { return animation.currentImage.x; }

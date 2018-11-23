@@ -14,10 +14,6 @@ Display::Display()
 	scene1Texture.loadFromFile("sprite/scene1.png");
 	scene1.setTexture(scene1Texture);
 	scene1.setScale(Vector2f(1.0f, 1.0f));
-	//Scene2
-	scene2Texture.loadFromFile("sprite/scene2.png");
-	scene2.setTexture(scene2Texture);
-	scene2.setScale(Vector2f(1.0f, 1.0f));
 
 	//Bar
 	barTexture.loadFromFile("sprite/barTest.png");
@@ -139,9 +135,15 @@ void Display::setScore(std::string name)
 	myFile.close(); 
 }
 
-void Display::setView(bool k)
+void Display::setViewCheck(bool vc)
 {
-	if (k)
+	this->viewCheck = vc;
+	setView();
+}
+
+void Display::setView()
+{
+	if (viewCheck)
 	{
 		camera.setCenter(Vector2f(player.getX(), scene1Texture.getSize().y / 2.0f));
 		camera.setSize(Vector2f(1280.0f, scene1Texture.getSize().y));
@@ -156,7 +158,7 @@ void Display::setView(bool k)
 }
 void Display::drawScene()
 {
-	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 680)
+	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 680 && viewCheck)
 	{
 		x = 100;
 		camera.move((Vector2f(player.getX() + x, 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 5.0f);
@@ -167,14 +169,6 @@ void Display::drawScene()
 	}
 	window->setView(camera);
 	window->draw(scene1);
-}
-void Display::moreStory()
-{
-	window->clear();
-	window->draw(scene2);
-	playMoreStory();
-	statusBar();
-	window->display();
 }
 void Display::drawMainMenu()
 {
@@ -507,7 +501,7 @@ void Display::batarangShoot()
 	}
 	for (int i = 0; i < enemyVec1.size(); i++)
 	{
-		if (isFire && ((enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670 ))
+		if (isFire && ((enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && enemyVec1[i].getHP()>0) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670 ))
 		{
 			if (enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead())
 			{
@@ -520,7 +514,7 @@ void Display::batarangShoot()
 	}
 	for (int i = 0; i < enemyVec2.size(); i++)
 	{
-		if (isFire && ((enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead()) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670 ))
+		if (isFire && ((enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && enemyVec2[i].getHP()>0) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670 ))
 		{
 			if (enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead())
 			{
@@ -532,13 +526,6 @@ void Display::batarangShoot()
 		}
 	}
 	
-}
-
-void Display::playMoreStory()
-{
-	batarangShoot();
-	player.Update(deltaTime, getHit, shoot);
-	window->draw(player.body);
 }
 
 void Display::vectorUpdate1()

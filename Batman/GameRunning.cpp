@@ -5,7 +5,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 {
 	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Resize);
 	display.setWindow(&window);
-	display.setView(false);
+	display.setViewCheck(false);
 	state = 1;
 	exit = 0;
 	runMenu = 1;
@@ -68,7 +68,8 @@ void GameRunning::MainMenu()
 					if (event.key.code == sf::Keyboard::Return) {
 						player.setString(yourname);
 						display.setScore(yourname);
-						window.close();
+						state = runMenu;
+						break;
 					}
 				}
 			}
@@ -88,12 +89,12 @@ void GameRunning::MainMenu()
 				{
 				case 1:
 
-					display.setView(true);
+					display.setViewCheck(true);
 					state = gameStart;
 					bgSound.setVolume(80);
 					break;
 				case 2:
-					display.setView(false);
+					display.setViewCheck(false);
 					state = showHighscore;
 					break;
 				case 3:
@@ -112,14 +113,14 @@ void GameRunning::MainMenu()
 			time = clock2.getElapsedTime();
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
-				display.setView(false);
+				display.setViewCheck(false);
 				state = runMenu;
 			}
 			if (display.playerisDead())
 			{
 				Sleep(1000);
 				state = playerDead;
-				display.setView(false);
+				display.setViewCheck(false);
 				bgSound.stop();
 			}
 			display.setDT(deltaTime);
@@ -130,7 +131,7 @@ void GameRunning::MainMenu()
 		{
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
-				display.setView(false);
+				display.setViewCheck(false);
 				state = runMenu;
 			}
 			display.drawHighscore();
