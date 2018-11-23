@@ -1,9 +1,9 @@
-
 Harry! 5
 Farm 77
 test 100
 Batman 9999
 hello 1500
-
 hell 1500
-hello 150
+
+gg 400
+King 2000

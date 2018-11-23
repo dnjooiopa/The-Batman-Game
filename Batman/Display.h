@@ -24,6 +24,7 @@ public:
 	void setWindow(RenderWindow *window);
 	void setDT(float deltaTime);
 	void timeElapse(float timeElapse);
+	void setScore(std::string name);
 	void drawMainMenu();
 	void buttonCheck();
 	bool mouseCheck(Text *text);
@@ -116,6 +117,7 @@ private:
 	bool bigEnemyGetHit;
 	bool bigEnemyGetBomb;
 	bool i;
+	bool k;
 
 	int myHP;
 	RectangleShape HP;
@@ -129,6 +131,7 @@ private:
 
 	vector<Enemy> enemyVec1;
 	vector<Enemy> enemyVec2;
+	vector<Item> trapVec;
 	int n;
 
 	Music batFlying;

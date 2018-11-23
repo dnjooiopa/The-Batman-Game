@@ -23,12 +23,12 @@ public:
 	int curX() { return animation.currentImage.x; }
 	bool checkDead() { return animation.j; }
 	Vector2f getPosition() { return body.getPosition(); }
-	RectangleShape draw() { return body; }
-	Collision Getcollision() { return Collision(body); }
+	Collision Getcollision() { return Collision(body); }	
+	RectangleShape body;
 	bool faceLeft;
 
 private:
-	RectangleShape body;
+
 	Animation animation;
 	float speed;
 	int row;

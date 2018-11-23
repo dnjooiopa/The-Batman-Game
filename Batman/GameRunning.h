@@ -3,7 +3,7 @@
 #include <string>
 #include "Display.h"
 #include <iostream>
-
+#include <Windows.h>
 using namespace sf;
 
 class GameRunning

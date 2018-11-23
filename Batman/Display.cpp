@@ -56,7 +56,7 @@ Display::Display()
 	itemTexture.loadFromFile("sprite/batItem.png");
 	item.setItem(&itemTexture);
 	//trap
-	trapTexture.loadFromFile("sprite/trap.png");
+	trapTexture.loadFromFile("sprite/trap2.png");
 	trap.setItem(&trapTexture);
 
 	//font
@@ -75,9 +75,10 @@ Display::Display()
 	msCheck = false;
 	batNumber = 0;
 	i = true;
+	k = true;
 	n = 10;
 	//HP
-	myHP = 100000;
+	myHP = 12000;
 	playerScore = 0;
 	HP.setFillColor(Color::Red);
 	hit = 4;
@@ -118,6 +119,15 @@ void Display::setDT(float deltaTime)
 void Display::timeElapse(float timeElapse)
 {
 	this->countTime = int(timeElapse);
+}
+
+void Display::setScore(std::string name)
+{
+
+	fstream myFile;
+	myFile.open("score.txt", ios::out | ios::app);
+	myFile << "\n" << name << " " << playerScore;
+	myFile.close(); 
 }
 
 void Display::setView(bool k)
@@ -320,7 +330,7 @@ void Display::Playing()
 	statusBar();
 	//fire.setPosition(Vector2f(player.getX()-100, player.getY() - 100));
 	//fire.Update(deltaTime);//fire
-	//window->draw(fire.draw());//fire
+	//window->draw(fire.body);//fire
 	window->display();
 }
 
@@ -528,7 +538,7 @@ void Display::vectorUpdate1()
 		if (!enemyVec1[i].checkDead())
 		{
 			enemyVec1[i].Update(player.getPosition(), deltaTime);
-			window->draw(enemyVec1[i].draw());
+			window->draw(enemyVec1[i].body);
 		}
 		else
 		{
@@ -544,7 +554,7 @@ void Display::vectorUpdate2()
 		if (!enemyVec2[i].checkDead())
 		{
 			enemyVec2[i].Update(player.getPosition(), deltaTime);
-			window->draw(enemyVec2[i].draw());
+			window->draw(enemyVec2[i].body);
 		}
 		else
 		{
@@ -578,20 +588,39 @@ void Display::specialItem()
 
 void Display::Trap()
 {	
-	if (trap.Getcollision().CheckCollision(player.Getcollision()))
+	if (countTime % 5 == 0 && k)
 	{
-		bomb.setPosition(Vector2f(trap.getX(), trap.getY()-25));
-		bomb.setBomb(true);
-		trap.setPosition(Vector2f(-200, player.getY()));
-		myHP -= 10000;
+		trapVec.push_back(trap);
+		k = false;
+	}
+	else if (countTime % 5 != 0)
+	{
+		k = true;
+	}
+	std::cout << trapVec.size() << std::endl;
+	for (int i = 0; i < trapVec.size(); i++)
+	{
+		if (trapVec[i].Getcollision().CheckCollision(player.Getcollision()))
+		{
+			bomb.setPosition(Vector2f(trapVec[i].getX(), trapVec[i].getY() - 25));
+			bomb.setBomb(true);
+			trapVec.erase(trapVec.begin() + i);
+			if (myHP > 0) myHP -= 10000;
+			if (myHP <= 0) myHP = 0;
+		}
 	}
 	bomb.Update(deltaTime);
 	if (bomb.showBomb())
 	{
 		window->draw(bomb.body);
 	}
-	trap.Update(deltaTime);
-	window->draw(trap.body);
+
+	for (int i = 0; i < trapVec.size(); i++)
+	{
+		trapVec[i].Update(deltaTime);
+		window->draw(trapVec[i].body);
+	}
+
 }
 
 bool Display::posCheck()

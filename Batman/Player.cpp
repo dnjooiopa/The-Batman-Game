@@ -202,7 +202,13 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	{
 		row = 5;
 	}
-	
+	if (Keyboard::isKeyPressed(Keyboard::LShift))
+	{
+		if (faceRight)
+			velocity.x = 1000;
+		else
+			velocity.x = -1000;
+	}
 	
 	if (getY() < 700.0f - (1.5 * animation.uvRect.height))
 		velocity.y += g * deltaTime;

@@ -32,14 +32,13 @@ void GameRunning::MainMenu()
 	Font font;
 	font.loadFromFile("font/mer.ttf");
 	enterYourName.setFont(font);
-	enterYourName.setString("Please Enter Your Name");
+	enterYourName.setString("    YOU DIED\nPlease Enter Your Name");
 	enterYourName.setCharacterSize(50);
 	enterYourName.setPosition(250, 100);
 	Time time;
 	while (window.isOpen())
 	{
 		deltaTime = clock1.restart().asSeconds();
-		
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -62,13 +61,13 @@ void GameRunning::MainMenu()
 						}
 					}
 					player.setCharacterSize(60);   //เซ็ตขนาดของข้อความ
-					player.setPosition(250.0f, 200.0f);  //เซ็ตขนาดของข้อความ
+					player.setPosition(250.0f, 300.0f);  //เซ็ตขนาดของข้อความ
 				}
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Return) {
 						player.setString(yourname);
-						player.setPosition(250, 300);
-						break;
+						display.setScore(yourname);
+						state == runMenu;
 					}
 				}
 			}
@@ -115,6 +114,7 @@ void GameRunning::MainMenu()
 			}
 			if (display.playerisDead())
 			{
+				Sleep(1000);
 				state = playerDead;
 				display.setView(false);
 				bgSound.stop();
