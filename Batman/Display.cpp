@@ -3,7 +3,7 @@
 Display::Display()
 {
 	//MainMenu
-	mainMenuTexture.loadFromFile("sprite/background2.png");
+	mainMenuTexture.loadFromFile("sprite/background.png");
 	mainMenuSprite.setTexture(mainMenuTexture);
 	//Logo
 	logoTexture.loadFromFile("sprite/logo.png");
@@ -659,7 +659,7 @@ void Display::Trap()
 			bomb.setPosition(Vector2f(trapVec[i].getX(), trapVec[i].getY() - 25));
 			bomb.setBomb(true);
 			trapVec.erase(trapVec.begin() + i);
-			if (myHP > 0) myHP -= 10000;
+			if (myHP > 0) myHP -= 15000;
 			if (myHP <= 0) myHP = 0;
 		}
 	}

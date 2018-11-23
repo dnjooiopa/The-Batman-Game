@@ -12,6 +12,8 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	gameStart = 2;
 	showHighscore = 3;
 	playerDead = 4;
+	endTexture.loadFromFile("sprite/end.png");
+	endBackground.setTexture(endTexture);
 	bgSound.openFromFile("sound/bgSound.ogg");
 	bgSound.setVolume(80);
 	bgSound.setPlayingOffset(Time(seconds(0)));
@@ -31,9 +33,9 @@ void GameRunning::MainMenu()
 	Font font;
 	font.loadFromFile("font/mer.ttf");
 	enterYourName.setFont(font);
-	enterYourName.setString("    YOU DIED\nPlease Enter Your Name");
+	enterYourName.setString("         YOU DIED\nPlease Enter Your Name");
 	enterYourName.setCharacterSize(50);
-	enterYourName.setPosition(250, 100);
+	enterYourName.setPosition(400, 100);
 	Time time;
 	while (window.isOpen())
 	{
@@ -45,7 +47,7 @@ void GameRunning::MainMenu()
 			{
 				
 				if (event.type == sf::Event::TextEntered) {
-					if (event.text.unicode == '\b' && yourname.getSize() != 0) {//ถ้ากด Backspace เป็นการลบตัวอักษร
+					if (event.text.unicode == '\b' && yourname.getSize()) {//ถ้ากด Backspace เป็นการลบตัวอักษร
 						yourname.erase(yourname.getSize() - 1, 1);
 						player.setFont(font);
 						player.setString(yourname);
@@ -54,13 +56,13 @@ void GameRunning::MainMenu()
 						string name;
 						yourname += static_cast<char>(event.text.unicode);
 						name += static_cast<char>(event.text.unicode);
-						if ((event.text.unicode < 128) && (yourname.getSize() < 15)) {
+						if ((event.text.unicode < 128) && (yourname.getSize() < 10)) {
 							player.setFont(font);
 							player.setString(yourname);
 						}
 					}
 					player.setCharacterSize(60);   //เซ็ตขนาดของข้อความ
-					player.setPosition(250.0f, 300.0f);  //เซ็ตขนาดของข้อความ
+					player.setPosition(415.0f, 410.0f);  //เซ็ตขนาดของข้อความ
 				}
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Return) {
@@ -136,7 +138,7 @@ void GameRunning::MainMenu()
 		if (state == playerDead)
 		{
 			window.clear();
-			window.draw(enterYourName);
+			window.draw(endBackground);
 			window.draw(player);
 			window.display();
 		}

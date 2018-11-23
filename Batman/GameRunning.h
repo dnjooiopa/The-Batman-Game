@@ -27,5 +27,7 @@ private:
 	int showHighscore;
 	int playerDead;
 	Music bgSound;
+	Texture endTexture;
+	Sprite endBackground;
 };
 
