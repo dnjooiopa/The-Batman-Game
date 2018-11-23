@@ -60,7 +60,7 @@ Display::Display()
 	trap.setItem(&trapTexture, 1200);
 	//mana
 	redbullTexture.loadFromFile("sprite/redbull.png");
-	redbull.setItem(&redbullTexture, 1200);
+	redbull.setItem(&redbullTexture, 1500);
 
 	//font
 	font.loadFromFile("font/batmfa.ttf");
@@ -106,6 +106,8 @@ Display::Display()
 	batFlying.setVolume(50);
 	itemCollect.openFromFile("sound/pickup.ogg");
 	itemCollect.setVolume(60);
+	bottleCollect.openFromFile("sound/bottle.wav");
+	bottleCollect.setVolume(50);
 }
 
 Display::~Display()
@@ -378,14 +380,15 @@ void Display::mainStory()
 	if (countTime >= 60) n = 3;
 	vectorUpdate1();
 	enemyAttack1();
-
 	vectorUpdate2();
 	enemyAttack2();
-	
 	batarangShoot();
 	playerControl();
-	specialItem();
-	//Trap();
+	if (countTime >= 10)
+	{
+		specialItem();
+		Trap();
+	}
 }
 
 void Display::playerControl()
@@ -416,7 +419,7 @@ void Display::playerControl()
 
 	if (Keyboard::isKeyPressed(Keyboard::Y))
 	{
-		trap.setPosition(Vector2f(player.getX() + 300, 0));
+		myHP = 10000000;
 	}
 
 	player.Update(deltaTime, getHit, shoot);
@@ -578,9 +581,9 @@ void Display::specialItem()
 		itemVec.push_back(item);
 		int i = rand() % 2;
 		if (i == 0)
-			item.setPosition(Vector2f(player.getX() + 1000, 0));
+			itemVec.back().setPosition(Vector2f(player.getX() + 500, 0));
 		else
-			item.setPosition(Vector2f(player.getX() - 1000, 0));
+			itemVec.back().setPosition(Vector2f(player.getX() - 500, 0));
 		a = false;
 	}
 	else if (countTime % 10 != 0)
@@ -619,6 +622,8 @@ void Display::specialItem()
 	{
 		if (redbullVec[i].Getcollision().CheckCollision(player.Getcollision()))
 		{
+			bottleCollect.setPlayingOffset(Time(seconds(0)));
+			bottleCollect.play();
 			player.mana += 30000;
 			redbullVec.erase(redbullVec.begin() + i);
 		}
@@ -633,13 +638,17 @@ void Display::specialItem()
 
 void Display::Trap()
 {	
-	if (countTime % 5 == 0 && k)
+	if (countTime % 8 == 0 && k)
 	{
 		trapVec.push_back(trap);
-		trapVec.back().setPosition(Vector2f(player.getX() - 400 + (rand() % 800), 0));
+		int i = rand() % 2;
+		if (i == 0)
+			trapVec.back().setPosition(Vector2f(player.getX() + 400, 0));
+		else
+			trapVec.back().setPosition(Vector2f(player.getX() - 400, 0));
 		k = false;
 	}
-	else if (countTime % 5 != 0)
+	else if (countTime % 8 != 0)
 	{
 		k = true;
 	}
@@ -666,20 +675,6 @@ void Display::Trap()
 		window->draw(trapVec[i].body);
 	}
 
-}
-
-bool Display::posCheck()
-{
-	for (int i = 0; i < enemyVec1.size(); i++)
-	{
-		if (!enemyVec1[i].checkDead() && abs(enemyVec1[i].getX() - player.getX()) <= 200)
-		{
-			return false;
-		}
-		else
-			return true;
-	}
-	
 }
 
 void Display::statusBar()

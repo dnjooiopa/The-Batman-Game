@@ -14,3 +14,11 @@ Enemy 8400
 player 16900
 Yow 12600
 Ray 12600
+
+kkk 5100
+Groot 5200
+kk 5000
+lol 1400
+DeadMan 5800
+bruce 8500
+Joker 13900

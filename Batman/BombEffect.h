@@ -17,7 +17,7 @@ public:
 		body.setTexture(texture);
 		body.setPosition(Vector2f(-200, 0));
 		bombSound.openFromFile("sound/bomb.ogg");
-		bombSound.setVolume(35);
+		bombSound.setVolume(25);
 		sbomb = false;
 	}
 	void setBomb(bool bombCheck)

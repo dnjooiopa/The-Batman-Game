@@ -28,8 +28,8 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	jumpHeight = 350.0f;
 	g = 2800.0f;
 	defaultPosY = 700.0f - (1.5 * animation.uvRect.height);
-	punchSound.openFromFile("sound/punch.ogg");
-	punchSound.setVolume(30);
+	punchSound.openFromFile("sound/punch2.ogg");
+	punchSound.setVolume(20);
 	totalTime = 0;
 	totalTimeB = 0;
 	totalTimeC = 0;
@@ -204,7 +204,7 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 		row = 5;
 	}
 	if (mana > 100000) mana = 100000;
-	if (Keyboard::isKeyPressed(Keyboard::LShift) && mana>0)
+	if ((Keyboard::isKeyPressed(Keyboard::A)|| Keyboard::isKeyPressed(Keyboard::D)) && Keyboard::isKeyPressed(Keyboard::LShift) && mana>0)
 	{
 		totalTimeC += deltaTime;
 		if (totalTimeC >= delayButton)

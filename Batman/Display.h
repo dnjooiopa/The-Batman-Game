@@ -48,7 +48,6 @@ public:
 	void vectorUpdate2();
 	void specialItem();
 	void Trap();
-	bool posCheck();
 	int getSelect() { return select; }
 	Font getFont() { return font; }
 	bool msCheck;
@@ -146,5 +145,6 @@ private:
 
 	Music batFlying;
 	Music itemCollect;
+	Music bottleCollect;
 };
 

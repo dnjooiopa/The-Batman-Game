@@ -13,7 +13,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	showHighscore = 3;
 	playerDead = 4;
 	bgSound.openFromFile("sound/bgSound.ogg");
-	bgSound.setVolume(50);
+	bgSound.setVolume(80);
 	bgSound.setPlayingOffset(Time(seconds(0)));
 	bgSound.play();
 	MainMenu();
@@ -88,7 +88,7 @@ void GameRunning::MainMenu()
 
 					display.setView(true);
 					state = gameStart;
-					bgSound.setVolume(30);
+					bgSound.setVolume(80);
 					break;
 				case 2:
 					display.setView(false);
