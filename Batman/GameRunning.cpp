@@ -26,7 +26,6 @@ GameRunning::~GameRunning()
 void GameRunning::MainMenu()
 {
 	float deltaTime = 0.0;
-	window.setMouseCursorVisible(true);
 	String yourname;
 	Text player,enterYourName;
 	Font font;
@@ -46,7 +45,7 @@ void GameRunning::MainMenu()
 			{
 				
 				if (event.type == sf::Event::TextEntered) {
-					if (event.text.unicode == '\b') {//ถ้ากด Backspace เป็นการลบตัวอักษร
+					if (event.text.unicode == '\b' && yourname.getSize() != 0) {//ถ้ากด Backspace เป็นการลบตัวอักษร
 						yourname.erase(yourname.getSize() - 1, 1);
 						player.setFont(font);
 						player.setString(yourname);
@@ -67,7 +66,7 @@ void GameRunning::MainMenu()
 					if (event.key.code == sf::Keyboard::Return) {
 						player.setString(yourname);
 						display.setScore(yourname);
-						state == runMenu;
+						window.close();
 					}
 				}
 			}
@@ -80,6 +79,7 @@ void GameRunning::MainMenu()
 		}
 		if (state == runMenu)
 		{
+			window.setMouseCursorVisible(true);
 			if (Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left) && display.msCheck))
 			{
 				switch (display.getSelect())
@@ -106,6 +106,7 @@ void GameRunning::MainMenu()
 
 		if (state == gameStart)
 		{
+			window.setMouseCursorVisible(false);
 			time = clock2.getElapsedTime();
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{

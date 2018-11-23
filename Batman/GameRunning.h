@@ -12,9 +12,7 @@ public:
 	GameRunning(Vector2u size,std::string name);
 	~GameRunning();
 
-	void GameStart();
 	void MainMenu();
-	void Highscore();
 
 private:
 	RenderWindow window;

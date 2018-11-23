@@ -98,6 +98,9 @@ private:
 	Item trap;
 	Texture trapTexture;
 
+	Item redbull;
+	Texture redbullTexture;
+
 	unsigned int countTime;
 	float deltaTime;
 	float totalTime;
@@ -118,6 +121,8 @@ private:
 	bool bigEnemyGetBomb;
 	bool i;
 	bool k;
+	bool j;
+	bool a;
 
 	int myHP;
 	RectangleShape HP;
@@ -126,12 +131,17 @@ private:
 	bool getHit;
 	int hit;
 
+	RectangleShape MANA;
+
 	vector<pair<int, string>> scoreboard;
 	ifstream loadFile;
 
 	vector<Enemy> enemyVec1;
 	vector<Enemy> enemyVec2;
+	vector<Item> itemVec;
 	vector<Item> trapVec;
+	vector<Item> redbullVec;
+	
 	int n;
 
 	Music batFlying;

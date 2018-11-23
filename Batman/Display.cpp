@@ -54,10 +54,13 @@ Display::Display()
 
 	//Item
 	itemTexture.loadFromFile("sprite/batItem.png");
-	item.setItem(&itemTexture);
+	item.setItem(&itemTexture, 2800);
 	//trap
 	trapTexture.loadFromFile("sprite/trap2.png");
-	trap.setItem(&trapTexture);
+	trap.setItem(&trapTexture, 1200);
+	//mana
+	redbullTexture.loadFromFile("sprite/redbull.png");
+	redbull.setItem(&redbullTexture, 1200);
 
 	//font
 	font.loadFromFile("font/batmfa.ttf");
@@ -76,12 +79,16 @@ Display::Display()
 	batNumber = 0;
 	i = true;
 	k = true;
+	j = true;
+	a = true;
 	n = 10;
 	//HP
-	myHP = 12000;
+	myHP = 100000;
 	playerScore = 0;
 	HP.setFillColor(Color::Red);
 	hit = 4;
+	//mana
+	MANA.setFillColor(Color::Blue);
 
 	//HighScore
 	loadFile.open("score.txt");
@@ -378,7 +385,7 @@ void Display::mainStory()
 	batarangShoot();
 	playerControl();
 	specialItem();
-	Trap();
+	//Trap();
 }
 
 void Display::playerControl()
@@ -565,25 +572,63 @@ void Display::vectorUpdate2()
 
 void Display::specialItem()
 {
-	if (countTime%20==0)
+	// batarang
+	if (countTime % 20 == 0 && a && itemVec.size() < 3)
 	{
+		itemVec.push_back(item);
 		int i = rand() % 2;
 		if (i == 0)
-			item.setPosition(Vector2f(player.getX() + 300, 0));
+			item.setPosition(Vector2f(player.getX() + 1000, 0));
 		else
-			item.setPosition(Vector2f(player.getX() - 300, 0));
+			item.setPosition(Vector2f(player.getX() - 1000, 0));
+		a = false;
 	}
-
-	if (item.Getcollision().CheckCollision(player.Getcollision()))
+	else if (countTime % 10 != 0)
 	{
-		batNumber += 10;
-		item.setPosition(Vector2f(-200, player.getY()));
-		itemCollect.setPlayingOffset(Time(seconds(0)));
-		itemCollect.play();
+		a = true;
 	}
-	item.Update(deltaTime);
-	window->draw(item.body);
+	for (int i = 0; i < itemVec.size(); i++)
+	{
+		if (itemVec[i].Getcollision().CheckCollision(player.Getcollision()))
+		{
+			itemCollect.setPlayingOffset(Time(seconds(0)));
+			itemCollect.play();
+			batNumber += 10;
+			itemVec.erase(itemVec.begin() + i);
+		}
+	}
 
+	for (int i = 0; i < itemVec.size(); i++)
+	{
+		itemVec[i].Update(deltaTime);
+		window->draw(itemVec[i].body);
+	}
+
+	//mana potion
+	if (countTime % 10 == 0 && j && redbullVec.size()<3)
+	{
+		redbullVec.push_back(redbull);
+		redbullVec.back().setPosition(Vector2f(player.getX() - 1000 + (rand() % 2000), 0));
+		j = false;
+	}
+	else if (countTime % 10 != 0)
+	{
+		j = true;
+	}
+	for (int i = 0; i < redbullVec.size(); i++)
+	{
+		if (redbullVec[i].Getcollision().CheckCollision(player.Getcollision()))
+		{
+			player.mana += 30000;
+			redbullVec.erase(redbullVec.begin() + i);
+		}
+	}
+
+	for (int i = 0; i < redbullVec.size(); i++)
+	{
+		redbullVec[i].Update(deltaTime);
+		window->draw(redbullVec[i].body);
+	}
 }
 
 void Display::Trap()
@@ -591,13 +636,13 @@ void Display::Trap()
 	if (countTime % 5 == 0 && k)
 	{
 		trapVec.push_back(trap);
+		trapVec.back().setPosition(Vector2f(player.getX() - 400 + (rand() % 800), 0));
 		k = false;
 	}
 	else if (countTime % 5 != 0)
 	{
 		k = true;
 	}
-	std::cout << trapVec.size() << std::endl;
 	for (int i = 0; i < trapVec.size(); i++)
 	{
 		if (trapVec[i].Getcollision().CheckCollision(player.Getcollision()))
@@ -655,7 +700,7 @@ void Display::statusBar()
 
 	//HP
 	HP.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 310.0f));
-	HP.setSize(Vector2f(myHP / 362, 55));
+	HP.setSize(Vector2f(myHP / 362, 25));
 	window->draw(HP);
 	std::string sTest = to_string(myHP);
 	hpNumber.setFont(font);
@@ -664,7 +709,12 @@ void Display::statusBar()
 	hpNumber.setFillColor(sf::Color::Green);
 	hpNumber.setOutlineColor(sf::Color::Black);
 	hpNumber.setPosition(Vector2f(camera.getCenter().x - 570.0f, camera.getCenter().y - 315.0f));
-	window->draw(hpNumber);
+	//window->draw(hpNumber);
+
+	//Mana
+	MANA.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 280.0f));
+	MANA.setSize(Vector2f(player.getMana() / 362, 25));
+	window->draw(MANA);
 
 	//score
 	string score = to_string(playerScore);

@@ -21,11 +21,13 @@ public:
 	float getX() {return body.getPosition().x;}
 	float getY() {return body.getPosition().y;}
 	int curX() { return animation.currentImage.x; }
+	int getMana() { return mana; }
 	Vector2f Getposition() { return body.getPosition(); }
 	Collision Getcollision() { return Collision(body); }
     RectangleShape body;
 	bool faceRight;
 	bool cShoot;
+	int mana;
 private:
 	Animation animation;
 	bool crouchCheck;
@@ -47,6 +49,7 @@ private:
 	float totalTime;
 	float totalTimeB;
 	float delayButton;
+	float totalTimeC;
 	
 	Vector2f velocity;
 	Vector2f pos;

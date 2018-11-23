@@ -7,3 +7,10 @@ hell 1500
 
 gg 400
 King 2000
+Dragon 3500
+world 2400
+Messi 3400
+Enemy 8400
+player 16900
+Yow 12600
+Ray 12600

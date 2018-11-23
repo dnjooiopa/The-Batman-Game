@@ -32,11 +32,12 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	punchSound.setVolume(30);
 	totalTime = 0;
 	totalTimeB = 0;
+	totalTimeC = 0;
 	delayButton = 0.05f;
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
 	body.setPosition(640.0f, defaultPosY);
-	
+	mana = 100000;
 }
 
 void Player::Update(float deltaTime, bool getHit, bool flying)
@@ -202,8 +203,16 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	{
 		row = 5;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::LShift))
+	if (mana > 100000) mana = 100000;
+	if (Keyboard::isKeyPressed(Keyboard::LShift) && mana>0)
 	{
+		totalTimeC += deltaTime;
+		if (totalTimeC >= delayButton)
+		{
+			totalTimeC -= delayButton;
+			if(mana>0) mana-=1000;
+		}
+
 		if (faceRight)
 			velocity.x = 1000;
 		else
@@ -212,8 +221,6 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	
 	if (getY() < 700.0f - (1.5 * animation.uvRect.height))
 		velocity.y += g * deltaTime;
-
-	//std::cout << getHit << std::endl;
 	
 	animation.playerUpdate(row, deltaTime, faceRight, punch, jump, shoot, getY());
 	body.setTextureRect(animation.uvRect);

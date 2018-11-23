@@ -7,7 +7,7 @@ class Item
 public:
 	Item();
 	~Item();
-	void setItem(Texture* texture)
+	void setItem(Texture* texture, float g)
 	{	
 		imgHeight = texture->getSize().y;
 		imgWidth = texture->getSize().x;
@@ -15,7 +15,7 @@ public:
 		body.setSize(Vector2f(imgWidth, imgHeight));
 		body.setPosition(Vector2f(-500, 0));
 		
-		g = 3000.0f;
+		this->g = g;
 	}
 	Vector2f getPosition() { return body.getPosition(); }
 	void setPosition(Vector2f pos){ body.setPosition(pos); }
