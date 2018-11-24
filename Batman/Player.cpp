@@ -214,9 +214,9 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 		}
 
 		if (faceRight)
-			velocity.x = 1000;
+			velocity.x = 800;
 		else
-			velocity.x = -1000;
+			velocity.x = -800;
 	}
 	
 	if (getY() < 700.0f - (1.5 * animation.uvRect.height))

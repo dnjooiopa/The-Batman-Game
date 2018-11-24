@@ -19,3 +19,7 @@ der 5500
 hero 8800
 fad 2000
 FG 46800
+Sparrow 12500
+kee 13700
+aK 9200
+acd 4300

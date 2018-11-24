@@ -87,6 +87,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	j = true;
 	a = true;
 	n = 10;
+	time = 0;
 	//HP
 	myHP = 10000;
 	playerScore = 0;
@@ -154,8 +155,9 @@ void GameRunning::gameReset()
 	redbull.setItem(&redbullTexture, 1500);
 	//hp
 	hpBot.setItem(&hpBotTexture, 1200);
+	//time 
+	time = 0;
 	viewCheck = false;
-	clock2.restart();
 }
 
 void GameRunning::GameControl()
@@ -163,7 +165,7 @@ void GameRunning::GameControl()
 	deltaTime = 0.0;
 	String yourname;
 	Text playerText, enterYourName;
-	Time time;
+	
 	while (window.isOpen())
 	{
 		deltaTime = clock1.restart().asSeconds();
@@ -238,7 +240,7 @@ void GameRunning::GameControl()
 		if (state == gameStart)
 		{
 			window.setMouseCursorVisible(false);
-			time = clock2.getElapsedTime();
+			time += deltaTime;
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
 				viewCheck = false;
@@ -252,7 +254,7 @@ void GameRunning::GameControl()
 				viewCheck = false;
 				bgSound.setVolume(40);
 			}
-			timeElapse(time.asSeconds());
+			timeElapse(time);
 			Playing();
 		}
 		if (state == showHighscore)
@@ -693,7 +695,7 @@ void GameRunning::vectorUpdate2()
 void GameRunning::specialItem()
 {
 	// batarang
-	if (countTime % 20 == 0 && a && itemVec.size() < 3)
+	if (countTime % 18 == 0 && a && itemVec.size() < 3)
 	{
 		itemVec.push_back(item);
 		int i = rand() % 2;
@@ -703,7 +705,7 @@ void GameRunning::specialItem()
 			itemVec.back().setPosition(Vector2f(player.getX() - 500, 0));
 		a = false;
 	}
-	else if (countTime % 10 != 0)
+	else if (countTime % 18 != 0)
 	{
 		a = true;
 	}
@@ -724,7 +726,7 @@ void GameRunning::specialItem()
 		window.draw(itemVec[i].body);
 	}
 
-	//mana potion
+	//potion
 	if (countTime % 10 == 0 && j && potionVec.size() < 4)
 	{
 		int ps = rand() % 5;

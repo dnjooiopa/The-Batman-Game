@@ -43,12 +43,10 @@ public:
 	void vectorUpdate2();
 	void specialItem();
 	void Trap();
-	
 
 private:
 	RenderWindow window;
 	Clock clock1;
-	Clock clock2;
 	bool running;
 	int state;
 	int exit;
@@ -101,6 +99,7 @@ private:
 	Texture redbullTexture;
 	Item hpBot;
 	Texture hpBotTexture;
+	float time;
 	unsigned int countTime;
 	float deltaTime;
 	float totalTime;
