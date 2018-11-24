@@ -37,7 +37,7 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
 	body.setPosition(640.0f, defaultPosY);
-	mana = 100000;
+	mana = 10000;
 }
 
 void Player::Update(float deltaTime, bool getHit, bool flying)
@@ -203,14 +203,14 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	{
 		row = 5;
 	}
-	if (mana > 100000) mana = 100000;
+	if (mana > 10000) mana = 10000;
 	if ((Keyboard::isKeyPressed(Keyboard::A)|| Keyboard::isKeyPressed(Keyboard::D)) && Keyboard::isKeyPressed(Keyboard::LShift) && mana>0)
 	{
 		totalTimeC += deltaTime;
 		if (totalTimeC >= delayButton)
 		{
 			totalTimeC -= delayButton;
-			if(mana>0) mana-=1000;
+			if(mana>0) mana-=100;
 		}
 
 		if (faceRight)
@@ -228,11 +228,6 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	body.setTextureRect(animation.uvRect);
 	body.move(velocity * deltaTime);
 	collide();
-}
-
-void Player::Draw(RenderWindow &window)
-{
-	window.draw(body);
 }
 
 void Player::collide()

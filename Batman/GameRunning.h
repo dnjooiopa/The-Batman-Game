@@ -5,7 +5,6 @@
 #include "Batarang.h"
 #include "Batwing.h"
 #include "BombEffect.h"
-#include "Fire.h"
 #include "Item.h"
 #include <iostream>
 #include <ctime>
@@ -31,7 +30,6 @@ public:
 	void sortHighscore();
 	void drawHighscore();
 	void Playing();
-	void drawScene();
 	void mainStory();
 	void playerControl();
 	void enemyAttack1();
@@ -81,8 +79,8 @@ private:
 	Enemy normalEnemy;
 	Texture normalEnemyTexture;
 
-	Enemy berm;
-	Texture bermTexture;
+	Enemy bigEnemy;
+	Texture bigEnemyTexture;
 
 	Batarang batarang;
 	Texture batarangTexture;
@@ -95,9 +93,6 @@ private:
 	BombEffect bomb;
 	Texture bombTexture;
 	bool bombCheck;
-
-	Fire fire;
-	Texture fireTexture;
 
 	Item item;
 	Texture itemTexture;
@@ -147,6 +142,7 @@ private:
 
 	vector<pair<int, string>> scoreboard;
 	ifstream loadFile;
+	fstream myFile;
 
 	vector<Enemy> enemyVec1;
 	vector<Enemy> enemyVec2;

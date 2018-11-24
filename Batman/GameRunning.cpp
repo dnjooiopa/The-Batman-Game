@@ -3,7 +3,7 @@
 
 GameRunning::GameRunning(Vector2u size, std::string name)
 {
-	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Resize);
+	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Titlebar);
 	viewCheck = false;
 	state = 1;
 	exit = 0;
@@ -38,8 +38,8 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f, 500);
 
 	//bigEnemy
-	bermTexture.loadFromFile("sprite/bigEnemy.png");
-	berm.setEnemy(&bermTexture, Vector2u(6, 4), 0.08f, 120.0f, 1500);
+	bigEnemyTexture.loadFromFile("sprite/bigEnemy.png");
+	bigEnemy.setEnemy(&bigEnemyTexture, Vector2u(6, 4), 0.08f, 120.0f, 1500);
 
 	//Batarang
 	batarangTexture.loadFromFile("sprite/batarang.png");
@@ -52,11 +52,6 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	//Bomb
 	bombTexture.loadFromFile("sprite/bomb.png");
 	bomb.setBombEffect(&bombTexture, Vector2u(6, 1), 0.12f);
-
-	//firetest
-	fireTexture.loadFromFile("sprite/fireT.png");
-	fire.setFire(&fireTexture, Vector2u(4, 4), 0.07f);
-	fire.setPosition(Vector2f(150.0f, 500.0f));
 
 	//Item
 	itemTexture.loadFromFile("sprite/batItem.png");
@@ -90,14 +85,22 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	a = true;
 	n = 10;
 	//HP
-	myHP = 100000;
+	myHP = 10000;
 	playerScore = 0;
 	HP.setFillColor(Color::Red);
 	hit = 4;
 	//mana
 	MANA.setFillColor(Color::Blue);
 	//score
-	sortHighscore();
+	loadFile.open("score.txt");
+	while (!loadFile.eof()) {
+		string tempName;
+		int tempScore;
+		loadFile >> tempName >> tempScore;
+		scoreboard.push_back({ tempScore,tempName });
+	}
+	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
+	loadFile.close();
 	//Sound
 	batFlying.openFromFile("sound/batFlying.ogg");
 	batFlying.setVolume(50);
@@ -109,9 +112,11 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	endTexture.loadFromFile("sprite/end.png");
 	endBackground.setTexture(endTexture);
 	bgSound.openFromFile("sound/bgSound.ogg");
+
 	bgSound.setVolume(80);
 	bgSound.setPlayingOffset(Time(seconds(0)));
 	bgSound.play();
+
 	GameControl();
 }
 
@@ -122,7 +127,7 @@ GameRunning::~GameRunning()
 void GameRunning::gameReset()
 {
 	//Player
-	myHP = 100000;
+	myHP = 10000;
 	playerScore = 0;
 	player.mana = 100000;
 	player.setPlayer(&playerTexture, Vector2u(6, 11), 0.08f, 300.0f);
@@ -133,17 +138,17 @@ void GameRunning::gameReset()
     itemVec.clear();
     trapVec.clear();
 	redbullVec.clear();
+
 	//normalEnemy
 	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f, 500);
 	//bigEnemy
-	berm.setEnemy(&bermTexture, Vector2u(6, 4), 0.08f, 120.0f, 1500);
+	bigEnemy.setEnemy(&bigEnemyTexture, Vector2u(6, 4), 0.08f, 120.0f, 1500);
 	//Item
 	item.setItem(&itemTexture, 2800);
 	//trap
 	trap.setItem(&trapTexture, 1200);
 	//mana
 	redbull.setItem(&redbullTexture, 1500);
-	sortHighscore();
 	viewCheck = false;
 	clock2.restart();
 }
@@ -153,7 +158,6 @@ void GameRunning::GameControl()
 	deltaTime = 0.0;
 	String yourname;
 	Text playerText, enterYourName;
-	
 	Time time;
 	while (window.isOpen())
 	{
@@ -185,10 +189,11 @@ void GameRunning::GameControl()
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Return) {
 						playerText.setString(yourname);
-						setScore(yourname);
+						setScore(yourname); 
 						gameReset();
 						state = showHighscore;
-						sortHighscore();
+						bgSound.setPlayingOffset(Time(seconds(0)));
+						bgSound.play();
 						break;
 					}
 				}
@@ -240,7 +245,7 @@ void GameRunning::GameControl()
 				window.setMouseCursorVisible(true);
 				state = playerDead;
 				viewCheck = false;
-				bgSound.stop();
+				bgSound.setVolume(40);
 			}
 			timeElapse(time.asSeconds());
 			Playing();
@@ -284,25 +289,6 @@ void GameRunning::GameControl()
 void GameRunning::timeElapse(float timeElapse)
 {
 	this->countTime = int(timeElapse);
-}
-
-void GameRunning::setScore(std::string name)
-{
-
-	fstream myFile;
-	myFile.open("score.txt", ios::out | ios::app);
-	myFile << "\n" << name << " " << playerScore;
-	myFile.close();
-}
-
-void GameRunning::drawScene()
-{
-	if (viewMove)
-	{
-		camera.move((Vector2f(player.getX(), 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 5.0f);
-	}
-	window.setView(camera);
-	window.draw(scene1);
 }
 void GameRunning::drawMainMenu()
 {
@@ -408,17 +394,13 @@ bool GameRunning::mouseCheck(Text *text)
 	else
 		return false;
 }
-void GameRunning::sortHighscore()
+void GameRunning::setScore(std::string name)
 {
-	loadFile.open("score.txt");
-	while (!loadFile.eof()) {
-		string tempName;
-		int tempScore;
-		loadFile >> tempName >> tempScore;
-		scoreboard.push_back({ tempScore,tempName });
-	}
+	myFile.open("score.txt", ios::out | ios::app);
+	myFile << "\n" << name << " " << playerScore;
+	myFile.close();
+	scoreboard.push_back({ playerScore,name });
 	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
-	loadFile.close();
 }
 void GameRunning::drawHighscore()
 {
@@ -470,15 +452,11 @@ void GameRunning::drawHighscore()
 void GameRunning::Playing()
 {
 	window.clear();
-	//drawScene();
 	window.draw(scene1);
 	mainStory();
 	//batwing.Update(deltaTime);
 	//window.draw(batwing.body);
 	statusBar();
-	//fire.setPosition(Vector2f(player.getX()-100, player.getY() - 100));
-	//fire.Update(deltaTime);//fire
-	//window.draw(fire.body);//fire
 	window.display();
 }
 
@@ -492,11 +470,11 @@ void GameRunning::mainStory()
 		{
 			int r = rand() % 2;
 			if (r == 0)
-				berm.setPosition(player.getX() + 800);
+				bigEnemy.setPosition(player.getX() + 800);
 			else
-				berm.setPosition(player.getX() - 800);
-			berm.setSpeed(70 + rand() % 100);
-			enemyVec2.push_back(berm);
+				bigEnemy.setPosition(player.getX() - 800);
+			bigEnemy.setSpeed(70 + rand() % 100);
+			enemyVec2.push_back(bigEnemy);
 		}
 		else
 		{
@@ -579,7 +557,7 @@ void GameRunning::enemyAttack1()
 
 				if (damaged == 10)
 				{
-					if (myHP > 0) myHP -= 3000;
+					if (myHP > 0) myHP -= 300;
 					if (myHP <= 0) myHP = 0;
 				}
 			}
@@ -600,7 +578,7 @@ void GameRunning::enemyAttack2()
 
 				if (damaged == 10)
 				{
-					if (myHP > 0) myHP -= 5000;
+					if (myHP > 0) myHP -= 500;
 					if (myHP <= 0) myHP = 0;
 				}
 			}
@@ -679,6 +657,7 @@ void GameRunning::vectorUpdate1()
 		if (!enemyVec1[i].checkDead())
 		{
 			enemyVec1[i].Update(player.getPosition(), deltaTime);
+			window.draw(enemyVec1[i].HP);
 			window.draw(enemyVec1[i].body);
 		}
 		else
@@ -695,6 +674,7 @@ void GameRunning::vectorUpdate2()
 		if (!enemyVec2[i].checkDead())
 		{
 			enemyVec2[i].Update(player.getPosition(), deltaTime);
+			window.draw(enemyVec2[i].HP);
 			window.draw(enemyVec2[i].body);
 		}
 		else
@@ -755,7 +735,7 @@ void GameRunning::specialItem()
 		{
 			bottleCollect.setPlayingOffset(Time(seconds(0)));
 			bottleCollect.play();
-			player.mana += 30000;
+			player.mana += 3000;
 			redbullVec.erase(redbullVec.begin() + i);
 		}
 	}
@@ -790,7 +770,7 @@ void GameRunning::Trap()
 			bomb.setPosition(Vector2f(trapVec[i].getX(), trapVec[i].getY() - 25));
 			bomb.setBomb(true);
 			trapVec.erase(trapVec.begin() + i);
-			if (myHP > 0) myHP -= 15000;
+			if (myHP > 0) myHP -= 1500;
 			if (myHP <= 0) myHP = 0;
 		}
 	}
@@ -826,7 +806,7 @@ void GameRunning::statusBar()
 
 	//HP
 	HP.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 310.0f));
-	HP.setSize(Vector2f(myHP / 362, 25));
+	HP.setSize(Vector2f(myHP / 36.2, 25));
 	window.draw(HP);
 	std::string sTest = to_string(myHP);
 	hpNumber.setFont(font);
@@ -839,7 +819,7 @@ void GameRunning::statusBar()
 
 	//Mana
 	MANA.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 280.0f));
-	MANA.setSize(Vector2f(player.getMana() / 362, 25));
+	MANA.setSize(Vector2f(player.getMana() / 36.2, 25));
 	window.draw(MANA);
 
 	//score

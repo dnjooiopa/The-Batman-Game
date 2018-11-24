@@ -14,6 +14,7 @@ void Enemy::setEnemy(Texture * texture, Vector2u imageCount, float switchTime, f
 	animation.setAnimation(texture, imageCount, switchTime);
 	this->speed = speed;
 	this->hp = hp;
+	this->fullHP = hp;
 	faceLeft = true;
 	dead = false;
 	shot = false;
@@ -88,9 +89,11 @@ void Enemy::Update(Vector2f playerPos, float deltaTime)
 	}
 	if (hp <= 0)
 	{
+		hp = 0;
 		row = 3;
 		dead = true;
 	}
+	hpBar();
 	animation.enemyUpdate(row, deltaTime, faceLeft, dead);
 	body.setTextureRect(animation.uvRect);
 	body.move(movement);
@@ -112,12 +115,23 @@ void Enemy::getPunch(bool hit)
 	this->hit = hit;
 }
 
-void Enemy::Draw(RenderWindow &window)
-{
-	window.draw(body);
-}
-
 void Enemy::setSpeed(float speed)
 {
 	this->speed = speed;
+}
+
+void Enemy::hpBar()
+{
+	int d = 0.25*animation.uvRect.width;
+	int m = 1;
+	HP.setFillColor(Color::Red);
+	if (!faceLeft)
+	{
+		m = -1;
+		d = -d;
+	}
+	HP.setOutlineThickness(1);
+	HP.setSize(Vector2f((m*hp) / (fullHP / animation.uvRect.width), 8));
+	HP.setPosition(Vector2f(getX()+d, getY() -3));
+	
 }

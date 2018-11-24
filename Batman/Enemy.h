@@ -16,8 +16,8 @@ public:
 	void getShot(bool shot);
 	void getPunch(bool hit);
 	bool getHit() { return hit; }
-	void Draw(RenderWindow &window);
 	void setSpeed(float speed);
+	void hpBar();
 	int getHP() { return hp; }
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
@@ -26,15 +26,16 @@ public:
 	Vector2f getPosition() { return body.getPosition(); }
 	Collision Getcollision() { return Collision(body); }	
 	RectangleShape body;
+	RectangleShape HP;
 	bool faceLeft;
 
 private:
-
 	Animation animation;
 	float speed;
 	int row;
 	bool checkMovement;
 	int hp;
+	int fullHP;
 	bool dead;
 	bool shot;
 	bool hit;
