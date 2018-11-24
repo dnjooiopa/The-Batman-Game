@@ -288,7 +288,6 @@ void GameRunning::GameControl()
 			camera.setCenter(Vector2f(mainMenuTexture.getSize().x / 2.0f, mainMenuTexture.getSize().y / 2.0f));
 			camera.setSize(Vector2f(mainMenuTexture.getSize()));
 		}
-
 		window.setView(camera);
 	}
 }

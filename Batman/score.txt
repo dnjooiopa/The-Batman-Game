@@ -23,3 +23,5 @@ Sparrow 12500
 kee 13700
 aK 9200
 acd 4300
+Bruce 11500
+ssr 10100
