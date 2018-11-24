@@ -69,7 +69,8 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	redbull.setItem(&redbullTexture, 1500);
 
 	//font
-	font.loadFromFile("font/batmfa.ttf");
+	font.loadFromFile("font/batmfa.ttf");\
+	font2.loadFromFile("font/mer.ttf");
 
 	//player
 	x = 0;
@@ -95,9 +96,8 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	hit = 4;
 	//mana
 	MANA.setFillColor(Color::Blue);
-
+	//score
 	sortHighscore();
-
 	//Sound
 	batFlying.openFromFile("sound/batFlying.ogg");
 	batFlying.setVolume(50);
@@ -112,7 +112,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	bgSound.setVolume(80);
 	bgSound.setPlayingOffset(Time(seconds(0)));
 	bgSound.play();
-	MainMenu();
+	GameControl();
 }
 
 GameRunning::~GameRunning()
@@ -148,13 +148,12 @@ void GameRunning::gameReset()
 	clock2.restart();
 }
 
-void GameRunning::MainMenu()
+void GameRunning::GameControl()
 {
 	deltaTime = 0.0;
 	String yourname;
 	Text playerText, enterYourName;
-	Font font2;
-	font2.loadFromFile("font/mer.ttf");
+	
 	Time time;
 	while (window.isOpen())
 	{
@@ -189,6 +188,7 @@ void GameRunning::MainMenu()
 						setScore(yourname);
 						gameReset();
 						state = showHighscore;
+						sortHighscore();
 						break;
 					}
 				}
@@ -237,6 +237,7 @@ void GameRunning::MainMenu()
 			if (playerisDead())
 			{
 				Sleep(1000);
+				window.setMouseCursorVisible(true);
 				state = playerDead;
 				viewCheck = false;
 				bgSound.stop();
@@ -262,7 +263,12 @@ void GameRunning::MainMenu()
 		}
 		if (viewCheck)
 		{
-			camera.setCenter(Vector2f(player.getX(), scene1Texture.getSize().y / 2.0f));
+			if(player.getX() < 640)
+				camera.setCenter(Vector2f(720, scene1Texture.getSize().y / 2.0f));
+			else if(player.getX() > 8888)
+				camera.setCenter(Vector2f(8969, scene1Texture.getSize().y / 2.0f));
+			else
+				camera.setCenter(Vector2f(player.getX() + 80, scene1Texture.getSize().y / 2.0f));
 			camera.setSize(Vector2f(1280.0f, scene1Texture.getSize().y));
 		}
 		else
@@ -291,14 +297,9 @@ void GameRunning::setScore(std::string name)
 
 void GameRunning::drawScene()
 {
-	if (player.getX() >= 640 && player.getX() < scene1Texture.getSize().x - 680 && viewCheck)
+	if (viewMove)
 	{
-		x = 100;
-		camera.move((Vector2f(player.getX() + x, 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 5.0f);
-	}
-	else
-	{
-		x = 0;
+		camera.move((Vector2f(player.getX(), 0.0f) - Vector2f(camera.getCenter().x, 0.0f)) * deltaTime * 5.0f);
 	}
 	window.setView(camera);
 	window.draw(scene1);
@@ -409,7 +410,6 @@ bool GameRunning::mouseCheck(Text *text)
 }
 void GameRunning::sortHighscore()
 {
-	//HighScore
 	loadFile.open("score.txt");
 	while (!loadFile.eof()) {
 		string tempName;
@@ -470,7 +470,8 @@ void GameRunning::drawHighscore()
 void GameRunning::Playing()
 {
 	window.clear();
-	drawScene();
+	//drawScene();
+	window.draw(scene1);
 	mainStory();
 	//batwing.Update(deltaTime);
 	//window.draw(batwing.body);

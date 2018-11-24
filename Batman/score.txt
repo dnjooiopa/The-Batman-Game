@@ -1,10 +1,8 @@
+
 Harry! 5
 Farm 77
 test 100
 Batman 9999
-hello 1500
-hell 1500
-
 gg 400
 King 2000
 Dragon 3500
@@ -12,19 +10,6 @@ world 2400
 Messi 3400
 Enemy 8400
 player 16900
-Yow 12600
-Ray 12600
-
-kkk 5100
-Groot 5200
-kk 5000
-lol 1400
-DeadMan 5800
-bruce 8500
-Joker 13900
-d 200
-hghg 0
-kaaa 100
-ds 1500
-dstest 2300
-Www 3900
+testScore 11400
+teet 4600
+dw 2800

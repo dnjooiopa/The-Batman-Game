@@ -22,7 +22,7 @@ public:
 	GameRunning(Vector2u size,std::string name);
 	~GameRunning();
 	void gameReset();
-	void MainMenu();
+	void GameControl();
 	void timeElapse(float timeElapse);
 	void setScore(std::string name);
 	void drawMainMenu();
@@ -73,6 +73,7 @@ private:
 	Texture logoTexture;
 	Sprite logo;
 	Font font;
+	Font font2;
 
 	Player player;
 	Texture playerTexture;
@@ -133,6 +134,7 @@ private:
 	bool j;
 	bool a;
 	bool gameEnd;
+	bool viewMove;
 
 	int myHP;
 	RectangleShape HP;

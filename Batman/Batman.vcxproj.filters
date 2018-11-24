@@ -21,9 +21,6 @@
     <ClCompile Include="GameRunning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Display.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,9 +36,6 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Fire.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,9 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameRunning.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Display.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -72,9 +63,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BombEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Fire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">

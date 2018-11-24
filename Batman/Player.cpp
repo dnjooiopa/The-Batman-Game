@@ -221,11 +221,12 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 	
 	if (getY() < 700.0f - (1.5 * animation.uvRect.height))
 		velocity.y += g * deltaTime;
-	
+	if (getX() < 50) body.setPosition(Vector2f(50, getY()));
+	if (getX() > 9450) body.setPosition(Vector2f(9450, getY()));
+
 	animation.playerUpdate(row, deltaTime, faceRight, punch, jump, shoot, getY());
 	body.setTextureRect(animation.uvRect);
 	body.move(velocity * deltaTime);
-
 	collide();
 }
 
