@@ -27,7 +27,6 @@ public:
 	void drawMainMenu();
 	void buttonCheck();
 	bool mouseCheck(Text *text);
-	void sortHighscore();
 	void drawHighscore();
 	void Playing();
 	void mainStory();
@@ -96,13 +95,12 @@ private:
 
 	Item item;
 	Texture itemTexture;
-
 	Item trap;
 	Texture trapTexture;
-
 	Item redbull;
 	Texture redbullTexture;
-
+	Item hpBot;
+	Texture hpBotTexture;
 	unsigned int countTime;
 	float deltaTime;
 	float totalTime;
@@ -148,7 +146,7 @@ private:
 	vector<Enemy> enemyVec2;
 	vector<Item> itemVec;
 	vector<Item> trapVec;
-	vector<Item> redbullVec;
+	vector<Item> potionVec;
 
 	int n;
 

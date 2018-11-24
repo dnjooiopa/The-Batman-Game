@@ -18,7 +18,14 @@ public:
 		this->g = g;
 	}
 	Vector2f getPosition() { return body.getPosition(); }
-	void setPosition(Vector2f pos){ body.setPosition(pos); }
+	void setPosition(Vector2f pos){
+		if (pos.x < 50)
+			body.setPosition(Vector2f(pos.x + 1500, pos.y));
+		else if (pos.x > 9000)
+			body.setPosition(Vector2f(pos.x - 1500, pos.y));
+		else
+			body.setPosition(pos);
+	}
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
 	Collision Getcollision() { return Collision(body); }
@@ -34,12 +41,11 @@ public:
 			velocity.y = 0;
 		}
 	}
-
 	RectangleShape body;
+	float g;
 private:
 
 	Vector2f velocity;
-	float g;
 	float imgHeight;
 	float imgWidth;
 };

@@ -62,6 +62,9 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	//mana
 	redbullTexture.loadFromFile("sprite/redbull.png");
 	redbull.setItem(&redbullTexture, 1500);
+	//hp
+	hpBotTexture.loadFromFile("sprite/hp.png");
+	hpBot.setItem(&hpBotTexture, 1200);
 
 	//font
 	font.loadFromFile("font/batmfa.ttf");\
@@ -137,7 +140,7 @@ void GameRunning::gameReset()
 	enemyVec2.clear();
     itemVec.clear();
     trapVec.clear();
-	redbullVec.clear();
+	potionVec.clear();
 
 	//normalEnemy
 	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f, 500);
@@ -149,6 +152,8 @@ void GameRunning::gameReset()
 	trap.setItem(&trapTexture, 1200);
 	//mana
 	redbull.setItem(&redbullTexture, 1500);
+	//hp
+	hpBot.setItem(&hpBotTexture, 1200);
 	viewCheck = false;
 	clock2.restart();
 }
@@ -412,18 +417,19 @@ void GameRunning::drawHighscore()
 		if (cnt > 5) break;                       //เมื่อตัวนับเกิน 5 ให้จบการทำงาน
 		Text a, b, highScore, textBack;                     //ประกาศ Text
 		a.setString(to_string(i->first));         //เนื่องจากค่าคะแนนเป็น integer จึงต้องทำการแปลงเป็น string ก่อนนำมาแสดงผล (first คือpair ตัวที่หนึ่ง =>int)
-		a.setFont(font);                          //การตั้งค่า Font คะแนน
+		a.setFont(font2);                          //การตั้งค่า Font คะแนน
 		a.setCharacterSize(40);                   //ตั้งค่าขนาด Font คะแนน
 		a.setFillColor(Color::White);
 		a.setPosition(720, 80 + (80 * cnt));      //ตั้งค่าตำแหน่งแสดงผลของคะแนน และเพิ่มค่าตำแหน่งให้ลงมาตัวละ 80 หน่วย
 		window.draw(a);                           //แสดงผลคะแนน
 		b.setString(i->second);					 // (second คือpair ตัวที่สอง =>string) 
-		b.setFont(font);                        //การตั้งค่า Font ชื่อผู้เล่น
+		b.setFont(font2);                        //การตั้งค่า Font ชื่อผู้เล่น
 		b.setCharacterSize(40);                   //ตั้งค่าขนาด Font ชื่อผู้เล่น
+		b.setStyle(Text::Bold);
 		b.setFillColor(Color::White);
 		b.setPosition(320, 80 + (80 * cnt));      //ตั้งค่าตำแหน่งแสดงผลของชื่อผู้เล่น และเพิ่มค่าตำแหน่งให้ลงมาตัวละ 80 หน่วย
 		window.draw(b);                           //แสดงผลชื่อผู้เล่น
-		highScore.setFont(font);
+		highScore.setFont(font2);
 		highScore.setString("HIGH SCORE");
 		highScore.setCharacterSize(50);
 		highScore.setFillColor(sf::Color::White);
@@ -436,7 +442,7 @@ void GameRunning::drawHighscore()
 		textBack.setPosition(40, 25);
 		if (mouseCheck(&textBack))
 		{
-			textBack.setStyle(sf::Text::Bold);
+			textBack.setStyle(Text::Bold);
 		}
 		else
 		{
@@ -719,31 +725,39 @@ void GameRunning::specialItem()
 	}
 
 	//mana potion
-	if (countTime % 10 == 0 && j && redbullVec.size() < 3)
+	if (countTime % 10 == 0 && j && potionVec.size() < 4)
 	{
-		redbullVec.push_back(redbull);
-		redbullVec.back().setPosition(Vector2f(player.getX() - 1000 + (rand() % 2000), 0));
+		int ps = rand() % 5;
+		if (ps == 4)
+			potionVec.push_back(hpBot);
+		else
+			potionVec.push_back(redbull);
+		potionVec.back().setPosition(Vector2f(player.getX() - 1000 + (rand() % 2000), 0));
 		j = false;
 	}
 	else if (countTime % 10 != 0)
 	{
 		j = true;
 	}
-	for (int i = 0; i < redbullVec.size(); i++)
+	for (int i = 0; i < potionVec.size(); i++)
 	{
-		if (redbullVec[i].Getcollision().CheckCollision(player.Getcollision()))
+		if (potionVec[i].Getcollision().CheckCollision(player.Getcollision()))
 		{
 			bottleCollect.setPlayingOffset(Time(seconds(0)));
 			bottleCollect.play();
-			player.mana += 3000;
-			redbullVec.erase(redbullVec.begin() + i);
+			if (potionVec[i].g == 1500)
+				player.mana += 3000;
+			else
+				myHP += 1000;
+			if (myHP > 10000) myHP = 10000;
+			potionVec.erase(potionVec.begin() + i);
 		}
 	}
 
-	for (int i = 0; i < redbullVec.size(); i++)
+	for (int i = 0; i < potionVec.size(); i++)
 	{
-		redbullVec[i].Update(deltaTime);
-		window.draw(redbullVec[i].body);
+		potionVec[i].Update(deltaTime);
+		window.draw(potionVec[i].body);
 	}
 }
 

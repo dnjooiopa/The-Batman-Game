@@ -53,6 +53,5 @@ private:
 	Vector2f velocity;
 	Vector2f pos;
 	Music punchSound;
-
 };
 

@@ -133,5 +133,4 @@ void Enemy::hpBar()
 	HP.setOutlineThickness(1);
 	HP.setSize(Vector2f((m*hp) / (fullHP / animation.uvRect.width), 8));
 	HP.setPosition(Vector2f(getX()+d, getY() -3));
-	
 }
