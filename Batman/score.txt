@@ -25,3 +25,5 @@ aK 9200
 acd 4300
 Bruce 11500
 ssr 10100
+jjjjjjj 4600
+WHO 4900

@@ -541,11 +541,6 @@ void GameRunning::playerControl()
 		}
 	}
 
-	if (Keyboard::isKeyPressed(Keyboard::Y))
-	{
-		myHP = 10000000;
-	}
-
 	player.Update(deltaTime, getHit, shoot);
 	window.draw(player.body);
 
@@ -768,10 +763,7 @@ void GameRunning::Trap()
 	{
 		trapVec.push_back(trap);
 		int i = rand() % 2;
-		if (i == 0)
-			trapVec.back().setPosition(Vector2f(player.getX() + 400, 0));
-		else
-			trapVec.back().setPosition(Vector2f(player.getX() - 400, 0));
+		trapVec.back().setPosition(Vector2f(player.getX() - 400 + (rand() % 800), 0));
 		k = false;
 	}
 	else if (countTime % 8 != 0)
