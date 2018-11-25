@@ -3,7 +3,7 @@
 
 GameRunning::GameRunning(Vector2u size, std::string name)
 {
-	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Titlebar);
+	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Fullscreen);
 	viewCheck = false;
 	state = 1;
 	exit = 0;
@@ -22,7 +22,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	//Scene1
 	scene1Texture.loadFromFile("sprite/scene1.png");
 	scene1.setTexture(scene1Texture);
-	scene1.setScale(Vector2f(1.0f, 1.0f));
+	scene1.setScale(Vector2f(1, 1));
 
 	//Bar
 	barTexture.loadFromFile("sprite/barTest.png");
@@ -30,15 +30,15 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 
 	//Player
 	playerTexture.loadFromFile("sprite/batman2.png");
-	player.setPlayer(&playerTexture, Vector2u(6, 11), 0.08f, 300.0f);
+	player.setPlayer(&playerTexture, Vector2u(6, 11), 0.08f, 300);
 
 	//normalEnemy
 	normalEnemyTexture.loadFromFile("sprite/nV.png");
-	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f, 500);
+	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150, 500);
 
 	//bigEnemy
 	bigEnemyTexture.loadFromFile("sprite/bigEnemy.png");
-	bigEnemy.setEnemy(&bigEnemyTexture, Vector2u(6, 4), 0.08f, 120.0f, 1500);
+	bigEnemy.setEnemy(&bigEnemyTexture, Vector2u(6, 4), 0.08f, 120, 1500);
 
 	//Batarang
 	batarangTexture.loadFromFile("sprite/batarang.png");
@@ -69,12 +69,12 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 
 	loadFile.open("score.txt");
 	while (!loadFile.eof()) {
-		string tempName;
+		std::string tempName;
 		int tempScore;
 		loadFile >> tempName >> tempScore;
 		scoreboard.push_back({ tempScore,tempName });
 	}
-	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
+	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, std::string>>());
 	loadFile.close();
 	//Sound
 	batFlying.openFromFile("sound/batFlying.ogg");
@@ -105,7 +105,7 @@ void GameRunning::defaultSetting()
 	myHP = 10000;
 	playerScore = 0;
 	player.mana = 100000;
-	player.setPlayer(&playerTexture, Vector2u(6, 11), 0.08f, 300.0f);
+	player.setPlayer(&playerTexture, Vector2u(6, 11), 0.08f, 300);
 	HP.setFillColor(Color::Red);
 	MANA.setFillColor(Color::Blue);
 	batNumber = 0;
@@ -142,7 +142,7 @@ void GameRunning::defaultSetting()
 void GameRunning::GameControl()
 {
 	deltaTime = 0.0;
-	sf:: String yourname;
+	sf::String yourname;
 	Text playerText, enterYourName;
 	
 	while (window.isOpen())
@@ -160,7 +160,7 @@ void GameRunning::GameControl()
 						playerText.setString(yourname);
 					}
 					else {
-						string name;
+						std::string name;
 						yourname += static_cast<char>(event.text.unicode);
 						name += static_cast<char>(event.text.unicode);
 						if ((event.text.unicode < 128) && (yourname.getSize() < 10)) {
@@ -169,7 +169,7 @@ void GameRunning::GameControl()
 						}
 					}
 					playerText.setCharacterSize(60);   //เซ็ตขนาดของข้อความ
-					playerText.setPosition(415.0f, 410.0f);  //เซ็ตขนาดของข้อความ
+					playerText.setPosition(415, 410);  //เซ็ตขนาดของข้อความ
 				}
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Return) {
@@ -251,16 +251,16 @@ void GameRunning::GameControl()
 		if (viewCheck)
 		{
 			if(player.getX() < 640)
-				camera.setCenter(Vector2f(720, scene1Texture.getSize().y / 2.0f));
+				camera.setCenter(Vector2f(720, scene1Texture.getSize().y / 2));
 			else if(player.getX() > 8888)
-				camera.setCenter(Vector2f(8969, scene1Texture.getSize().y / 2.0f));
+				camera.setCenter(Vector2f(8969, scene1Texture.getSize().y / 2));
 			else
-				camera.setCenter(Vector2f(player.getX() + 80, scene1Texture.getSize().y / 2.0f));
-			camera.setSize(Vector2f(1280.0f, scene1Texture.getSize().y));
+				camera.setCenter(Vector2f(player.getX() + 80, scene1Texture.getSize().y / 2));
+			camera.setSize(Vector2f(1280, scene1Texture.getSize().y));
 		}
 		else
 		{
-			camera.setCenter(Vector2f(mainMenuTexture.getSize().x / 2.0f, mainMenuTexture.getSize().y / 2.0f));
+			camera.setCenter(Vector2f(mainMenuTexture.getSize().x / 2, mainMenuTexture.getSize().y / 2));
 			camera.setSize(Vector2f(mainMenuTexture.getSize()));
 		}
 		window.setView(camera);
@@ -387,13 +387,13 @@ void GameRunning::setScore(std::string name)
 	myFile << "\n" << name << " " << playerScore;
 	myFile.close();
 	scoreboard.push_back({ playerScore,name });
-	sort(scoreboard.begin(), scoreboard.end(), greater<pair<int, string>>());
+	sort(scoreboard.begin(), scoreboard.end(), greater < pair<int, std::string >> ());
 }
 void GameRunning::drawHighscore()
 {
 	int cnt = 0;  //ประกาศตัวนับ
 	window.clear();
-	for (vector<pair<int, string>>::iterator i = scoreboard.begin(); i != scoreboard.end(); ++i)
+	for (vector<pair<int, std::string>>::iterator i = scoreboard.begin(); i != scoreboard.end(); ++i)
 	{
 		++cnt;
 		if (cnt > 5) break;                       //เมื่อตัวนับเกิน 5 ให้จบการทำงาน
@@ -548,14 +548,14 @@ void GameRunning::enemyAttack()
 ///////////////////////////Batarang
 void GameRunning::batarangShoot()
 {
-	Vector2f flySpeed(1.5f, 0.0f);
+	Vector2f flySpeed(window.getSize().x*1.5/1280, 0);
 	if (!shoot && player.cShoot && batNumber != 0)
 	{
 		if (player.faceRight)
-			d = 110.0f;
+			d = 110;
 		else
 			d = 0;
-		batarang.setPosition(Vector2f(player.getX() + d, player.getY() + 25.0f));
+		batarang.setPosition(Vector2f(player.getX() + d, player.getY() + 25));
 		shoot = true;
 		player.cShoot = false;
 		batFlying.setPlayingOffset(Time(seconds(0)));
@@ -670,7 +670,7 @@ void GameRunning::specialItem()
 			if (potionVec[i].g == 1500)
 				player.mana += 3000;
 			else
-				myHP += 2000;
+				myHP += 3000;
 			if (myHP > 10000) myHP = 10000;
 			potionVec.erase(potionVec.begin() + i);
 		}
@@ -723,21 +723,21 @@ void GameRunning::Trap()
 void GameRunning::statusBar()
 {
 	//Bar
-	bar.setPosition(Vector2f(camera.getCenter().x - 640.0f, camera.getCenter().y - 360.0f));
+	bar.setPosition(Vector2f(camera.getCenter().x - 640, camera.getCenter().y - 360));
 	window.draw(bar);
 
 	Text hpNumber, times, textScore, textBat;
 	//Time
-	string dt = to_string(countTime);
+	std::string dt = to_string(countTime);
 	times.setFont(font);
 	times.setString(dt);
 	times.setCharacterSize(40);
 	times.setFillColor(sf::Color::Red);
-	times.setPosition(Vector2f(camera.getCenter().x + 270.0f, camera.getCenter().y - 310.0f));
+	times.setPosition(Vector2f(camera.getCenter().x + 275, camera.getCenter().y - 310));
 	window.draw(times);
 
 	//HP
-	HP.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 310.0f));
+	HP.setPosition(Vector2f(camera.getCenter().x - 583, camera.getCenter().y - 310));
 	HP.setSize(Vector2f(myHP / 36.2, 25));
 	window.draw(HP);
 	/*std::string sTest = to_string(myHP);
@@ -746,29 +746,29 @@ void GameRunning::statusBar()
 	hpNumber.setCharacterSize(40);
 	hpNumber.setFillColor(sf::Color::Green);
 	hpNumber.setOutlineColor(sf::Color::Black);
-	hpNumber.setPosition(Vector2f(camera.getCenter().x - 570.0f, camera.getCenter().y - 315.0f));
+	hpNumber.setPosition(Vector2f(camera.getCenter().x - 570, camera.getCenter().y - 315));
 	window.draw(hpNumber);*/
 
 	//Mana
-	MANA.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 280.0f));
+	MANA.setPosition(Vector2f(camera.getCenter().x - 583, camera.getCenter().y - 280));
 	MANA.setSize(Vector2f(player.getMana() / 36.2, 25));
 	window.draw(MANA);
 
 	//score
-	string score = to_string(playerScore);
+	std::string score = to_string(playerScore);
 	textScore.setFont(font);
 	textScore.setString(score);
 	textScore.setCharacterSize(50);
 	textScore.setFillColor(sf::Color::Yellow);
 	textScore.setOutlineColor(sf::Color::Black);
-	textScore.setPosition(Vector2f(camera.getCenter().x - 238.0f, camera.getCenter().y - 330.0f));
+	textScore.setPosition(Vector2f(camera.getCenter().x - 238, camera.getCenter().y - 330));
 	window.draw(textScore);
 
-	string bn = to_string(batNumber);
+	std::string bn = to_string(batNumber);
 	textBat.setFont(font);
 	textBat.setString(bn);
 	textBat.setCharacterSize(40);
 	textBat.setFillColor(sf::Color::White);
-	textBat.setPosition(Vector2f(camera.getCenter().x + 480.0f, camera.getCenter().y - 310.0f));
+	textBat.setPosition(Vector2f(camera.getCenter().x + 480, camera.getCenter().y - 310));
 	window.draw(textBat);
 }

@@ -216,8 +216,7 @@ void Player::Update(float deltaTime, int hp, bool flying)
 			velocity.x = -800;
 	}
 	
-	if (getY() < 700.0f - (1.5 * animation.uvRect.height))
-		velocity.y += g * deltaTime;
+	if (getY() < 700.0f - (1.5 * animation.uvRect.height))	velocity.y += g * deltaTime;
 	if (getX() < 50) body.setPosition(Vector2f(50, getY()));
 	if (getX() > 9450) body.setPosition(Vector2f(9450, getY()));
 	if (hp == 0)

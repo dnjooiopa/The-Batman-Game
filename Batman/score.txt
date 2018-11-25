@@ -27,3 +27,6 @@ sss 1900
 die 1400
 kk 8800
 Blaxk 8400
+ssssssssss 1900
+sdad 5200
+Death 7800
