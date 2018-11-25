@@ -54,7 +54,7 @@ private:
 	Music bottleCollect;
 	//texture display background
 	Texture mainMenuTexture;
-	Texture endTexture;
+	sf:: Texture endTexture;
 	Texture scene1Texture;
 	Texture barTexture;
 	Texture logoTexture;

@@ -117,9 +117,9 @@ void GameRunning::defaultSetting()
 	potionVec.clear();
 
 	//time 
-	n = 10;
 	time = 0;
 	countTime = 0;
+	n = 10;
 	nTrap = 8;
 	eSpeed = 80;
 	msCheck = false;
@@ -200,7 +200,6 @@ void GameRunning::GameControl()
 				case 1:
 					viewCheck = true;
 					state = gameStart;
-					//	bgSound.setVolume(80);
 					break;
 				case 2:
 					viewCheck = false;

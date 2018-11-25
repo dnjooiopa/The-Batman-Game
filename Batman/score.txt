@@ -25,3 +25,5 @@ Vector 7700
 diy 2100
 sss 1900
 die 1400
+kk 8800
+Blaxk 8400
