@@ -39,7 +39,7 @@ void Animation::playerUpdate(int row, float deltaTime, bool faceRight, bool punc
 	if (posY < 400 && row == 2) currentImage.x = 3;//jump up
 	
 	if (row == 10)
-		switchTime = 0.4;
+		switchTime = 0.5;
 	else if (row == 8)
 		switchTime = 0.2;
 	else

@@ -21,3 +21,6 @@ Bruce 11500
 ssr 10100
 WHO 4900
 Vector 7700
+
+diy 2100
+sss 1900

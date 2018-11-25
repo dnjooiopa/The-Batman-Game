@@ -276,7 +276,7 @@ void GameRunning::drawMainMenu()
 {
 	Text textPlaygame, textExit, textScore, textName;
 	textPlaygame.setFont(font);//Play Game
-	if(countTime == 0)
+	if(time == 0)
 		textPlaygame.setString("PLAY GAME");
 	else
 		textPlaygame.setString("RESUME");
