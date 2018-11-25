@@ -125,10 +125,8 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Batarang.cpp" />
-    <ClCompile Include="Batwing.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="GameRunning.cpp" />
-    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -136,7 +134,6 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Batarang.h" />
-    <ClInclude Include="Batwing.h" />
     <ClInclude Include="BombEffect.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="GameRunning.h" />

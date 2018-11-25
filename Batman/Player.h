@@ -13,7 +13,7 @@ public:
 	~Player();
 
 	void setPlayer(Texture* texture, Vector2u imageCount, float switchTime, float speed);
-	void Update(float deltaTime, bool getHit, bool flying);
+	void Update(float deltaTime, int hp, bool flying);
 	void collide();
 	bool checkPunch() { return cPunch; }
 	Vector2f getPosition() { return Vector2f(body.getPosition()); }
@@ -21,6 +21,7 @@ public:
 	float getY() {return body.getPosition().y;}
 	int curX() { return animation.currentImage.x; }
 	int getMana() { return mana; }
+	bool checkDead() { return animation.j; }
 	Vector2f Getposition() { return body.getPosition(); }
 	Collision Getcollision() { return Collision(body); }
     RectangleShape body;
@@ -49,7 +50,8 @@ private:
 	float totalTimeB;
 	float delayButton;
 	float totalTimeC;
-	
+	bool dead;
+
 	Vector2f velocity;
 	Vector2f pos;
 	Music punchSound;

@@ -19,6 +19,7 @@ public:
 	void setSpeed(float speed);
 	void hpBar();
 	int getHP() { return hp; }
+	float getSpeed() { return speed; }
 	float getX() { return body.getPosition().x; }
 	float getY() { return body.getPosition().y; }
 	int curX() { return animation.currentImage.x; }

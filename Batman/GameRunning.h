@@ -3,15 +3,13 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Batarang.h"
-#include "Batwing.h"
 #include "BombEffect.h"
 #include "Item.h"
 #include <iostream>
-#include <ctime>
 #include <vector>
 #include <fstream>
 #include <algorithm>
-#include <Windows.h>
+
 using namespace sf;
 using namespace std;
 
@@ -20,7 +18,7 @@ class GameRunning
 public:
 	GameRunning(Vector2u size,std::string name);
 	~GameRunning();
-	void gameReset();
+	void defaultSetting();
 	void GameControl();
 	void timeElapse(float timeElapse);
 	void setScore(std::string name);
@@ -31,65 +29,71 @@ public:
 	void Playing();
 	void mainStory();
 	void playerControl();
-	void enemyAttack1();
-	void enemyAttack2();
+	void enemyAttack();
 	void batarangShoot();
 	void statusBar();
-	bool playerisDead() {
-		if (myHP == 0) return true;
-		else return false;
-	}
-	void vectorUpdate1();
-	void vectorUpdate2();
+	void enemyVectorUpdate();
 	void specialItem();
 	void Trap();
 
 private:
 	RenderWindow window;
-	Clock clock1;
-	bool running;
+	//game state
 	int state;
 	int exit;
 	int runMenu;
 	int gameStart;
 	int showHighscore;
 	int playerDead;
+	bool viewCheck;
+	bool gameEnd;
+	//Sound
 	Music bgSound;
-	Texture endTexture;
-	Sprite endBackground;
-	/////////////////////////////
-	View camera;
+	Music batFlying;
+	Music itemCollect;
+	Music bottleCollect;
+	//texture display background
 	Texture mainMenuTexture;
-	Sprite mainMenuSprite;
+	Texture endTexture;
 	Texture scene1Texture;
-	Sprite scene1;
 	Texture barTexture;
-	Sprite bar;
 	Texture logoTexture;
+	Sprite mainMenuSprite;
+	Sprite endBackground;
+	Sprite scene1;
+	Sprite bar;
 	Sprite logo;
+	View camera;
+	//Font
 	Font font;
 	Font font2;
-
+	//Character Class
 	Player player;
 	Texture playerTexture;
+	int playerScore;
+	float d;
+	int myHP;
+	RectangleShape MANA;
+	RectangleShape HP;
+	int damaged;
+	int posibleHit;
 
 	Enemy normalEnemy;
 	Texture normalEnemyTexture;
-
 	Enemy bigEnemy;
 	Texture bigEnemyTexture;
-
-	Batarang batarang;
-	Texture batarangTexture;
-	Vector2f movement;
-	int batNumber;
-
-	Batwing batwing;
-	Texture batwingTexture;
+	float eSpeed;
 
 	BombEffect bomb;
 	Texture bombTexture;
 	bool bombCheck;
+	//Item Class
+    Batarang batarang;
+	Texture batarangTexture;
+	Vector2f movement;
+	int batNumber;
+	bool shoot;
+	bool isFire;
 
 	Item item;
 	Texture itemTexture;
@@ -99,58 +103,32 @@ private:
 	Texture redbullTexture;
 	Item hpBot;
 	Texture hpBotTexture;
+	//Time and delay
+	Clock clock;
 	float time;
 	unsigned int countTime;
 	float deltaTime;
-	float totalTime;
-	float d;
-	int x;
-	bool shoot;
-	bool isFire;
-	float dethatimebullet;
-	int select;
 	float totalTimeButton;
 	float delayButton;
+	int select;
 	bool msCheck;
 	bool mCheck;
 
-	bool viewCheck;
-	bool enemySpawn;
-	bool spawnCheck;
-	bool normalEnemyGetHit[4];
-	bool normalEnemyGetBomb;
-	bool bigEnemyGetHit;
-	bool bigEnemyGetBomb;
-	bool i;
-	bool k;
-	bool j;
-	bool a;
-	bool gameEnd;
-	bool viewMove;
-
-	int myHP;
-	RectangleShape HP;
-	int damaged;
-	int playerScore;
-	bool getHit;
-	int hit;
-
-	RectangleShape MANA;
-
+	//High Score 
 	vector<pair<int, string>> scoreboard;
 	ifstream loadFile;
 	fstream myFile;
 
-	vector<Enemy> enemyVec1;
-	vector<Enemy> enemyVec2;
+	//Class Vector
+	vector<Enemy> enemyVec;
 	vector<Item> itemVec;
 	vector<Item> trapVec;
 	vector<Item> potionVec;
-
+	bool i;
+	bool k;
+	bool j;
+	bool a;
 	int n;
-
-	Music batFlying;
-	Music itemCollect;
-	Music bottleCollect;
+	int nTrap;
 };
 

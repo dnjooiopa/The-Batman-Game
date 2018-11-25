@@ -1,7 +1,4 @@
 
-Harry! 5
-Farm 77
-test 100
 Batman 9999
 Dragon 3500
 Messi 3400
@@ -18,12 +15,9 @@ Dead 12900
 der 5500
 hero 8800
 fad 2000
-FG 46800
-Sparrow 12500
-kee 13700
 aK 9200
 acd 4300
 Bruce 11500
 ssr 10100
-jjjjjjj 4600
 WHO 4900
+Vector 7700

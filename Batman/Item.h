@@ -5,8 +5,8 @@ using namespace sf;
 class Item
 {
 public:
-	Item();
-	~Item();
+	Item() {};
+	~Item() {};
 	void setItem(Texture* texture, float g)
 	{	
 		imgHeight = texture->getSize().y;

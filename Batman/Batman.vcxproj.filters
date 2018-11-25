@@ -30,16 +30,10 @@
     <ClCompile Include="Batarang.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Batwing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,9 +48,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Batarang.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Batwing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">

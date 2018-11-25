@@ -52,5 +52,4 @@ private:
 	bool sbomb;
 	bool bombCheck;
 	Music bombSound;
-
 };

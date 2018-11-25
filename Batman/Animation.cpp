@@ -25,12 +25,12 @@ void Animation::setAnimation(Texture *texture, Vector2u imageCount, float switch
 
 ////////////////////////Update//////////////
 /////Player
-void Animation::playerUpdate(int row, float deltaTime, bool faceRight, bool punch, bool jump, bool shoot, float posY)
+void Animation::playerUpdate(int row, float deltaTime, bool faceRight, bool punch, bool jump, bool shoot, float posY, bool dead)
 {
 	currentImage.y = row;
 	totalTime += deltaTime;
 
-	if ((punch&&i) || (jump&&i) || (shoot&&i))
+	if ((punch&&i) || (jump&&i) || (shoot&&i) || (dead&&i) )
 	{
 		currentImage.x = 0;
 		i = false;
@@ -39,7 +39,7 @@ void Animation::playerUpdate(int row, float deltaTime, bool faceRight, bool punc
 	if (posY < 400 && row == 2) currentImage.x = 3;//jump up
 	
 	if (row == 10)
-		switchTime = 0.25;
+		switchTime = 0.4;
 	else if (row == 8)
 		switchTime = 0.2;
 	else
@@ -55,7 +55,14 @@ void Animation::playerUpdate(int row, float deltaTime, bool faceRight, bool punc
 			i = true;
 		}
 	}
-	
+	if (currentImage.x == imageCount.x - 1 && dead)
+	{
+		j = true;
+	}
+	if (!dead)
+	{
+		j = false;
+	}
 
 	uvRect.top = currentImage.y * uvRect.height;
 

@@ -15,7 +15,6 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	//MainMenu
 	mainMenuTexture.loadFromFile("sprite/background.png");
 	mainMenuSprite.setTexture(mainMenuTexture);
-	//Logo
 	logoTexture.loadFromFile("sprite/logo.png");
 	logo.setTexture(logoTexture);
 	logo.setScale(0.35f, 0.35f);
@@ -45,10 +44,6 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	batarangTexture.loadFromFile("sprite/batarang.png");
 	batarang.setBatarang(&batarangTexture, Vector2u(4, 1), 0.08f);
 
-	//Batwing
-	batwingTexture.loadFromFile("sprite/batwing.png");
-	batwing.setBatwing(&batwingTexture, Vector2u(2, 3), 0.08f, 500.0f);
-
 	//Bomb
 	bombTexture.loadFromFile("sprite/bomb.png");
 	bomb.setBombEffect(&bombTexture, Vector2u(6, 1), 0.12f);
@@ -58,7 +53,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	item.setItem(&itemTexture, 2800);
 	//trap
 	trapTexture.loadFromFile("sprite/trap2.png");
-	trap.setItem(&trapTexture, 1200);
+	trap.setItem(&trapTexture, 300);
 	//mana
 	redbullTexture.loadFromFile("sprite/redbull.png");
 	redbull.setItem(&redbullTexture, 1500);
@@ -70,32 +65,8 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	font.loadFromFile("font/batmfa.ttf");\
 	font2.loadFromFile("font/mer.ttf");
 
-	//player
-	x = 0;
-	shoot = false;
-	enemySpawn = false;
-	spawnCheck = true;
-	isFire = false;
-	select = 1;
-	totalTimeButton = 0;
-	delayButton = 0.07;
-	mCheck = false;
-	msCheck = false;
-	batNumber = 0;
-	i = true;
-	k = true;
-	j = true;
-	a = true;
-	n = 10;
-	time = 0;
-	//HP
-	myHP = 10000;
-	playerScore = 0;
-	HP.setFillColor(Color::Red);
-	hit = 4;
-	//mana
-	MANA.setFillColor(Color::Blue);
-	//score
+	defaultSetting();
+
 	loadFile.open("score.txt");
 	while (!loadFile.eof()) {
 		string tempName;
@@ -128,53 +99,60 @@ GameRunning::~GameRunning()
 {
 }
 
-void GameRunning::gameReset()
+void GameRunning::defaultSetting()
 {
 	//Player
 	myHP = 10000;
 	playerScore = 0;
 	player.mana = 100000;
 	player.setPlayer(&playerTexture, Vector2u(6, 11), 0.08f, 300.0f);
+	HP.setFillColor(Color::Red);
+	MANA.setFillColor(Color::Blue);
 	batNumber = 0;
+
 	//clearVector
-	enemyVec1.clear();
-	enemyVec2.clear();
+	enemyVec.clear();
     itemVec.clear();
     trapVec.clear();
 	potionVec.clear();
 
-	//normalEnemy
-	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150.0f, 500);
-	//bigEnemy
-	bigEnemy.setEnemy(&bigEnemyTexture, Vector2u(6, 4), 0.08f, 120.0f, 1500);
-	//Item
-	item.setItem(&itemTexture, 2800);
-	//trap
-	trap.setItem(&trapTexture, 1200);
-	//mana
-	redbull.setItem(&redbullTexture, 1500);
-	//hp
-	hpBot.setItem(&hpBotTexture, 1200);
 	//time 
+	n = 10;
 	time = 0;
+	countTime = 0;
+	nTrap = 8;
+	eSpeed = 80;
+	msCheck = false;
 	viewCheck = false;
+	shoot = false;
+	isFire = false;
+	select = 1;
+	totalTimeButton = 0;
+	delayButton = 0.07;
+	mCheck = false;
+	msCheck = false;
+	batNumber = 0;
+	i = true;
+	k = true;
+	j = true;
+	a = true;
+	posibleHit = 4;
 }
 
 void GameRunning::GameControl()
 {
 	deltaTime = 0.0;
-	String yourname;
+	sf:: String yourname;
 	Text playerText, enterYourName;
 	
 	while (window.isOpen())
 	{
-		deltaTime = clock1.restart().asSeconds();
+		deltaTime = clock.restart().asSeconds();
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if (state == playerDead)
 			{
-
 				if (event.type == sf::Event::TextEntered) {
 					if (event.text.unicode == '\b' && yourname.getSize()) {//ถ้ากด Backspace เป็นการลบตัวอักษร
 						yourname.erase(yourname.getSize() - 1, 1);
@@ -197,7 +175,7 @@ void GameRunning::GameControl()
 					if (event.key.code == sf::Keyboard::Return) {
 						playerText.setString(yourname);
 						setScore(yourname); 
-						gameReset();
+						defaultSetting();
 						state = showHighscore;
 						bgSound.setPlayingOffset(Time(seconds(0)));
 						bgSound.play();
@@ -215,7 +193,7 @@ void GameRunning::GameControl()
 		if (state == runMenu)
 		{
 			window.setMouseCursorVisible(true);
-			if ((Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left) && msCheck)) && !playerisDead())
+			if ((Keyboard::isKeyPressed(Keyboard::Return) || (Mouse::isButtonPressed(Mouse::Left) && msCheck)))
 			{
 				switch (select)
 				{
@@ -236,7 +214,6 @@ void GameRunning::GameControl()
 			}
 			drawMainMenu();
 		}
-
 		if (state == gameStart)
 		{
 			window.setMouseCursorVisible(false);
@@ -246,9 +223,8 @@ void GameRunning::GameControl()
 				viewCheck = false;
 				state = runMenu;
 			}
-			if (playerisDead())
+			if (player.checkDead())
 			{
-				Sleep(1000);
 				window.setMouseCursorVisible(true);
 				state = playerDead;
 				viewCheck = false;
@@ -300,19 +276,22 @@ void GameRunning::drawMainMenu()
 {
 	Text textPlaygame, textExit, textScore, textName;
 	textPlaygame.setFont(font);//Play Game
-	textPlaygame.setString("PLAY GAME");
+	if(countTime == 0)
+		textPlaygame.setString("PLAY GAME");
+	else
+		textPlaygame.setString("RESUME");
 	textPlaygame.setCharacterSize(40);
-	textPlaygame.setFillColor(sf::Color::White);
+	textPlaygame.setFillColor(sf::Color(166, 166, 166));
 	textPlaygame.setPosition(900, 200);
 	textScore.setFont(font);//Score
 	textScore.setString("Score");
 	textScore.setCharacterSize(40);
-	textScore.setFillColor(sf::Color::White);
+	textScore.setFillColor(sf::Color(166, 166, 166));
 	textScore.setPosition(895, 300);
 	textExit.setFont(font);//Exit
 	textExit.setString("Exit");
 	textExit.setCharacterSize(40);
-	textExit.setFillColor(sf::Color::White);
+	textExit.setFillColor(sf::Color(166, 166, 166));
 	textExit.setPosition(895, 400);
 	textName.setFont(font);//Name
 	textName.setString("KITTISAK PHORMRAKSA  61010092");
@@ -323,6 +302,7 @@ void GameRunning::drawMainMenu()
 	if (select == 1 || mouseCheck(&textPlaygame))
 	{
 		select = 1;
+		textPlaygame.setFillColor(sf::Color::White);
 		textPlaygame.setStyle(sf::Text::Bold);
 		logo.setPosition(770, 200);
 		msCheck = mouseCheck(&textPlaygame);
@@ -335,6 +315,7 @@ void GameRunning::drawMainMenu()
 	if (select == 2 || mouseCheck(&textScore))
 	{
 		select = 2;
+		textScore.setFillColor(sf::Color::White);
 		textScore.setStyle(sf::Text::Bold);
 		logo.setPosition(770, 300);
 		msCheck = mouseCheck(&textScore);
@@ -347,6 +328,7 @@ void GameRunning::drawMainMenu()
 	if (select == 3 || mouseCheck(&textExit))
 	{
 		select = 3;
+		textExit.setFillColor(sf::Color::White);
 		textExit.setStyle(sf::Text::Bold);
 		logo.setPosition(770, 400);
 		msCheck = mouseCheck(&textExit);
@@ -357,7 +339,7 @@ void GameRunning::drawMainMenu()
 	}
 	buttonCheck();
 	window.clear();
-	window.draw(mainMenuSprite);
+    window.draw(mainMenuSprite);
 	window.draw(logo);
 	window.draw(textPlaygame);
 	window.draw(textScore);
@@ -439,10 +421,11 @@ void GameRunning::drawHighscore()
 		textBack.setFont(font);
 		textBack.setString("BACK");
 		textBack.setCharacterSize(35);
-		textBack.setFillColor(sf::Color::White);
+		textBack.setFillColor(sf::Color(166,166,166));
 		textBack.setPosition(40, 25);
 		if (mouseCheck(&textBack))
 		{
+			textBack.setFillColor(sf::Color::White);
 			textBack.setStyle(Text::Bold);
 		}
 		else
@@ -461,8 +444,6 @@ void GameRunning::Playing()
 	window.clear();
 	window.draw(scene1);
 	mainStory();
-	//batwing.Update(deltaTime);
-	//window.draw(batwing.body);
 	statusBar();
 	window.display();
 }
@@ -472,27 +453,26 @@ void GameRunning::mainStory()
 {
 	if (countTime % n == 0 && i)
 	{
-		int R = rand() % 3;
+		int R = rand() % 2;
 		if (R == 0)
-		{
-			int r = rand() % 2;
-			if (r == 0)
-				bigEnemy.setPosition(player.getX() + 800);
-			else
-				bigEnemy.setPosition(player.getX() - 800);
-			bigEnemy.setSpeed(70 + rand() % 100);
-			enemyVec2.push_back(bigEnemy);
-		}
+			bigEnemy.setPosition(player.getX() + 800);
 		else
-		{
-			int r = rand() % 2;
-			if (r == 0)
-				normalEnemy.setPosition(player.getX() + 800);
-			else
-				normalEnemy.setPosition(player.getX() - 800);
-			normalEnemy.setSpeed(70 + rand() % 100);
-			enemyVec1.push_back(normalEnemy);
-		}
+			bigEnemy.setPosition(player.getX() - 800);
+		bigEnemy.setSpeed(eSpeed + rand() % 100);
+
+		int r = rand() % 2;
+		if (r == 0)
+			normalEnemy.setPosition(player.getX() + 800);
+		else
+			normalEnemy.setPosition(player.getX() - 800);
+		normalEnemy.setSpeed(eSpeed + rand() % 100);
+
+		int q = rand() % 3;
+		if(q==1)
+			enemyVec.push_back(bigEnemy);
+		else
+			enemyVec.push_back(normalEnemy);
+
 		i = false;
 	}
 	else if (countTime % n != 0)
@@ -500,12 +480,20 @@ void GameRunning::mainStory()
 		i = true;
 	}
 
-	if (countTime >= 30) n = 5;
-	if (countTime >= 60) n = 3;
-	vectorUpdate1();
-	enemyAttack1();
-	vectorUpdate2();
-	enemyAttack2();
+	if (countTime >= 30)
+	{
+		n = 5;
+		nTrap = 6;
+		eSpeed = 90;
+	}
+	if (countTime >= 60)
+	{
+		n = 3;
+		nTrap = 4;
+		eSpeed = 120;
+	}
+	enemyVectorUpdate();
+	enemyAttack();
 	batarangShoot();
 	playerControl();
 	if (countTime >= 10)
@@ -517,70 +505,40 @@ void GameRunning::mainStory()
 
 void GameRunning::playerControl()
 {
-	for (int i = 0; i < enemyVec1.size(); i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
-		if (enemyVec1[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec1[i].faceLeft))
+		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec[i].faceLeft))
 		{
-			if (!enemyVec1[i].checkDead())
+			if (!enemyVec[i].checkDead())
 			{
-				enemyVec1[i].getPunch(true);
+				enemyVec[i].getPunch(true);
 				playerScore += 100;
 			}
 		}
 	}
 
-	for (int i = 0; i < enemyVec2.size(); i++)
-	{
-		if (enemyVec2[i].Getcollision().CheckCollision(player.Getcollision()) && player.checkPunch() && (player.faceRight == enemyVec2[i].faceLeft))
-		{
-			if (!enemyVec2[i].checkDead())
-			{
-				enemyVec2[i].getPunch(true);
-				playerScore += 100;
-			}
-		}
-	}
-
-	player.Update(deltaTime, getHit, shoot);
+	player.Update(deltaTime, myHP, shoot);
 	window.draw(player.body);
 
 }
 
 ////////////////////Normal Enemy
-void GameRunning::enemyAttack1()
+void GameRunning::enemyAttack()
 {
-	for (int i = 0; i < enemyVec1.size(); i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
-		if (enemyVec1[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec1[i].checkDead())
+		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec[i].checkDead())
 		{
-			if (enemyVec1[i].curX() == 2)
+			if (enemyVec[i].curX() == 2)
 			{
-				damaged = rand() % 200;
+				damaged = rand() % 100;
 
 				if (damaged == 10)
 				{
-					if (myHP > 0) myHP -= 300;
-					if (myHP <= 0) myHP = 0;
-				}
-			}
-		}
-	}
-}
-
-////////////////////Big Enemy
-void GameRunning::enemyAttack2()
-{
-	for (int i = 0; i < enemyVec2.size(); i++)
-	{
-		if (enemyVec2[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec2[i].checkDead())
-		{
-			if (enemyVec2[i].curX() == 2)
-			{
-				damaged = rand() % 200;
-
-				if (damaged == 10)
-				{
-					if (myHP > 0) myHP -= 500;
+					if(enemyVec[i].getSpeed()==normalEnemy.getSpeed())
+						myHP -= 300;
+					if (enemyVec[i].getSpeed() == bigEnemy.getSpeed())
+						myHP -= 700;
 					if (myHP <= 0) myHP = 0;
 				}
 			}
@@ -623,65 +581,34 @@ void GameRunning::batarangShoot()
 		}
 		batarang.body.move(movement);
 	}
-	for (int i = 0; i < enemyVec1.size(); i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
-		if (isFire && ((enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && enemyVec1[i].getHP() > 0) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
+		if (isFire && ((enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && enemyVec[i].getHP() > 0) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 640))
 		{
-			if (enemyVec1[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec1[i].checkDead())
+			if (enemyVec[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec[i].checkDead())
 			{
-				enemyVec1[i].getShot(true);
+				enemyVec[i].getShot(true);
 				playerScore += 200;
 			}
 			shoot = false;
 			isFire = false;
 		}
 	}
-	for (int i = 0; i < enemyVec2.size(); i++)
-	{
-		if (isFire && ((enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && enemyVec2[i].getHP() > 0) || batarang.getX() >= camera.getCenter().x + 640 || batarang.getX() <= camera.getCenter().x - 670))
-		{
-			if (enemyVec2[i].Getcollision().CheckCollision(batarang.Getcollision()) && !enemyVec2[i].checkDead())
-			{
-				enemyVec2[i].getShot(true);
-				playerScore += 200;
-			}
-			shoot = false;
-			isFire = false;
-		}
-	}
-
 }
 
-void GameRunning::vectorUpdate1()
+void GameRunning::enemyVectorUpdate()
 {
-	for (int i = 0; i < enemyVec1.size(); i++)
+	for (int i = 0; i < enemyVec.size(); i++)
 	{
-		if (!enemyVec1[i].checkDead())
+		if (!enemyVec[i].checkDead())
 		{
-			enemyVec1[i].Update(player.getPosition(), deltaTime);
-			window.draw(enemyVec1[i].HP);
-			window.draw(enemyVec1[i].body);
+			enemyVec[i].Update(player.getPosition(), deltaTime);
+			window.draw(enemyVec[i].HP);
+			window.draw(enemyVec[i].body);
 		}
 		else
 		{
-			enemyVec1.erase(enemyVec1.begin() + i);
-		}
-	}
-}
-
-void GameRunning::vectorUpdate2()
-{
-	for (int i = 0; i < enemyVec2.size(); i++)
-	{
-		if (!enemyVec2[i].checkDead())
-		{
-			enemyVec2[i].Update(player.getPosition(), deltaTime);
-			window.draw(enemyVec2[i].HP);
-			window.draw(enemyVec2[i].body);
-		}
-		else
-		{
-			enemyVec2.erase(enemyVec2.begin() + i);
+			enemyVec.erase(enemyVec.begin() + i);
 		}
 	}
 }
@@ -689,7 +616,7 @@ void GameRunning::vectorUpdate2()
 void GameRunning::specialItem()
 {
 	// batarang
-	if (countTime % 18 == 0 && a && itemVec.size() < 3)
+	if (countTime % 14 == 0 && a && itemVec.size() < 3)
 	{
 		itemVec.push_back(item);
 		int i = rand() % 2;
@@ -699,7 +626,7 @@ void GameRunning::specialItem()
 			itemVec.back().setPosition(Vector2f(player.getX() - 500, 0));
 		a = false;
 	}
-	else if (countTime % 18 != 0)
+	else if (countTime % 14 != 0)
 	{
 		a = true;
 	}
@@ -744,7 +671,7 @@ void GameRunning::specialItem()
 			if (potionVec[i].g == 1500)
 				player.mana += 3000;
 			else
-				myHP += 1000;
+				myHP += 2000;
 			if (myHP > 10000) myHP = 10000;
 			potionVec.erase(potionVec.begin() + i);
 		}
@@ -759,14 +686,14 @@ void GameRunning::specialItem()
 
 void GameRunning::Trap()
 {
-	if (countTime % 8 == 0 && k)
+	if (countTime % nTrap == 0 && k)
 	{
 		trapVec.push_back(trap);
 		int i = rand() % 2;
 		trapVec.back().setPosition(Vector2f(player.getX() - 400 + (rand() % 800), 0));
 		k = false;
 	}
-	else if (countTime % 8 != 0)
+	else if (countTime % nTrap != 0)
 	{
 		k = true;
 	}
@@ -792,7 +719,6 @@ void GameRunning::Trap()
 		trapVec[i].Update(deltaTime);
 		window.draw(trapVec[i].body);
 	}
-
 }
 
 void GameRunning::statusBar()
@@ -808,21 +734,21 @@ void GameRunning::statusBar()
 	times.setString(dt);
 	times.setCharacterSize(40);
 	times.setFillColor(sf::Color::Red);
-	times.setPosition(Vector2f(camera.getCenter().x + 250.0f, camera.getCenter().y - 310.0f));
+	times.setPosition(Vector2f(camera.getCenter().x + 270.0f, camera.getCenter().y - 310.0f));
 	window.draw(times);
 
 	//HP
 	HP.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 310.0f));
 	HP.setSize(Vector2f(myHP / 36.2, 25));
 	window.draw(HP);
-	std::string sTest = to_string(myHP);
+	/*std::string sTest = to_string(myHP);
 	hpNumber.setFont(font);
 	hpNumber.setString("HP:" + sTest);
 	hpNumber.setCharacterSize(40);
 	hpNumber.setFillColor(sf::Color::Green);
 	hpNumber.setOutlineColor(sf::Color::Black);
 	hpNumber.setPosition(Vector2f(camera.getCenter().x - 570.0f, camera.getCenter().y - 315.0f));
-	//window.draw(hpNumber);
+	window.draw(hpNumber);*/
 
 	//Mana
 	MANA.setPosition(Vector2f(camera.getCenter().x - 583.0f, camera.getCenter().y - 280.0f));

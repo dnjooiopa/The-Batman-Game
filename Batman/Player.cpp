@@ -25,6 +25,7 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	cShoot = false;
 	sShoot = false;
 	canJump = true;
+	dead = false;
 	jumpHeight = 350.0f;
 	g = 2800.0f;
 	defaultPosY = 700.0f - (1.5 * animation.uvRect.height);
@@ -40,7 +41,7 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	mana = 10000;
 }
 
-void Player::Update(float deltaTime, bool getHit, bool flying)
+void Player::Update(float deltaTime, int hp, bool flying)
 {
     velocity.x = 0.0f;
 	if (Keyboard::isKeyPressed(Keyboard::A) && !crouchCheck && !punchCheck && !shoot && getX()>125)
@@ -119,7 +120,7 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 		if (punch)
 		{
 			row = 3;
-			if (animation.currentImage.x == 2 && sPunch && !getHit)
+			if (animation.currentImage.x == 2 && sPunch)
 			{	
 				cPunch = true;
 				punchSound.setPlayingOffset(Time(seconds(0)));
@@ -199,10 +200,6 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 			faceRight = false;
 	}
 
-	if (getHit)
-	{
-		row = 5;
-	}
 	if (mana > 10000) mana = 10000;
 	if ((Keyboard::isKeyPressed(Keyboard::A)|| Keyboard::isKeyPressed(Keyboard::D)) && Keyboard::isKeyPressed(Keyboard::LShift) && mana>0 && !crouchCheck)
 	{
@@ -223,8 +220,13 @@ void Player::Update(float deltaTime, bool getHit, bool flying)
 		velocity.y += g * deltaTime;
 	if (getX() < 50) body.setPosition(Vector2f(50, getY()));
 	if (getX() > 9450) body.setPosition(Vector2f(9450, getY()));
+	if (hp == 0)
+	{
+		dead = true;
+		row = 10;
+	}
 
-	animation.playerUpdate(row, deltaTime, faceRight, punch, jump, shoot, getY());
+	animation.playerUpdate(row, deltaTime, faceRight, punch, jump, shoot, getY(), dead);
 	body.setTextureRect(animation.uvRect);
 	body.move(velocity * deltaTime);
 	collide();
