@@ -124,7 +124,7 @@ private:
 	vector<Item> itemVec;
 	vector<Item> trapVec;
 	vector<Item> potionVec;
-	bool i;
+	bool l;
 	bool k;
 	bool j;
 	bool a;

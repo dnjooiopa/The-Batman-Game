@@ -3,7 +3,7 @@
 
 GameRunning::GameRunning(Vector2u size, std::string name)
 {
-	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Fullscreen);
+	window.create(VideoMode(size.x, size.y), name, sf::Style::Close | sf::Style::Titlebar);
 	viewCheck = false;
 	state = 1;
 	exit = 0;
@@ -64,7 +64,6 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	//font
 	font.loadFromFile("font/batmfa.ttf");\
 	font2.loadFromFile("font/mer.ttf");
-
 	defaultSetting();
 
 	loadFile.open("score.txt");
@@ -132,7 +131,7 @@ void GameRunning::defaultSetting()
 	mCheck = false;
 	msCheck = false;
 	batNumber = 0;
-	i = true;
+	l = true;
 	k = true;
 	j = true;
 	a = true;
@@ -450,7 +449,7 @@ void GameRunning::Playing()
 ///////////////////Main Story////////////////////////////////////////
 void GameRunning::mainStory()
 {
-	if (countTime % n == 0 && i)
+	if (countTime % n == 0 && l)
 	{
 		int R = rand() % 2;
 		if (R == 0)
@@ -472,11 +471,11 @@ void GameRunning::mainStory()
 		else
 			enemyVec.push_back(normalEnemy);
 
-		i = false;
+		l = false;
 	}
 	else if (countTime % n != 0)
 	{
-		i = true;
+		l = true;
 	}
 
 	if (countTime >= 30)
@@ -667,7 +666,7 @@ void GameRunning::specialItem()
 		{
 			bottleCollect.setPlayingOffset(Time(seconds(0)));
 			bottleCollect.play();
-			if (potionVec[i].g == 1500)
+			if (potionVec[i].g == redbull.g)
 				player.mana += 3000;
 			else
 				myHP += 3000;
@@ -700,7 +699,8 @@ void GameRunning::Trap()
 	{
 		if (trapVec[i].Getcollision().CheckCollision(player.Getcollision()))
 		{
-			bomb.setPosition(Vector2f(trapVec[i].getX(), trapVec[i].getY() - 25));
+			if(trapVec[i].getY() < player.getY()) bomb.setPosition(Vector2f(trapVec[i].getX(), trapVec[i].getY() + 50));
+			else bomb.setPosition(Vector2f(trapVec[i].getX(), trapVec[i].getY() - 25));
 			bomb.setBomb(true);
 			trapVec.erase(trapVec.begin() + i);
 			if (myHP > 0) myHP -= 1500;
