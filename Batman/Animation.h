@@ -22,5 +22,6 @@ private:
 	float totalTime;
 	float switchTime;
 	int row;
+	bool k;
 };
 
