@@ -85,11 +85,15 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 
 	endTexture.loadFromFile("sprite/end.png");
 	endBackground.setTexture(endTexture);
+	
 	bgSound.openFromFile("sound/bgSound.ogg");
-
 	bgSound.setVolume(80);
 	bgSound.setPlayingOffset(Time(seconds(0)));
 	bgSound.play();
+
+
+//	hurtSound.openFromFile("sound/hurt.ogg");
+//	hurtSound.setVolume(80);
 
 	GameControl();
 }

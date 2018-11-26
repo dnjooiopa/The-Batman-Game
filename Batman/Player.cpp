@@ -221,6 +221,8 @@ void Player::Update(float deltaTime, int hp, bool flying)
 	if (getX() > 9450) body.setPosition(Vector2f(9450, getY()));
 	if (hp == 0)
 	{
+		velocity.x = 0;
+		velocity.y = 0;
 		dead = true;
 		row = 10;
 	}

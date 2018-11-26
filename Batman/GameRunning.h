@@ -52,6 +52,7 @@ private:
 	Music batFlying;
 	Music itemCollect;
 	Music bottleCollect;
+
 	//texture display background
 	Texture mainMenuTexture;
 	sf:: Texture endTexture;
