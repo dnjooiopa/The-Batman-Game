@@ -30,3 +30,4 @@ Blaxk 8400
 ssssssssss 1900
 sdad 5200
 Death 7800
+free 9600

@@ -201,7 +201,7 @@ void Player::Update(float deltaTime, int hp, bool flying)
 	}
 
 	if (mana > 10000) mana = 10000;
-	if ((Keyboard::isKeyPressed(Keyboard::A)|| Keyboard::isKeyPressed(Keyboard::D)) && Keyboard::isKeyPressed(Keyboard::LShift) && mana>0 && !crouchCheck)
+	if ((Keyboard::isKeyPressed(Keyboard::A)|| Keyboard::isKeyPressed(Keyboard::D)) && Keyboard::isKeyPressed(Keyboard::LShift) && mana>0 && !crouchCheck && !(Keyboard::isKeyPressed(Keyboard::K)))
 	{
 		totalTimeC += deltaTime;
 		if (totalTimeC >= delayButton)

@@ -144,7 +144,7 @@ void GameRunning::GameControl()
 	sf::String yourname;
 	Text playerText, enterYourName;
 	
-	while (window.isOpen())
+	while (state != exit)
 	{
 		deltaTime = clock.restart().asSeconds();
 		Event event;
@@ -726,7 +726,7 @@ void GameRunning::statusBar()
 	bar.setPosition(Vector2f(camera.getCenter().x - 640, camera.getCenter().y - 360));
 	window.draw(bar);
 
-	Text hpNumber, times, textScore, textBat;
+	Text times, textScore, textBat;
 	//Time
 	std::string dt = to_string(countTime);
 	times.setFont(font);
@@ -740,14 +740,6 @@ void GameRunning::statusBar()
 	HP.setPosition(Vector2f(camera.getCenter().x - 583, camera.getCenter().y - 310));
 	HP.setSize(Vector2f(myHP / 36.2, 25));
 	window.draw(HP);
-	/*std::string sTest = to_string(myHP);
-	hpNumber.setFont(font);
-	hpNumber.setString("HP:" + sTest);
-	hpNumber.setCharacterSize(40);
-	hpNumber.setFillColor(sf::Color::Green);
-	hpNumber.setOutlineColor(sf::Color::Black);
-	hpNumber.setPosition(Vector2f(camera.getCenter().x - 570, camera.getCenter().y - 315));
-	window.draw(hpNumber);*/
 
 	//Mana
 	MANA.setPosition(Vector2f(camera.getCenter().x - 583, camera.getCenter().y - 280));
