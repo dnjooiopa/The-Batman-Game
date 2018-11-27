@@ -37,3 +37,4 @@ oop 11500
 assaadsdasdass 8400
 fuc 7500
 kuayTe 5000
+t 6600

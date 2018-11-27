@@ -91,10 +91,6 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	bgSound.setPlayingOffset(Time(seconds(0)));
 	bgSound.play();
 
-
-//	hurtSound.openFromFile("sound/hurt.ogg");
-//	hurtSound.setVolume(80);
-
 	GameControl();
 }
 
@@ -131,7 +127,7 @@ void GameRunning::defaultSetting()
 	isFire = false;
 	select = 1;
 	totalTimeButton = 0;
-	delayButton = 0.07;
+	delayButton = 0.06;
 	mCheck = false;
 	msCheck = false;
 	batNumber = 0;
@@ -490,9 +486,15 @@ void GameRunning::mainStory()
 	}
 	if (countTime >= 60)
 	{
+		trap.g = 600;
 		n = 3;
 		nTrap = 4;
 		eSpeed = 120;
+	}
+	if (countTime >= 80)
+	{
+		trap.g = 800;
+		eSpeed = 150;
 	}
 	enemyVectorUpdate();
 	enemyAttack();
