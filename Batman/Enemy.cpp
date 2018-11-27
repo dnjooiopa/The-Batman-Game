@@ -9,15 +9,17 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::setEnemy(Texture * texture, Vector2u imageCount, float switchTime, float speed,int hp)
+void Enemy::setEnemy(Texture * texture, Vector2u imageCount, float switchTime, float speed,int hp, int type)
 {
 	animation.setAnimation(texture, imageCount, switchTime);
 	this->speed = speed;
 	this->hp = hp;
 	this->fullHP = hp;
+	this->type = type;
 	faceLeft = true;
 	dead = false;
 	shot = false;
+	b = true;
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
 }
@@ -64,9 +66,12 @@ void Enemy::Update(Vector2f playerPos, float deltaTime)
 		if (movement.x == 0.0f)
 		{
 			if (row == 2)
+			{
 				row = 2;
+			}
 			else
 				row = 1;
+			
 		}
 		else
 		{

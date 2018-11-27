@@ -129,6 +129,7 @@ private:
 	bool k;
 	bool j;
 	bool a;
+	bool b;
 	int n;
 	int nTrap;
 };

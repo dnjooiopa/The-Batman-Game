@@ -34,11 +34,11 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 
 	//normalEnemy
 	normalEnemyTexture.loadFromFile("sprite/nV.png");
-	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150, 500);
+	normalEnemy.setEnemy(&normalEnemyTexture, Vector2u(4, 4), 0.08f, 150, 500, 1);
 
 	//bigEnemy
 	bigEnemyTexture.loadFromFile("sprite/bigEnemy.png");
-	bigEnemy.setEnemy(&bigEnemyTexture, Vector2u(6, 4), 0.08f, 120, 1500);
+	bigEnemy.setEnemy(&bigEnemyTexture, Vector2u(6, 4), 0.08f, 120, 1500, 2 );
 
 	//Batarang
 	batarangTexture.loadFromFile("sprite/batarang.png");
@@ -114,6 +114,7 @@ void GameRunning::defaultSetting()
     itemVec.clear();
     trapVec.clear();
 	potionVec.clear();
+	
 
 	//time 
 	time = 0;
@@ -135,6 +136,7 @@ void GameRunning::defaultSetting()
 	k = true;
 	j = true;
 	a = true;
+	b = true;
 	posibleHit = 4;
 }
 
@@ -142,7 +144,7 @@ void GameRunning::GameControl()
 {
 	deltaTime = 0.0;
 	sf::String yourname;
-	Text playerText, enterYourName;
+	Text playerText, scoreText, enterYourName;
 	
 	while (state != exit)
 	{
@@ -169,6 +171,7 @@ void GameRunning::GameControl()
 					}
 					playerText.setCharacterSize(60);   //à«çµ¢¹Ò´¢Í§¢éÍ¤ÇÒÁ
 					playerText.setPosition(415, 410);  //à«çµ¢¹Ò´¢Í§¢éÍ¤ÇÒÁ
+
 				}
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Return) {
@@ -242,9 +245,15 @@ void GameRunning::GameControl()
 		}
 		if (state == playerDead)
 		{
+			scoreText.setFont(font2);
+			scoreText.setString("your score: "+to_string(playerScore));
+			scoreText.setCharacterSize(45);
+			scoreText.setFillColor(sf::Color::White);
+			scoreText.setPosition(450, 270);
 			window.clear();
 			window.draw(endBackground);
 			window.draw(playerText);
+			window.draw(scoreText);
 			window.display();
 		}
 		if (viewCheck)
@@ -526,27 +535,27 @@ void GameRunning::playerControl()
 
 }
 
-////////////////////Normal Enemy
+////////////////////Enemy Attack
 void GameRunning::enemyAttack()
 {
 	for (int i = 0; i < enemyVec.size(); i++)
 	{
 		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec[i].checkDead())
 		{
-			if (enemyVec[i].curX() == 2)
+			if (enemyVec[i].curX() == 2  && enemyVec[i].getRow() == 2 && enemyVec[i].b)
 			{
-				damaged = rand() % 100;
-
-				if (damaged == 10)
-				{
-					if(enemyVec[i].getSpeed()==normalEnemy.getSpeed())
-						myHP -= 300;
-					if (enemyVec[i].getSpeed() == bigEnemy.getSpeed())
-						myHP -= 700;
-					if (myHP <= 0) myHP = 0;
-				}
+				if (enemyVec[i].getType() == 1)
+					myHP -= 300;
+				if (enemyVec[i].getType() == 2)
+					myHP -= 700;
+				if (myHP <= 0) myHP = 0;
+				enemyVec[i].b = false;
 			}
-		}
+			if (enemyVec[i].curX() != 2 )
+			{
+				enemyVec[i].b = true;
+			}
+		} else enemyVec[i].b = true;
 	}
 }
 
