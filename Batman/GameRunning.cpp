@@ -83,7 +83,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	bottleCollect.openFromFile("sound/bottle.wav");
 	bottleCollect.setVolume(50);
 
-	endTexture.loadFromFile("sprite/end.png");
+	endTexture.loadFromFile("sprite/end2.png");
 	endBackground.setTexture(endTexture);
 	
 	bgSound.openFromFile("sound/bgSound.ogg");
@@ -249,7 +249,7 @@ void GameRunning::GameControl()
 			scoreText.setString("your score: "+to_string(playerScore));
 			scoreText.setCharacterSize(45);
 			scoreText.setFillColor(sf::Color::White);
-			scoreText.setPosition(450, 270);
+			scoreText.setPosition(450, 550);
 			window.clear();
 			window.draw(endBackground);
 			window.draw(playerText);
@@ -542,21 +542,33 @@ void GameRunning::enemyAttack()
 	{
 		if (enemyVec[i].Getcollision().CheckCollision(player.Getcollision()) && !enemyVec[i].checkDead())
 		{
-			if (enemyVec[i].curX() == 2  && enemyVec[i].getRow() == 2 && enemyVec[i].b)
+			if (enemyVec[i].getType() == 1)
 			{
-				if (enemyVec[i].getType() == 1)
+				if (enemyVec[i].curX() == 2 && enemyVec[i].getRow() == 2 && enemyVec[i].b)
+				{
 					myHP -= 300;
-				if (enemyVec[i].getType() == 2)
-					myHP -= 700;
-				if (myHP <= 0) myHP = 0;
-				enemyVec[i].b = false;
+					enemyVec[i].b = false;
+				}
+				if (enemyVec[i].curX() != 2)
+				{
+					enemyVec[i].b = true;
+				}
 			}
-			if (enemyVec[i].curX() != 2 )
+			if (enemyVec[i].getType() == 2)
 			{
-				enemyVec[i].b = true;
+				if (enemyVec[i].curX() == 3 && enemyVec[i].getRow() == 2 && enemyVec[i].b)
+				{
+					myHP -= 700;
+					enemyVec[i].b = false;
+				}
+				if (enemyVec[i].curX() != 3)
+				{
+					enemyVec[i].b = true;
+				}
 			}
 		} else enemyVec[i].b = true;
 	}
+	if (myHP <= 0) myHP = 0;
 }
 
 ///////////////////////////Batarang
@@ -663,8 +675,8 @@ void GameRunning::specialItem()
 	//potion
 	if (countTime % 10 == 0 && j && potionVec.size() < 4)
 	{
-		int ps = rand() % 5;
-		if (ps == 4)
+		int ps = rand() % 4;
+		if (ps == 3)
 			potionVec.push_back(hpBot);
 		else
 			potionVec.push_back(redbull);
