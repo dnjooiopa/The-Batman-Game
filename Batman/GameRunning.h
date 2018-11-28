@@ -77,7 +77,6 @@ private:
 	RectangleShape MANA;
 	RectangleShape HP;
 	int damaged;
-	int posibleHit;
 
 	Enemy normalEnemy;
 	Texture normalEnemyTexture;

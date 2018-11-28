@@ -137,7 +137,6 @@ void GameRunning::defaultSetting()
 	j = true;
 	a = true;
 	b = true;
-	posibleHit = 4;
 }
 
 void GameRunning::GameControl()
@@ -487,16 +486,20 @@ void GameRunning::mainStory()
 		l = true;
 	}
 
-	if (countTime >= 30)
+	if (countTime >= 15)
 	{
 		n = 5;
+	}
+	if (countTime >= 30)
+	{
+		n = 3;
 		nTrap = 6;
 		eSpeed = 90;
 	}
 	if (countTime >= 60)
 	{
 		trap.g = 600;
-		n = 3;
+		n = 2;
 		nTrap = 4;
 		eSpeed = 120;
 	}
@@ -544,29 +547,29 @@ void GameRunning::enemyAttack()
 		{
 			if (enemyVec[i].getType() == 1)
 			{
-				if (enemyVec[i].curX() == 2 && enemyVec[i].getRow() == 2 && enemyVec[i].b)
+				if (enemyVec[i].curX() == 2 && enemyVec[i].getRow() == 2 && enemyVec[i].punchCheck)
 				{
 					myHP -= 300;
-					enemyVec[i].b = false;
+					enemyVec[i].punchCheck = false;
 				}
 				if (enemyVec[i].curX() != 2)
 				{
-					enemyVec[i].b = true;
+					enemyVec[i].punchCheck = true;
 				}
 			}
 			if (enemyVec[i].getType() == 2)
 			{
-				if (enemyVec[i].curX() == 3 && enemyVec[i].getRow() == 2 && enemyVec[i].b)
+				if (enemyVec[i].curX() == 3 && enemyVec[i].getRow() == 2 && enemyVec[i].punchCheck)
 				{
 					myHP -= 700;
-					enemyVec[i].b = false;
+					enemyVec[i].punchCheck = false;
 				}
 				if (enemyVec[i].curX() != 3)
 				{
-					enemyVec[i].b = true;
+					enemyVec[i].punchCheck = true;
 				}
 			}
-		} else enemyVec[i].b = true;
+		} else enemyVec[i].punchCheck = true;
 	}
 	if (myHP <= 0) myHP = 0;
 }

@@ -19,7 +19,7 @@ void Enemy::setEnemy(Texture * texture, Vector2u imageCount, float switchTime, f
 	faceLeft = true;
 	dead = false;
 	shot = false;
-	b = true;
+	punchCheck = true;
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
 }

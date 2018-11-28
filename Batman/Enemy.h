@@ -31,7 +31,7 @@ public:
 	RectangleShape body;
 	RectangleShape HP;
 	bool faceLeft;
-	bool b;
+	bool punchCheck;
 private:
 	Animation animation;
 	float speed;
