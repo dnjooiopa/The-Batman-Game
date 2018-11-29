@@ -11,7 +11,6 @@ public:
 	void playerUpdate(int row, float deltaTime, bool faceRight, bool punch, bool jump, bool shoot, float posY, bool dead);
 	void enemyUpdate(int row, float deltaTime, bool faceLeft, bool dead);
 	void batarangUpdate(float posX);
-	void batwingUpdate(int row, float deltaTime, bool faceRight);
 	void bombUpdate(float deltaTime, bool bombCheck);
 	IntRect uvRect;
 	Vector2u currentImage;

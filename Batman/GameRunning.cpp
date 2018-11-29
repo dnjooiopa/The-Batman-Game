@@ -82,14 +82,13 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	itemCollect.setVolume(60);
 	bottleCollect.openFromFile("sound/bottle.wav");
 	bottleCollect.setVolume(50);
-
-	endTexture.loadFromFile("sprite/end2.png");
-	endBackground.setTexture(endTexture);
-	
 	bgSound.openFromFile("sound/bgSound.ogg");
 	bgSound.setVolume(80);
 	bgSound.setPlayingOffset(Time(seconds(0)));
 	bgSound.play();
+	
+	endTexture.loadFromFile("sprite/end2.png");
+	endBackground.setTexture(endTexture);
 
 	GameControl();
 }
@@ -786,6 +785,7 @@ void GameRunning::statusBar()
 	textScore.setPosition(Vector2f(camera.getCenter().x - 238, camera.getCenter().y - 330));
 	window.draw(textScore);
 
+	//BatNumber
 	std::string bn = to_string(batNumber);
 	textBat.setFont(font);
 	textBat.setString(bn);
