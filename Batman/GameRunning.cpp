@@ -66,6 +66,10 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	font2.loadFromFile("font/mer.ttf");
 	defaultSetting();
 
+	//end background
+	endTexture.loadFromFile("sprite/end2.png");
+	endBackground.setTexture(endTexture);
+
 	loadFile.open("score.txt");
 	while (!loadFile.eof()) {
 		std::string tempName;
@@ -87,8 +91,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	bgSound.setPlayingOffset(Time(seconds(0)));
 	bgSound.play();
 	
-	endTexture.loadFromFile("sprite/end2.png");
-	endBackground.setTexture(endTexture);
+
 
 	GameControl();
 }
