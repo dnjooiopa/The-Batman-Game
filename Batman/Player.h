@@ -20,14 +20,14 @@ public:
 	float getX() {return body.getPosition().x;}
 	float getY() {return body.getPosition().y;}
 	int curX() { return animation.currentImage.x; }
-	int getMana() { return mana; }
+	int getMana() { return stamina; }
 	bool checkDead() { return animation.j; }
 	Vector2f Getposition() { return body.getPosition(); }
 	Collision Getcollision() { return Collision(body); }
     RectangleShape body;
 	bool faceRight;
 	bool cShoot;
-	int mana;
+	int stamina;
 private:
 	Animation animation;
 	bool crouchCheck;

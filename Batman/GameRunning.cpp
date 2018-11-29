@@ -54,7 +54,7 @@ GameRunning::GameRunning(Vector2u size, std::string name)
 	//trap
 	trapTexture.loadFromFile("sprite/trap2.png");
 	trap.setItem(&trapTexture, 300);
-	//mana
+	//stamina
 	redbullTexture.loadFromFile("sprite/redbull.png");
 	redbull.setItem(&redbullTexture, 1500);
 	//hp
@@ -105,10 +105,10 @@ void GameRunning::defaultSetting()
 	//Player
 	myHP = 10000;
 	playerScore = 0;
-	player.mana = 100000;
+	player.stamina = 100000;
 	player.setPlayer(&playerTexture, Vector2u(6, 11), 0.08f, 300);
 	HP.setFillColor(Color::Red);
-	MANA.setFillColor(Color::Blue);
+	Stamina.setFillColor(Color::Blue);
 	batNumber = 0;
 
 	//clearVector
@@ -116,7 +116,6 @@ void GameRunning::defaultSetting()
     itemVec.clear();
     trapVec.clear();
 	potionVec.clear();
-	
 
 	//time 
 	time = 0;
@@ -699,7 +698,7 @@ void GameRunning::specialItem()
 			bottleCollect.setPlayingOffset(Time(seconds(0)));
 			bottleCollect.play();
 			if (potionVec[i].g == redbull.g)
-				player.mana += 3000;
+				player.stamina += 3000;
 			else
 				myHP += 3000;
 			if (myHP > 10000) myHP = 10000;
@@ -773,10 +772,10 @@ void GameRunning::statusBar()
 	HP.setSize(Vector2f(myHP / 36.2, 25));
 	window.draw(HP);
 
-	//Mana
-	MANA.setPosition(Vector2f(camera.getCenter().x - 583, camera.getCenter().y - 280));
-	MANA.setSize(Vector2f(player.getMana() / 36.2, 25));
-	window.draw(MANA);
+	//Stamina
+	Stamina.setPosition(Vector2f(camera.getCenter().x - 583, camera.getCenter().y - 280));
+	Stamina.setSize(Vector2f(player.getMana() / 36.2, 25));
+	window.draw(Stamina);
 
 	//score
 	std::string score = to_string(playerScore);

@@ -76,7 +76,7 @@ private:
 	int playerScore;
 	float d;
 	int myHP;
-	RectangleShape MANA;
+	RectangleShape Stamina;
 	RectangleShape HP;
 	int damaged;
 

@@ -38,7 +38,7 @@ void Player::setPlayer(Texture *texture, Vector2u imageCount, float switchTime, 
 	body.setTexture(texture);
 	body.setSize(Vector2f(1.5 * animation.uvRect.width, 1.5 * animation.uvRect.height));
 	body.setPosition(640.0f, defaultPosY);
-	mana = 10000;
+	stamina = 10000;
 }
 
 void Player::Update(float deltaTime, int hp, bool flying)
@@ -200,14 +200,14 @@ void Player::Update(float deltaTime, int hp, bool flying)
 			faceRight = false;
 	}
 
-	if (mana > 10000) mana = 10000;
-	if ((Keyboard::isKeyPressed(Keyboard::A)|| Keyboard::isKeyPressed(Keyboard::D)) && Keyboard::isKeyPressed(Keyboard::LShift) && mana>0 && !crouchCheck && !(Keyboard::isKeyPressed(Keyboard::K)))
+	if (stamina > 10000) stamina = 10000;
+	if ((Keyboard::isKeyPressed(Keyboard::A)|| Keyboard::isKeyPressed(Keyboard::D)) && Keyboard::isKeyPressed(Keyboard::LShift) && stamina>0 && !crouchCheck && !(Keyboard::isKeyPressed(Keyboard::K)))
 	{
 		totalTimeC += deltaTime;
 		if (totalTimeC >= delayButton)
 		{
 			totalTimeC -= delayButton;
-			if(mana>0) mana-=100;
+			if(stamina>0) stamina-=100;
 		}
 
 		if (faceRight)
