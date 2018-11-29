@@ -65,9 +65,11 @@ private:
 	Sprite bar;
 	Sprite logo;
 	View camera;
+
 	//Font
 	Font font;
 	Font font2;
+
 	//Character Class
 	Player player;
 	Texture playerTexture;

@@ -576,7 +576,7 @@ void GameRunning::enemyAttack()
 ///////////////////////////Batarang
 void GameRunning::batarangShoot()
 {
-	Vector2f flySpeed(window.getSize().x*1.5/1280, 0);
+	Vector2f flySpeed(window.getSize().x*3.5/1280, 0);
 	if (!shoot && player.cShoot && batNumber != 0)
 	{
 		if (player.faceRight)
