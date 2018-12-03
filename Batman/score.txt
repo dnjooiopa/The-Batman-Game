@@ -33,3 +33,6 @@ www 10500
 dad 10200
 helwo 5700
 profun 13500
+kuay 11800
+sys 11400
+python 9500

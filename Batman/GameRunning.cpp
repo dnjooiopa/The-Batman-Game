@@ -117,6 +117,7 @@ void GameRunning::defaultSetting()
     trapVec.clear();
 	potionVec.clear();
 
+
 	//time 
 	time = 0;
 	countTime = 0;
@@ -171,7 +172,6 @@ void GameRunning::GameControl()
 					}
 					playerText.setCharacterSize(60);   //เซ็ตขนาดของข้อความ
 					playerText.setPosition(415, 410);  //เซ็ตขนาดของข้อความ
-
 				}
 				else if (event.type == sf::Event::KeyPressed) {
 					if (event.key.code == sf::Keyboard::Return) {
