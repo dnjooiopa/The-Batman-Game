@@ -1,7 +1,7 @@
 # The-Batman-Game
 
-menu screen
+Menu screen
 ![Screenshot](menu.png)
 
-ingame
+Example gameplay
 ![Screenshot](gameplay.png)
